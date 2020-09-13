@@ -7,7 +7,7 @@ const proSettings: ProSettings = {
   layout: 'top',
   contentWidth: 'Fluid',
   fixedHeader: false,
-  fixSiderbar: true,
+  fixSiderbar: false,
   colorWeak: false,
   menu: {
     locale: true,

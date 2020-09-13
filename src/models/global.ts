@@ -1,3 +1,4 @@
+import { Reducer } from 'umi';
 
 export interface GlobalModelState {
   collapsed: boolean;
@@ -7,7 +8,9 @@ export interface GlobalModelType {
   namespace: 'global';
   state: GlobalModelState;
   effects: {};
-  reducers: {};
+  reducers: {
+    changeLayoutCollapsed: Reducer<GlobalModelState>;
+  };
 }
 
 const GlobalModel: GlobalModelType = {
@@ -17,7 +20,14 @@ const GlobalModel: GlobalModelType = {
     collapsed: false,
   },
   effects: {},
-  reducers: {},
+  reducers: {
+    changeLayoutCollapsed(state = { collapsed: true }, { payload }): GlobalModelState {
+      return {
+        ...state,
+        collapsed: payload,
+      };
+    },
+  },
 };
 
 export default GlobalModel;
