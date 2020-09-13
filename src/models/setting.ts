@@ -1,11 +1,12 @@
 import { Reducer } from 'umi';
-import defaultSettings, { DefaultSettings } from '../../config/defaultSettings';
+import { Settings } from '@ant-design/pro-layout';
+import defaultSettings from '../../config/defaultSettings';
 
 export interface SettingModelType {
   namespace: 'settings';
-  state: DefaultSettings;
+  state: Settings;
   reducers: {
-    changeSetting: Reducer<DefaultSettings>;
+    changeSetting: Reducer<Settings>;
   };
 }
 
