@@ -1,0 +1,14 @@
+{
+  "name": "Lanting",
+  "short_name": "Lanting",
+  "display": "standalone",
+  "start_url": "./",
+  "theme_color": "#002140",
+  "background_color": "#001529",
+  "icons": [
+    {
+      "src": "icons/icon.png",
+      "sizes": "512x512"
+    }
+  ]
+}
