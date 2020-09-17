@@ -24,14 +24,21 @@
     "start:no-ui": "cross-env UMI_UI=none umi dev",
     "start:pre": "cross-env REACT_APP_ENV=pre umi dev",
     "start:test": "cross-env REACT_APP_ENV=test MOCK=none umi dev",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "compile-archives": "echo 123"
   },
   "lint-staged": {
     "**/*.less": "stylelint --syntax less",
     "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
-    "**/*.{js,jsx,tsx,ts,less,md,json}": ["prettier --write"]
+    "**/*.{js,jsx,tsx,ts,less,md,json}": [
+      "prettier --write"
+    ]
   },
-  "browserslist": ["> 1%", "last 2 versions", "not ie <= 10"],
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ],
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
     "@ant-design/pro-descriptions": "^1.0.16",
@@ -86,13 +93,14 @@
     "stylelint": "^13.0.0",
     "typescript": "^3.9.7"
   },
-  "engines": { "node": ">=10.0.0" },
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "checkFiles": [
     "src/**/*.js*",
     "src/**/*.ts*",
     "src/**/*.less",
     "config/**/*.js*",
     "scripts/**/*.js"
-  ],
-  "type": "module"
+  ]
 }

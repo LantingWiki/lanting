@@ -1,0 +1,11 @@
+{
+  "name": "lanting-server",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "author": "boyang",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^14.10.3"
+  },
+  "type": "module"
+}
