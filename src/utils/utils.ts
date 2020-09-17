@@ -6,3 +6,10 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(
 export const isUrl = (path: string): boolean => reg.test(path);
 
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
+
+export const fieldToTranslation = {
+  author: '作者',
+  publisher: '媒体',
+  date: '日期',
+  tag: '标签',
+};

@@ -1,5 +1,5 @@
 import { Effect, Reducer } from 'umi';
-import { ListItemDataType } from './data.d';
+import { ListItemDataType } from './data';
 import { queryFakeList } from './service';
 
 export interface StateType {
