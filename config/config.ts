@@ -80,4 +80,5 @@ export default defineConfig({
   manifest: {
     basePath: '/',
   },
+  copy: ['archives'],
 });

@@ -25,7 +25,7 @@
     "start:pre": "cross-env REACT_APP_ENV=pre umi dev",
     "start:test": "cross-env REACT_APP_ENV=test MOCK=none umi dev",
     "tsc": "tsc --noEmit",
-    "compile-archives": "echo 123"
+    "compile-archives": "node --loader ts-node/esm ./server/scripts/compile-archives.ts"
   },
   "lint-staged": {
     "**/*.less": "stylelint --syntax less",
@@ -91,6 +91,7 @@
     "pro-download": "1.0.1",
     "puppeteer-core": "^5.0.0",
     "stylelint": "^13.0.0",
+    "ts-node": "^9.0.0",
     "typescript": "^3.9.7"
   },
   "engines": {
