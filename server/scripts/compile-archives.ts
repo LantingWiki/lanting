@@ -1,22 +1,44 @@
 /* eslint-disable no-console */
 import * as fs from 'fs';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const ARCHIVE_DIR = `${__dirname}/../../public/archives`;
+// eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ARCHIVE_DIR = `${__dirname}/../../archives`;
 
-type Chapter = '本纪' | '世家' | '游侠' | '群像' | '随园食单';
+type Chapter = '本纪' | '世家' | '列传' | '群像' | '随园食单';
+
+class FieldFreqMap {
+  author: {
+    [key: string]: string;
+  } = {};
+
+  publisher: {
+    [key: string]: string;
+  } = {};
+
+  date: {
+    [key: string]: string;
+  } = {};
+
+  tag: {
+    [key: string]: string;
+  } = {};
+}
 
 class Archive {
   id: string = '';
 
   title: string = '';
 
-  author: string = '';
+  author: string[] = [];
 
   publisher: string = '';
 
   date: string = '';
 
-  chapter: Chapter = '游侠';
+  chapter: Chapter = '列传';
 
   tags: string[] = [];
 
@@ -25,11 +47,22 @@ class Archive {
   hasOrig: boolean = false;
 }
 
-function setField(archive: Archive, field: string, fileContent: string) {
+class Archives {
+  archives: Archive[] = [];
+
+  fieldFreqMap: FieldFreqMap = new FieldFreqMap();
+}
+
+function setField(archive: Archive, field: string, fileContent: string, archives: Archives) {
   const regexArr = toFieldRegex(field).exec(fileContent);
   if (regexArr && regexArr[1]) {
-    archive[field] = getFieldFromFieldLine(field, regexArr[1]);
+    const fieldVal = getFieldFromFieldLine(field, regexArr[1]);
+    archive[field] = fieldVal;
     fileContent = fileContent.replace(regexArr[0], '');
+
+    if (['author', 'publisher', 'date', 'tag'].includes(field)) {
+      archives.fieldFreqMap[field][fieldVal] = (archives.fieldFreqMap[field][fieldVal] || 0) + 1;
+    }
   } else {
     console.log('Failed to get field: ', field);
   }
@@ -38,11 +71,11 @@ function setField(archive: Archive, field: string, fileContent: string) {
 
 function getFieldFromFieldLine(field: string, fieldLine: string) {
   switch (field) {
-    case 'author':
     case 'publisher':
     case 'date':
     case 'chapter':
       return fieldLine;
+    case 'author':
     case 'tags':
       return fieldLine.split(',').map((s) => s.trim());
     default:
@@ -59,9 +92,7 @@ function getIdFromCommentFilename(f: string) {
 }
 
 function main() {
-  const compiledArchives: { archives: Archive[] } = {
-    archives: [],
-  };
+  const compiledArchives = new Archives();
 
   const commentsFiles = fs.readdirSync(`${ARCHIVE_DIR}/comments`);
   console.log('Comments count: ', commentsFiles.length);
@@ -75,7 +106,7 @@ function main() {
     let fileContent: string = fs.readFileSync(`${ARCHIVE_DIR}/comments/${f}`, 'utf-8');
 
     ['author', 'publisher', 'date', 'chapter', 'tags'].forEach((field) => {
-      fileContent = setField(archive, field, fileContent);
+      fileContent = setField(archive, field, fileContent, compiledArchives);
     });
 
     return archive;
