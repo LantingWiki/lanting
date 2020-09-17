@@ -7,5 +7,6 @@
   "devDependencies": {
     "@types/node": "^14.10.3"
   },
-  "type": "module"
+  "type": "module",
+  "module": "ESNext"
 }
