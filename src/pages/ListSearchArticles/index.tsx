@@ -1,16 +1,25 @@
 import React, { FC, useEffect } from 'react';
-import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
-import { LoadingOutlined, StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Form, List, Row, Select, Tag, Collapse } from 'antd';
+import {
+  LoadingOutlined,
+  StarOutlined,
+  LikeOutlined,
+  MessageOutlined,
+  DownOutlined,
+} from '@ant-design/icons';
 import { connect, Dispatch } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
+import compiledArchives from '@/assets/archives.json';
+import { fieldToTranslation } from '@/utils/utils';
 import ArticleListContent from './components/ArticleListContent';
 import { StateType } from './model';
-import { ListItemDataType } from './data.d';
+import { ListItemDataType, Archives } from './data';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
 import styles from './style.less';
 
 const { Option } = Select;
+const { Panel } = Collapse;
 const FormItem = Form.Item;
 
 const pageSize = 5;
@@ -20,6 +29,41 @@ interface ListSearchArticlesProps {
   listSearchArticles: StateType;
   loading: boolean;
 }
+
+const generateOptions = (field: string, archives: Archives) => {
+  const map = archives.fieldFreqMap[field];
+  const options = Object.keys(map).map((fieldVal) => (
+    <Option key={fieldVal} value={fieldVal} label={fieldVal}>
+      {fieldVal}: {map[fieldVal]}
+    </Option>
+  ));
+  options.unshift(
+    <Option key="all" value="all" label="全选">
+      全选
+    </Option>,
+  );
+  return options;
+};
+
+const generateSelect = (field: string, archives: Archives, isLast: boolean) => {
+  const translation = fieldToTranslation[field];
+  return (
+    <StandardFormRow title={translation} key={field} last={isLast}>
+      <FormItem name={field} className={styles.formitem}>
+        <Select
+          suffixIcon={<DownOutlined />}
+          mode="multiple"
+          placeholder={`筛选${translation}`}
+          optionLabelProp="label"
+          className={styles.select}
+        >
+          {generateOptions(field, archives)}
+        </Select>
+      </FormItem>
+    </StandardFormRow>
+  );
+};
+
 const ListSearchArticles: FC<ListSearchArticlesProps> = ({
   dispatch,
   listSearchArticles: { list },
@@ -125,11 +169,38 @@ const ListSearchArticles: FC<ListSearchArticlesProps> = ({
     </div>
   );
 
+  const selects = ['author', 'publisher', 'date', 'tag'].map((f, idx) =>
+    generateSelect(f, compiledArchives, idx === 3),
+  );
+
   return (
-    <PageContainer
-      className={styles.pcontainer}
-      content="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?"
-    >
+    <PageContainer className={styles.pcontainer} content="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?">
+      <Card bordered={false} className={styles.card}>
+        <Collapse ghost>
+          <Panel header="一孔之见" key="1" forceRender>
+            <Form
+              layout="vertical"
+              form={form}
+              initialValues={{
+                author: ['all'],
+                publisher: ['all'],
+                date: ['all'],
+                tag: ['all'],
+              }}
+              onValuesChange={() => {
+                dispatch({
+                  type: 'listSearchArticles/fetch',
+                  payload: {
+                    count: 8,
+                  },
+                });
+              }}
+            >
+              {selects}
+            </Form>
+          </Panel>
+        </Collapse>
+      </Card>
       <Card bordered={false}>
         <Form
           layout="inline"
@@ -241,7 +312,7 @@ const ListSearchArticles: FC<ListSearchArticlesProps> = ({
       </Card>
     </PageContainer>
   );
-}
+};
 
 export default connect(
   ({

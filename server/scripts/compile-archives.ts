@@ -2,56 +2,11 @@
 import * as fs from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { Archive, Archives } from './data';
 
 // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ARCHIVE_DIR = `${__dirname}/../../archives`;
-
-type Chapter = '本纪' | '世家' | '列传' | '群像' | '随园食单';
-
-class FieldFreqMap {
-  author: {
-    [key: string]: string;
-  } = {};
-
-  publisher: {
-    [key: string]: string;
-  } = {};
-
-  date: {
-    [key: string]: string;
-  } = {};
-
-  tag: {
-    [key: string]: string;
-  } = {};
-}
-
-class Archive {
-  id: string = '';
-
-  title: string = '';
-
-  author: string[] = [];
-
-  publisher: string = '';
-
-  date: string = '';
-
-  chapter: Chapter = '列传';
-
-  tags: string[] = [];
-
-  remarks: string = '';
-
-  hasOrig: boolean = false;
-}
-
-class Archives {
-  archives: Archive[] = [];
-
-  fieldFreqMap: FieldFreqMap = new FieldFreqMap();
-}
 
 function setField(archive: Archive, field: string, fileContent: string, archives: Archives) {
   const regexArr = toFieldRegex(field).exec(fileContent);
@@ -61,7 +16,13 @@ function setField(archive: Archive, field: string, fileContent: string, archives
     fileContent = fileContent.replace(regexArr[0], '');
 
     if (['author', 'publisher', 'date', 'tag'].includes(field)) {
-      archives.fieldFreqMap[field][fieldVal] = (archives.fieldFreqMap[field][fieldVal] || 0) + 1;
+      if (typeof fieldVal === 'string') {
+        archives.fieldFreqMap[field][fieldVal] = (archives.fieldFreqMap[field][fieldVal] || 0) + 1;
+      } else {
+        (fieldVal as string[]).forEach((v) => {
+          archives.fieldFreqMap[field][v] = (archives.fieldFreqMap[field][v] || 0) + 1;
+        });
+      }
     }
   } else {
     console.log('Failed to get field: ', field);
@@ -76,7 +37,7 @@ function getFieldFromFieldLine(field: string, fieldLine: string) {
     case 'chapter':
       return fieldLine;
     case 'author':
-    case 'tags':
+    case 'tag':
       return fieldLine.split(',').map((s) => s.trim());
     default:
       return fieldLine;
@@ -105,13 +66,13 @@ function main() {
 
     let fileContent: string = fs.readFileSync(`${ARCHIVE_DIR}/comments/${f}`, 'utf-8');
 
-    ['author', 'publisher', 'date', 'chapter', 'tags'].forEach((field) => {
+    ['author', 'publisher', 'date', 'chapter', 'tag'].forEach((field) => {
       fileContent = setField(archive, field, fileContent, compiledArchives);
     });
 
     return archive;
   });
 
-  fs.writeFileSync(`${ARCHIVE_DIR}/archives.json`, JSON.stringify(compiledArchives));
+  fs.writeFileSync(`${ARCHIVE_DIR}/../src/assets/archives.json`, JSON.stringify(compiledArchives));
 }
 main();

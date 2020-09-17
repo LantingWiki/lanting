@@ -10,6 +10,6 @@ export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 export const fieldToTranslation = {
   author: '作者',
   publisher: '媒体',
-  date: '日期',
+  date: '年月',
   tag: '标签',
 };
