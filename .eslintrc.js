@@ -4,8 +4,9 @@ module.exports = {
     page: true,
     REACT_APP_ENV: true,
   },
-  "rules": {
-    "prefer-destructuring": ["error", {"object": true, "array": false}],
-    "no-param-reassign": 0
-  }
+  rules: {
+    'prefer-destructuring': ['error', { object: true, array: false }],
+    'no-param-reassign': 0,
+    'max-classes-per-file': 0,
+  },
 };
