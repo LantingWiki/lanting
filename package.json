@@ -10,12 +10,11 @@
     "fetch:blocks": "pro fetch-blocks && npm run prettier",
     "i18n-remove": "pro i18n-remove --locale=zh-CN --write",
     "postinstall": "umi g tmp",
-    "lint": "umi g tmp && npm run lint:js && npm run lint:style && npm run lint:prettier",
+    "lint": "umi g tmp && npm run lint:js && npm run lint:prettier",
     "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx ",
-    "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src && npm run lint:style",
+    "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
     "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
     "lint:prettier": "prettier --check \"src/**/*\" --end-of-line auto",
-    "lint:style": "stylelint --fix \"src/**/*.less\" --syntax less",
     "precommit": "lint-staged",
     "prettier": "prettier -c --write \"src/**/*\"",
     "start": "umi dev",
@@ -28,9 +27,8 @@
     "compile-archives": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/compile-archives.ts"
   },
   "lint-staged": {
-    "**/*.less": "stylelint --syntax less",
     "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
-    "**/*.{js,jsx,tsx,ts,less}": [
+    "**/*.{js,jsx,tsx,ts}": [
       "prettier --write"
     ]
   },
@@ -90,7 +88,6 @@
     "prettier": "^2.0.1",
     "pro-download": "1.0.1",
     "puppeteer-core": "^5.0.0",
-    "stylelint": "^13.0.0",
     "typescript": "^3.9.7",
     "ts-node": "^9.0.0"
   },

@@ -15,23 +15,28 @@ function setField(archive: Archive, field: string, fileContent: string, archives
     archive[field] = fieldVal;
     fileContent = fileContent.replace(regexArr[0], '');
 
-    if (['author', 'publisher', 'date', 'tag'].includes(field)) {
-      if (typeof fieldVal === 'string') {
-        archives.fieldFreqMap[field][fieldVal] = (archives.fieldFreqMap[field][fieldVal] || 0) + 1;
-      } else {
-        (fieldVal as string[]).forEach((v) => {
-          archives.fieldFreqMap[field][v] = (archives.fieldFreqMap[field][v] || 0) + 1;
-        });
-      }
-    }
+    updateFreqMap(field, fieldVal, archives);
   } else {
     console.log('Failed to get field: ', field);
   }
   return fileContent;
 }
 
+function updateFreqMap(field: string, fieldVal: string | string[], archives: Archives) {
+  if (['author', 'publisher', 'date', 'tag'].includes(field)) {
+    if (typeof fieldVal === 'string') {
+      archives.fieldFreqMap[field][fieldVal] = (archives.fieldFreqMap[field][fieldVal] || 0) + 1;
+    } else {
+      (fieldVal as string[]).forEach((v) => {
+        archives.fieldFreqMap[field][v] = (archives.fieldFreqMap[field][v] || 0) + 1;
+      });
+    }
+  }
+}
+
 function getFieldFromFieldLine(field: string, fieldLine: string) {
   switch (field) {
+    case 'title':
     case 'publisher':
     case 'date':
     case 'chapter':
@@ -66,9 +71,10 @@ function main() {
 
     let fileContent: string = fs.readFileSync(`${ARCHIVE_DIR}/comments/${f}`, 'utf-8');
 
-    ['author', 'publisher', 'date', 'chapter', 'tag'].forEach((field) => {
+    ['title', 'author', 'publisher', 'date', 'chapter', 'tag'].forEach((field) => {
       fileContent = setField(archive, field, fileContent, compiledArchives);
     });
+    archive.remarks = fileContent;
 
     return archive;
   });

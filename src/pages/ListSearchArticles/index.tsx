@@ -1,19 +1,14 @@
 import React, { FC, useEffect } from 'react';
 import { Button, Card, Col, Form, List, Row, Select, Tag, Collapse } from 'antd';
-import {
-  LoadingOutlined,
-  StarOutlined,
-  LikeOutlined,
-  MessageOutlined,
-  DownOutlined,
-} from '@ant-design/icons';
+import { EditOutlined, BankOutlined, LoadingOutlined, DownOutlined } from '@ant-design/icons';
 import { connect, Dispatch } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import compiledArchives from '@/assets/archives.json';
 import { fieldToTranslation } from '@/utils/utils';
 import ArticleListContent from './components/ArticleListContent';
+import ArchiveListContent from './components/ArchiveListContent';
 import { StateType } from './model';
-import { ListItemDataType, Archives } from './data';
+import { ListItemDataType, Archives, Archive } from './data';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
 import styles from './style.less';
@@ -121,24 +116,17 @@ const ListSearchArticles: FC<ListSearchArticlesProps> = ({
     text: React.ReactNode;
   }> = ({ type, text }) => {
     switch (type) {
-      case 'star-o':
+      case 'edit':
         return (
-          <span>
-            <StarOutlined style={{ marginRight: 8 }} />
+          <span className={styles.author}>
+            <EditOutlined style={{ marginRight: 8 }} />
             {text}
           </span>
         );
-      case 'like-o':
+      case 'bank':
         return (
-          <span>
-            <LikeOutlined style={{ marginRight: 8 }} />
-            {text}
-          </span>
-        );
-      case 'message':
-        return (
-          <span>
-            <MessageOutlined style={{ marginRight: 8 }} />
+          <span className={styles.author}>
+            <BankOutlined style={{ marginRight: 8 }} />
             {text}
           </span>
         );
@@ -173,34 +161,35 @@ const ListSearchArticles: FC<ListSearchArticlesProps> = ({
     generateSelect(f, compiledArchives, idx === 3),
   );
 
+  const filterElem = (
+    <Collapse ghost>
+      <Panel header="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" key="1" forceRender showArrow={false}>
+        <Form
+          layout="vertical"
+          form={form}
+          initialValues={{
+            author: ['all'],
+            publisher: ['all'],
+            date: ['all'],
+            tag: ['all'],
+          }}
+          onValuesChange={() => {
+            dispatch({
+              type: 'listSearchArticles/fetch',
+              payload: {
+                count: 8,
+              },
+            });
+          }}
+        >
+          {selects}
+        </Form>
+      </Panel>
+    </Collapse>
+  );
+
   return (
-    <PageContainer className={styles.pcontainer} content="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?">
-      <Card bordered={false} className={styles.card}>
-        <Collapse ghost>
-          <Panel header="一孔之见" key="1" forceRender>
-            <Form
-              layout="vertical"
-              form={form}
-              initialValues={{
-                author: ['all'],
-                publisher: ['all'],
-                date: ['all'],
-                tag: ['all'],
-              }}
-              onValuesChange={() => {
-                dispatch({
-                  type: 'listSearchArticles/fetch',
-                  payload: {
-                    count: 8,
-                  },
-                });
-              }}
-            >
-              {selects}
-            </Form>
-          </Panel>
-        </Collapse>
-      </Card>
+    <PageContainer className={styles.pcontainer} content={filterElem}>
       <Card bordered={false}>
         <Form
           layout="inline"
@@ -268,6 +257,47 @@ const ListSearchArticles: FC<ListSearchArticlesProps> = ({
             </Row>
           </StandardFormRow>
         </Form>
+      </Card>
+      <Card className={styles.listcard} bordered={false}>
+        <List<Archive>
+          size="large"
+          rowKey="id"
+          itemLayout="vertical"
+          loadMore={loadMore}
+          dataSource={compiledArchives.archives}
+          renderItem={(item) => (
+            <List.Item
+              key={item.id}
+              actions={[
+                <h4 key="edit">
+                  <EditOutlined style={{ marginRight: 4 }} />
+                  {item.author.map((a) => ` ${a}`)}
+                </h4>,
+                <div>
+                  <BankOutlined style={{ marginRight: 8 }} />
+                  {item.publisher}
+                </div>,
+              ]}
+              extra={<div className={styles.listItemExtra} />}
+            >
+              <List.Item.Meta
+                title={
+                  <a className={styles.listItemMetaTitle} href="#">
+                    {item.title}
+                  </a>
+                }
+                description={
+                  <span>
+                    {item.tag.map((t) => (
+                      <Tag>{t}</Tag>
+                    ))}
+                  </span>
+                }
+              />
+              <ArchiveListContent archive={item} />
+            </List.Item>
+          )}
+        />
       </Card>
       <Card
         style={{ marginTop: 24 }}
