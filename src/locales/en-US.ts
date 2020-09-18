@@ -1,4 +1,3 @@
-import component from './en-US/component';
 import globalHeader from './en-US/globalHeader';
 import menu from './en-US/menu';
 import settingDrawer from './en-US/settingDrawer';
@@ -14,5 +13,4 @@ export default {
   ...menu,
   ...settingDrawer,
   ...settings,
-  ...component,
 };

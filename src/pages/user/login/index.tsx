@@ -1,136 +1,119 @@
-import { AlipayCircleOutlined, TaobaoCircleOutlined, WeiboCircleOutlined } from '@ant-design/icons';
-import { Alert, Checkbox } from 'antd';
+import { Tabs, Form } from 'antd';
 import React, { useState } from 'react';
-import { Link, connect, Dispatch } from 'umi';
-import { StateType } from '@/models/login';
+import useMergeValue from 'use-merge-value';
+import classNames from 'classnames';
+import { FormInstance } from 'antd/es/form';
 import { LoginParamsType } from '@/services/login';
-import { ConnectState } from '@/models/connect';
-import LoginForm from './components/Login';
 
-import styles from './style.less';
+import LoginContext from './LoginContext';
+import LoginItem, { LoginItemProps } from './LoginItem';
+import LoginSubmit from './LoginSubmit';
+import LoginTab from './LoginTab';
+import styles from './index.less';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginForm;
-interface LoginProps {
-  dispatch: Dispatch;
-  userLogin: StateType;
-  submitting?: boolean;
+export interface LoginProps {
+  activeKey?: string;
+  onTabChange?: (key: string) => void;
+  style?: React.CSSProperties;
+  onSubmit?: (values: LoginParamsType) => void;
+  className?: string;
+  from?: FormInstance;
+  children: React.ReactElement<typeof LoginTab>[];
 }
 
-const LoginMessage: React.FC<{
-  content: string;
-}> = ({ content }) => (
-  <Alert
-    style={{
-      marginBottom: 24,
-    }}
-    message={content}
-    type="error"
-    showIcon
-  />
-);
+interface LoginType extends React.FC<LoginProps> {
+  Tab: typeof LoginTab;
+  Submit: typeof LoginSubmit;
+  UserName: React.FunctionComponent<LoginItemProps>;
+  Password: React.FunctionComponent<LoginItemProps>;
+  Mobile: React.FunctionComponent<LoginItemProps>;
+  Captcha: React.FunctionComponent<LoginItemProps>;
+}
 
-const Login: React.FC<LoginProps> = (props) => {
-  const { userLogin = {}, submitting } = props;
-  const { status, type: loginType } = userLogin;
-  const [autoLogin, setAutoLogin] = useState(true);
-  const [type, setType] = useState<string>('account');
-
-  const handleSubmit = (values: LoginParamsType) => {
-    const { dispatch } = props;
-    dispatch({
-      type: 'login/login',
-      payload: { ...values, type },
-    });
-  };
+const Login: LoginType = (props) => {
+  const { className } = props;
+  const [tabs, setTabs] = useState<string[]>([]);
+  const [active, setActive] = useState({});
+  const [type, setType] = useMergeValue('', {
+    value: props.activeKey,
+    onChange: props.onTabChange,
+  });
+  const TabChildren: React.ReactComponentElement<typeof LoginTab>[] = [];
+  const otherChildren: React.ReactElement<unknown>[] = [];
+  React.Children.forEach(
+    props.children,
+    (child: React.ReactComponentElement<typeof LoginTab> | React.ReactElement<unknown>) => {
+      if (!child) {
+        return;
+      }
+      if ((child.type as { typeName: string }).typeName === 'LoginTab') {
+        TabChildren.push(child as React.ReactComponentElement<typeof LoginTab>);
+      } else {
+        otherChildren.push(child);
+      }
+    },
+  );
   return (
-    <div className={styles.main}>
-      <LoginForm activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
-        <Tab key="account" tab="账户密码登录">
-          {status === 'error' && loginType === 'account' && !submitting && (
-            <LoginMessage content="账户或密码错误（admin/ant.design）" />
+    <LoginContext.Provider
+      value={{
+        tabUtil: {
+          addTab: (id) => {
+            setTabs([...tabs, id]);
+          },
+          removeTab: (id) => {
+            setTabs(tabs.filter((currentId) => currentId !== id));
+          },
+        },
+        updateActive: (activeItem) => {
+          if (!active) return;
+          if (active[type]) {
+            active[type].push(activeItem);
+          } else {
+            active[type] = [activeItem];
+          }
+          setActive(active);
+        },
+      }}
+    >
+      <div className={classNames(className, styles.login)}>
+        <Form
+          form={props.from}
+          onFinish={(values) => {
+            if (props.onSubmit) {
+              props.onSubmit(values as LoginParamsType);
+            }
+          }}
+        >
+          {tabs.length ? (
+            <React.Fragment>
+              <Tabs
+                destroyInactiveTabPane
+                animated={false}
+                className={styles.tabs}
+                activeKey={type}
+                onChange={(activeKey) => {
+                  setType(activeKey);
+                }}
+              >
+                {TabChildren}
+              </Tabs>
+              {otherChildren}
+            </React.Fragment>
+          ) : (
+            props.children
           )}
-
-          <UserName
-            name="userName"
-            placeholder="用户名: admin or user"
-            rules={[
-              {
-                required: true,
-                message: '请输入用户名!',
-              },
-            ]}
-          />
-          <Password
-            name="password"
-            placeholder="密码: ant.design"
-            rules={[
-              {
-                required: true,
-                message: '请输入密码！',
-              },
-            ]}
-          />
-        </Tab>
-        <Tab key="mobile" tab="手机号登录">
-          {status === 'error' && loginType === 'mobile' && !submitting && (
-            <LoginMessage content="验证码错误" />
-          )}
-          <Mobile
-            name="mobile"
-            placeholder="手机号"
-            rules={[
-              {
-                required: true,
-                message: '请输入手机号！',
-              },
-              {
-                pattern: /^1\d{10}$/,
-                message: '手机号格式错误！',
-              },
-            ]}
-          />
-          <Captcha
-            name="captcha"
-            placeholder="验证码"
-            countDown={120}
-            getCaptchaButtonText=""
-            getCaptchaSecondText="秒"
-            rules={[
-              {
-                required: true,
-                message: '请输入验证码！',
-              },
-            ]}
-          />
-        </Tab>
-        <div>
-          <Checkbox checked={autoLogin} onChange={(e) => setAutoLogin(e.target.checked)}>
-            自动登录
-          </Checkbox>
-          <a
-            style={{
-              float: 'right',
-            }}
-          >
-            忘记密码
-          </a>
-        </div>
-        <Submit loading={submitting}>登录</Submit>
-        <div className={styles.other}>
-          其他登录方式
-          <AlipayCircleOutlined className={styles.icon} />
-          <TaobaoCircleOutlined className={styles.icon} />
-          <WeiboCircleOutlined className={styles.icon} />
-          <Link className={styles.register} to="/user/register">
-            注册账户
-          </Link>
-        </div>
-      </LoginForm>
-    </div>
+        </Form>
+      </div>
+    </LoginContext.Provider>
   );
 };
 
-export default connect(({ login, loading }: ConnectState) => ({
-  userLogin: login,
-  submitting: loading.effects['login/login'],
-}))(Login);
+Login.Tab = LoginTab;
+Login.Submit = LoginSubmit;
+
+Login.UserName = LoginItem.UserName;
+Login.Password = LoginItem.Password;
+Login.Mobile = LoginItem.Mobile;
+Login.Captcha = LoginItem.Captcha;
+
+export default Login;

@@ -31,8 +31,8 @@ export default defineConfig({
       routes: [
         {
           name: 'login',
-          path: '/user/login',
-          component: './user/login',
+          path: '/user',
+          component: './User',
         },
       ],
     },
@@ -52,7 +52,7 @@ export default defineConfig({
               name: 'lanting',
               path: '/lanting',
               icon: 'BookOutlined',
-              component: './ListSearchArticles',
+              component: './Lanting',
             },
             {
               component: './404',

@@ -1,7 +1,6 @@
 import { stringify } from 'querystring';
 import { history, Reducer, Effect } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
 import { getPageQuery } from '@/utils/utils';
 
 export interface StateType {
@@ -30,8 +29,8 @@ const Model: LoginModelType = {
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+    *login(_, { put }) {
+      const response = { status: 'ok', currentAuthority: 'admin' };
       yield put({
         type: 'changeLoginStatus',
         payload: response,

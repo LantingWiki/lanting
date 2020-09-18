@@ -75,6 +75,8 @@ function main() {
       fileContent = setField(archive, field, fileContent, compiledArchives);
     });
     archive.remarks = fileContent.replace('# remarks', '');
+    archive.hasOrig = fs.existsSync(`${ARCHIVE_DIR}/origs/${archive.id}.md`)
+      || fs.existsSync(`${ARCHIVE_DIR}/origs/${archive.id}.html`);
 
     return archive;
   });
