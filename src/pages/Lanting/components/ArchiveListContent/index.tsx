@@ -1,7 +1,7 @@
 import React from 'react';
 import { CalendarOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import ReactMarkdown from 'react-markdown';
-import ExpandCollapse from 'react-expand-collapse';
+import ExpandCollapse from '@/components/vendor/ExpandCollapse';
 import styles from './index.less';
 import { Archive } from '../../data';
 

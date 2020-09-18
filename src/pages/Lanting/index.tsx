@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 import { Card, Form, List, Select, Tag, Collapse } from 'antd';
-import { FormInstance } from 'antd/lib/form/Form'
+import { FormInstance } from 'antd/lib/form/Form';
 import { EditOutlined, BankOutlined, DownOutlined } from '@ant-design/icons';
 import { connect, Dispatch } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { fieldToTranslation } from '@/utils/utils';
 import ArchiveListContent from './components/ArchiveListContent';
 import { StateType } from './model';
-import { Archives, Archive } from './data';
+import { Archives, Archive, FilterValues } from './data';
 import StandardFormRow from './components/StandardFormRow';
 import styles from './style.less';
 
@@ -57,13 +57,15 @@ const generateSelect = (field: string, archives: Archives, isLast: boolean) => {
 
 const generateSelects = (archives: Archives) => {
   return ['author', 'publisher', 'date', 'tag'].map((f, idx) =>
-    generateSelect(f, archives, idx === 3)
+    generateSelect(f, archives, idx === 3),
   );
-}
+};
 
-const getFilterElem = (archives: Archives, form: FormInstance,
-  onValuesChange: (changedValues: any, values: any) => void) => {
-  
+const getFilterElem = (
+  archives: Archives,
+  form: FormInstance,
+  onValuesChange: (changedValues: any, values: FilterValues) => void,
+) => {
   return (
     <Collapse ghost>
       <Panel header="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" key="1" forceRender showArrow={false}>
@@ -87,16 +89,14 @@ const getFilterElem = (archives: Archives, form: FormInstance,
 
 const Lanting: FC<LantingProps> = ({
   dispatch,
-  lanting: { archives },
+  lanting: { compiledArchives, currentArchives },
 }) => {
   const [form] = Form.useForm();
 
-  const onFilterChange = (changedValues: any, values: any) => {
+  const onFilterChange = (_: any, values: FilterValues) => {
     dispatch({
       type: 'lanting/queryList',
       payload: {
-        test1: 2,
-        changedValues,
         values,
       },
     });
@@ -105,14 +105,14 @@ const Lanting: FC<LantingProps> = ({
   return (
     <PageContainer
       className={styles.pcontainer}
-      content={getFilterElem(archives, form, onFilterChange)}
+      content={getFilterElem(compiledArchives, form, onFilterChange)}
     >
       <Card className={styles.listcard} bordered={false}>
         <List<Archive>
           size="large"
           rowKey="id"
           itemLayout="vertical"
-          dataSource={archives.archives}
+          dataSource={currentArchives}
           renderItem={(item) => (
             <List.Item
               key={item.id}
@@ -129,18 +129,19 @@ const Lanting: FC<LantingProps> = ({
               extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
-                title={item.hasOrig ?
-                  <h4 className={styles.listItemMetaTitle}><a href="#">
-                    {item.title}
-                  </a></h4> :
-                  <h4 className={styles.listItemMetaTitle}>
-                    {item.title}
-                  </h4>
+                title={
+                  item.hasOrig ? (
+                    <a className={styles.listItemMetaTitle} href="#" target="_blank">
+                      {item.title}
+                    </a>
+                  ) : (
+                    <span>{item.title}</span>
+                  )
                 }
                 description={
                   <span>
                     {item.tag.map((t) => (
-                      <Tag>{t}</Tag>
+                      <Tag key={t}>{t}</Tag>
                     ))}
                   </span>
                 }

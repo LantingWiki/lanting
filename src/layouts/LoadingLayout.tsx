@@ -31,7 +31,7 @@ class LoadingLayout extends React.Component<LoadingLayoutProps, LoadingLayoutSta
   render() {
     const { isReady } = this.state;
     const { children, loading } = this.props;
-    
+
     if (loading || !isReady) {
       return <PageLoading />;
     }

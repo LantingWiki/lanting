@@ -10,7 +10,7 @@ import ProLayout, {
   DefaultFooter,
 } from '@ant-design/pro-layout';
 import React, { useRef } from 'react';
-import { Link, useIntl, connect, Dispatch, history } from 'umi';
+import { Link, connect, Dispatch, history } from 'umi';
 import { GithubOutlined } from '@ant-design/icons';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
@@ -32,7 +32,6 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
     [path: string]: MenuDataItem;
   };
 };
-
 const defaultFooterDom = (
   <DefaultFooter
     copyright={`${new Date().getFullYear()} 兰亭已矣`}
@@ -60,12 +59,7 @@ const defaultFooterDom = (
 );
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
-  const {
-    dispatch,
-    children,
-    settings,
-  } = props;
-
+  const { dispatch, children, settings } = props;
   const menuDataRef = useRef<MenuDataItem[]>([]);
 
   const handleMenuCollapse = (payload: boolean): void => {
@@ -77,20 +71,18 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     }
   };
 
-  const { formatMessage } = useIntl();
-
   return (
     <ProLayout
       className={styles.pro}
       headerHeight={64}
       logo={logo}
-      formatMessage={formatMessage}
       onCollapse={handleMenuCollapse}
       onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (menuItemProps.isUrl || !menuItemProps.path) {
           return defaultDom;
         }
+
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
       footerRender={() => defaultFooterDom}

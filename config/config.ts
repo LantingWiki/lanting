@@ -10,13 +10,13 @@ export default defineConfig({
   dva: {
     hmr: true,
   },
-  locale: {
-    // default zh-CN
-    default: 'zh-CN',
-    antd: true,
-    // default true, when it is true, will use `navigator.language` overwrite default
-    baseNavigator: true,
-  },
+  // locale: {
+  //   // default zh-CN
+  //   default: 'zh-CN',
+  //   antd: true,
+  //   // default true, when it is true, will use `navigator.language` overwrite default
+  //   baseNavigator: true,
+  // },
   dynamicImport: {
     loading: '@/components/PageLoading/index',
   },
@@ -49,7 +49,7 @@ export default defineConfig({
               redirect: '/lanting',
             },
             {
-              name: 'lanting',
+              name: '兰亭已矣',
               path: '/lanting',
               icon: 'BookOutlined',
               component: './Lanting',
