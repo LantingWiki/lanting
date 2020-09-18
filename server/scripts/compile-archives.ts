@@ -74,7 +74,7 @@ function main() {
     ['title', 'author', 'publisher', 'date', 'chapter', 'tag'].forEach((field) => {
       fileContent = setField(archive, field, fileContent, compiledArchives);
     });
-    archive.remarks = fileContent;
+    archive.remarks = fileContent.replace('# remarks', '');
 
     return archive;
   });

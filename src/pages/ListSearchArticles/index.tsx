@@ -263,7 +263,6 @@ const ListSearchArticles: FC<ListSearchArticlesProps> = ({
           size="large"
           rowKey="id"
           itemLayout="vertical"
-          loadMore={loadMore}
           dataSource={compiledArchives.archives}
           renderItem={(item) => (
             <List.Item

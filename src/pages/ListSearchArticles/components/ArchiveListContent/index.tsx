@@ -1,5 +1,7 @@
 import React from 'react';
-import { CalendarOutlined } from '@ant-design/icons';
+import { CalendarOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
+import ReactMarkdown from 'react-markdown';
+import ExpandCollapse from 'react-expand-collapse';
 import styles from './index.less';
 import { Archive } from '../../data';
 
@@ -9,7 +11,23 @@ interface ArchiveListContentProps {
 
 const ArchiveListContent: React.FC<ArchiveListContentProps> = ({ archive }) => (
   <div className={styles.listContent}>
-    <div className={styles.description}>{archive.remarks}</div>
+    <ExpandCollapse
+      previewHeight="128px"
+      expandText={
+        <>
+          一叶知秋 <DownOutlined />
+        </>
+      }
+      collapseText={
+        <>
+          微言大义 <UpOutlined />
+        </>
+      }
+      ellipsis={false}
+    >
+      <ReactMarkdown source={archive.remarks} skipHtml />
+    </ExpandCollapse>
+    <div className={styles.description} />
     <div className={styles.extra}>
       <CalendarOutlined style={{ marginRight: 8 }} />
       {archive.date}
