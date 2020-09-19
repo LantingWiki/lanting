@@ -1,10 +1,10 @@
 import { Reducer } from 'umi';
 import compiledArchives from '@/assets/archives.json';
-import { Archive, Archives, FilterValues } from './data';
+import { Archive, Archives, ChapterArchives, CHAPTERS, FilterValues } from './data';
 
 export interface StateType {
   compiledArchives: Archives;
-  currentArchives: Archive[];
+  currentArchives: ChapterArchives;
 }
 
 export interface ModelType {
@@ -15,7 +15,17 @@ export interface ModelType {
   };
 }
 
-const filterArchives = (filters: FilterValues, archives: Archive[]) => {
+const initArchives = (archives: Archives) => {
+  const chapterArchives = new ChapterArchives();
+  CHAPTERS.forEach((c) => {
+    chapterArchives[c] = archives.archives.filter((a) => a.chapter === c);
+  });
+  return chapterArchives;
+};
+
+const initedChapterArchives = initArchives(compiledArchives);
+
+const filterOneChapterArchives = (filters: FilterValues, archives: Archive[]) => {
   const results = archives.filter((archive) => {
     if (!filters.date.includes('all') && !filters.date.includes(archive.date)) {
       return false;
@@ -37,16 +47,25 @@ const filterArchives = (filters: FilterValues, archives: Archive[]) => {
   return results;
 };
 
+const filterArchives = (filters: FilterValues) => {
+  const chapterArchives = new ChapterArchives();
+  CHAPTERS.forEach((c) => {
+    chapterArchives[c] = filterOneChapterArchives(filters, initedChapterArchives[c]);
+  });
+  return chapterArchives;
+};
+
 const Model: ModelType = {
   namespace: 'lanting',
   state: {
     compiledArchives,
-    currentArchives: compiledArchives.archives.slice(),
+    currentArchives: initedChapterArchives,
   },
 
   reducers: {
     queryList(state, action) {
-      const filteredArchives = filterArchives(action.payload.values, compiledArchives.archives);
+      console.log('XXXTEMP', 1);
+      const filteredArchives = filterArchives(action.payload.values);
       return {
         ...state,
         currentArchives: filteredArchives,

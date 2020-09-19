@@ -1,4 +1,18 @@
-export type Chapter = '本纪' | '世家' | '列传' | '群像' | '随园食单' | string;
+export const CHAPTERS = ['本纪', '世家', '列传', '游侠', '群像'];
+
+export type Chapter = '本纪' | '世家' | '列传' | '游侠' | '群像' | '随园食单' | string;
+
+export class ChapterArchives {
+  '本纪': Archive[] = [];
+
+  '世家': Archive[] = [];
+
+  '列传': Archive[] = [];
+
+  '游侠': Archive[] = [];
+
+  '群像': Archive[] = [];
+}
 
 export class FieldFreqMap {
   author: {

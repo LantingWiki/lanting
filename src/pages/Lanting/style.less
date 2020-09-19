@@ -1,35 +1,5 @@
 @import '~antd/es/style/themes/default.less';
 
-.listItemMetaTitle a {
-  color: @heading-color;
-}
-.listItemExtra {
-  width: 272px;
-  height: 1px;
-}
-.selfTrigger {
-  margin-left: 12px;
-}
-
-@media screen and (max-width: @screen-xs) {
-  .selfTrigger {
-    display: block;
-    margin-left: 0;
-  }
-}
-@media screen and (max-width: @screen-md) {
-  .selfTrigger {
-    display: block;
-    margin-left: 0;
-  }
-}
-@media screen and (max-width: @screen-lg) {
-  .listItemExtra {
-    width: 0;
-    height: 1px;
-  }
-}
-
 .pcontainer {
   padding-bottom: 0px;
   :global {
@@ -47,15 +17,6 @@
     .ant-collapse-content-box {
       padding-bottom: 32px !important;
       padding-bottom: 0 !important;
-    }
-  }
-}
-
-.listcard {
-  margin-top: 24px;
-  :global {
-    .ant-card-body {
-      padding: 16px 0;
     }
   }
 }
