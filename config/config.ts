@@ -10,32 +10,22 @@ export default defineConfig({
   dva: {
     hmr: true,
   },
-  // locale: {
-  //   // default zh-CN
-  //   default: 'zh-CN',
-  //   antd: true,
-  //   // default true, when it is true, will use `navigator.language` overwrite default
-  //   baseNavigator: true,
-  // },
-  dynamicImport: {
-    loading: '@/components/PageLoading/index',
-  },
   targets: {
     ie: 11,
   },
   // umi routes: https://umijs.org/docs/routing
   routes: [
-    {
-      path: '/user',
-      component: '../layouts/UserLayout',
-      routes: [
-        {
-          name: 'login',
-          path: '/user',
-          component: './User',
-        },
-      ],
-    },
+    // {
+    //   path: '/user',
+    //   component: '../layouts/UserLayout',
+    //   routes: [
+    //     {
+    //       name: 'login',
+    //       path: '/user',
+    //       component: './User',
+    //     },
+    //   ],
+    // },
     {
       path: '/',
       component: '../layouts/LoadingLayout',
@@ -73,6 +63,7 @@ export default defineConfig({
     // ...darkTheme,
     'primary-color': defaultSettings.primaryColor,
   },
+  publicPath: '/',
   // @ts-ignore
   title: false,
   ignoreMomentLocale: true,
