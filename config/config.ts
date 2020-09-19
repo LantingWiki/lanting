@@ -5,6 +5,10 @@ import proxy from './proxy';
 
 const { REACT_APP_ENV } = process.env;
 export default defineConfig({
+  externals: {
+    react: 'window.React',
+    'react-dom': 'window.ReactDOM',
+  },
   hash: true,
   antd: {},
   dva: {
