@@ -6,7 +6,7 @@ import { Archive, Archives } from './data';
 
 // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ARCHIVE_DIR = `${__dirname}/../../archives`;
+const ARCHIVE_DIR = `${__dirname}/../../src/assets/archives`;
 
 function setField(archive: Archive, field: string, fileContent: string, archives: Archives) {
   const regexArr = toFieldRegex(field).exec(fileContent);
@@ -75,12 +75,13 @@ function main() {
       fileContent = setField(archive, field, fileContent, compiledArchives);
     });
     archive.remarks = fileContent.replace('# remarks', '');
-    archive.hasOrig = fs.existsSync(`${ARCHIVE_DIR}/origs/${archive.id}.md`)
-      || fs.existsSync(`${ARCHIVE_DIR}/origs/${archive.id}.html`);
+    archive.hasOrig =
+      fs.existsSync(`${ARCHIVE_DIR}/origs/${archive.id}.md`) ||
+      fs.existsSync(`${ARCHIVE_DIR}/origs/${archive.id}.html`);
 
     return archive;
   });
 
-  fs.writeFileSync(`${ARCHIVE_DIR}/../src/assets/archives.json`, JSON.stringify(compiledArchives));
+  fs.writeFileSync(`${ARCHIVE_DIR}/../archives.json`, JSON.stringify(compiledArchives));
 }
 main();

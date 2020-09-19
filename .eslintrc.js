@@ -8,5 +8,6 @@ module.exports = {
     'prefer-destructuring': ['error', { object: true, array: false }],
     'no-param-reassign': 0,
     'max-classes-per-file': 0,
+    'no-plusplus': 0,
   },
 };

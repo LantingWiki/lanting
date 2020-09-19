@@ -1,91 +1,20 @@
 import React, { FC } from 'react';
-import { Card, Form, List, Select, Tag, Collapse } from 'antd';
-import { FormInstance } from 'antd/lib/form/Form';
-import { EditOutlined, BankOutlined, DownOutlined } from '@ant-design/icons';
+import { Card, Form, List, Tag } from 'antd';
+import { EditOutlined, BankOutlined } from '@ant-design/icons';
 import { connect, Dispatch } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import { fieldToTranslation } from '@/utils/utils';
+import Filters from './components/Filters';
 import ArchiveListContent from './components/ArchiveListContent';
+import MiscRecipes from './components/MiscRecipes';
 import { StateType } from './model';
-import { Archives, Archive, FilterValues } from './data';
-import StandardFormRow from './components/StandardFormRow';
+import { Archive, FilterValues } from './data';
 import styles from './style.less';
-
-const { Option } = Select;
-const { Panel } = Collapse;
-const FormItem = Form.Item;
 
 interface LantingProps {
   dispatch: Dispatch;
   lanting: StateType;
   loading: boolean;
 }
-
-const generateOptions = (field: string, archives: Archives) => {
-  const map = archives.fieldFreqMap[field];
-  const options = Object.keys(map).map((fieldVal) => (
-    <Option key={fieldVal} value={fieldVal} label={fieldVal}>
-      {fieldVal}: {map[fieldVal]}
-    </Option>
-  ));
-  options.unshift(
-    <Option key="all" value="all" label="全选">
-      全选
-    </Option>,
-  );
-  return options;
-};
-
-const generateSelect = (field: string, archives: Archives, isLast: boolean) => {
-  const translation = fieldToTranslation[field];
-  return (
-    <StandardFormRow title={translation} key={field} last={isLast}>
-      <FormItem name={field} className={styles.formitem}>
-        <Select
-          suffixIcon={<DownOutlined />}
-          mode="multiple"
-          placeholder={`筛选${translation}`}
-          optionLabelProp="label"
-          className={styles.select}
-        >
-          {generateOptions(field, archives)}
-        </Select>
-      </FormItem>
-    </StandardFormRow>
-  );
-};
-
-const generateSelects = (archives: Archives) => {
-  return ['author', 'publisher', 'date', 'tag'].map((f, idx) =>
-    generateSelect(f, archives, idx === 3),
-  );
-};
-
-const getFilterElem = (
-  archives: Archives,
-  form: FormInstance,
-  onValuesChange: (changedValues: any, values: FilterValues) => void,
-) => {
-  return (
-    <Collapse ghost>
-      <Panel header="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" key="1" forceRender showArrow={false}>
-        <Form
-          layout="vertical"
-          form={form}
-          initialValues={{
-            author: ['all'],
-            publisher: ['all'],
-            date: ['all'],
-            tag: ['all'],
-          }}
-          onValuesChange={onValuesChange}
-        >
-          {generateSelects(archives)}
-        </Form>
-      </Panel>
-    </Collapse>
-  );
-};
 
 const Lanting: FC<LantingProps> = ({
   dispatch,
@@ -105,7 +34,7 @@ const Lanting: FC<LantingProps> = ({
   return (
     <PageContainer
       className={styles.pcontainer}
-      content={getFilterElem(compiledArchives, form, onFilterChange)}
+      content={<Filters archives={compiledArchives} form={form} onValuesChange={onFilterChange} />}
     >
       <Card className={styles.listcard} bordered={false}>
         <List<Archive>
@@ -151,6 +80,7 @@ const Lanting: FC<LantingProps> = ({
           )}
         />
       </Card>
+      <MiscRecipes />
     </PageContainer>
   );
 };
