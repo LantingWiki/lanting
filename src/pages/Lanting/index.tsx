@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Form } from 'antd';
 import { connect, Dispatch } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -20,6 +20,12 @@ const Lanting: FC<LantingProps> = ({
   lanting: { compiledArchives, currentArchives },
 }) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    dispatch({
+      type: 'lanting/fetch',
+    });
+  }, []);
 
   const onFilterChange = (_: any, values: FilterValues) => {
     dispatch({

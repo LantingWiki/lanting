@@ -1,5 +1,4 @@
-import { Reducer } from 'umi';
-import compiledArchives from '@/assets/archives.json';
+import { Effect, Reducer } from 'umi';
 import { Archive, Archives, ChapterArchives, CHAPTERS, FilterValues } from './data';
 
 export interface StateType {
@@ -10,7 +9,11 @@ export interface StateType {
 export interface ModelType {
   namespace: string;
   state: StateType;
+  effects: {
+    fetch: Effect;
+  };
   reducers: {
+    putList: Reducer<StateType>;
     queryList: Reducer<StateType>;
   };
 }
@@ -23,7 +26,9 @@ const initArchives = (archives: Archives) => {
   return chapterArchives;
 };
 
-const initedChapterArchives = initArchives(compiledArchives);
+let initedChapterArchives = new ChapterArchives();
+let compiledArchives = new Archives();
+let inited = false;
 
 const filterOneChapterArchives = (filters: FilterValues, archives: Archive[]) => {
   const results = archives.filter((archive) => {
@@ -61,10 +66,35 @@ const Model: ModelType = {
     compiledArchives,
     currentArchives: initedChapterArchives,
   },
-
+  effects: {
+    *fetch(_, { call, put }) {
+      if (inited) {
+        return;
+      }
+      inited = true;
+      const response = yield call(() => {
+        return import('@/assets/archives.json');
+      });
+      compiledArchives = response;
+      initedChapterArchives = initArchives(response);
+      yield put({
+        type: 'putList',
+        payload: {
+          compiledArchives,
+          currentArchives: initedChapterArchives,
+        },
+      });
+    },
+  },
   reducers: {
+    putList(state, action) {
+      return {
+        ...state,
+        compiledArchives: action.payload.compiledArchives,
+        currentArchives: action.payload.currentArchives,
+      };
+    },
     queryList(state, action) {
-      console.log('XXXTEMP', 1);
       const filteredArchives = filterArchives(action.payload.values);
       return {
         ...state,

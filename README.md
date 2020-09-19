@@ -31,6 +31,7 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 ### 部署
 [x] 包, 小小小
+[x] 按需加载, archives.json不打包
 
 ### styles
 [x] ant card body

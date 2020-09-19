@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "description": "兰亭已矣",
   "scripts": {
+    "deploy": "yarn build && for f in ./dist/; do ossutilmac64 cp -r -u $f oss://lanting-public/; done",
     "analyze": "cross-env ANALYZE=1 umi build",
     "build": "umi build",
-    "deploy": "echo TODO",
     "dev": "npm run start:dev",
     "fetch:blocks": "pro fetch-blocks && npm run prettier",
     "postinstall": "umi g tmp",

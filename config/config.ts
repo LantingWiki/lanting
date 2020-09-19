@@ -1,5 +1,6 @@
 // https://umijs.org/config/
 import { defineConfig } from 'umi';
+
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 
@@ -68,6 +69,9 @@ export default defineConfig({
     'primary-color': defaultSettings.primaryColor,
   },
   publicPath: '/',
+  dynamicImport: {
+    loading: '@ant-design/pro-layout/lib/PageLoading',
+  },
   // @ts-ignore
   title: false,
   ignoreMomentLocale: true,
