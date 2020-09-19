@@ -50,9 +50,13 @@ const renderArchive = (item: Archive) => (
 const ArchiveChapter: React.FC<ArchiveChapterProps> = ({ chapter, archives }) => (
   <ChapterCard title={<h2>{chapter}</h2>} defaultActive>
     <List<Archive>
+      className={styles.list}
       size="large"
       rowKey="id"
       itemLayout="vertical"
+      locale={{ emptyText: '前不见古人' }}
+      split
+      grid={{ gutter: 0, column: 2, sm: 1, xs: 1 }}
       dataSource={archives}
       renderItem={renderArchive}
     />
