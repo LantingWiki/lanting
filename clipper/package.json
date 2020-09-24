@@ -1,8 +1,8 @@
 {
-  "name": "joplin-webclipper",
-  "version": "1.0.0",
-  "description": "Joplin Web Clipper",
+  "name": "lanting-clipper",
+  "version": "0.1.0",
+  "description": "",
   "main": "main.js",
-  "author": "Laurent Cozic",
+  "author": "",
   "license": "MIT"
 }

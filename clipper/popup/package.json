@@ -1,5 +1,5 @@
 {
-  "name": "joplin-webclipper-popup",
+  "name": "lanting-clipper-popup",
   "version": "0.1.0",
   "private": true,
   "homepage": ".",
@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "cra-build-watch": "^3.2.0",
-    "fs-extra": "^6.0.1",
+    "eslint-loader": "^4.0.2",
     "react-scripts": "^3.3.1"
   },
   "browserslist": [

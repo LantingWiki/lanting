@@ -16,8 +16,7 @@ window.joplinEnv = function() {
 	if (env_) return env_;
 
 	const manifest = browser_.runtime.getManifest();
-	env_ = manifest.name.indexOf('[DEV]') >= 0 ? 'dev' : 'prod';
-	return env_;
+	return 'dev';
 };
 
 async function browserCaptureVisibleTabs(windowId) {
@@ -40,14 +39,6 @@ async function browserGetZoom(tabId) {
 		});
 	});
 }
-
-browser_.runtime.onInstalled.addListener(function() {
-	if (window.joplinEnv() === 'dev') {
-		browser_.browserAction.setIcon({
-			path: 'icons/32-dev.png',
-		});
-	}
-});
 
 browser_.runtime.onMessage.addListener(async (command) => {
 	if (command.name === 'screenshotArea') {

@@ -16,6 +16,7 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [] 还是存到本地不变, 路径变一下, 文件名变一下只需要 ID. ID 哪里来? 去 repo 查. 不要打本地, 打接口, 然后本地 pull 吧
 [] 从第一行解析出标题, 试图解析出 metadata, 解析最后 metadata 里有用的部分. 建对应的 orig 和 comment, metadata都放comment, 都进入compile流程. 通过 ID 来对应. 有了就不建, 等于是补全.
 [] 上传源文件到 OSS. repo 里也存一份只用来存档, 来判断有没有, 页面直接拼 URL -> 可以! markdown这边, 改下代码想办法让图片跟markdown塞在一起吧
+综合webclipper, 第一图片怎么处理, 第二css是不是OK, 第三下下来之后触发什么
 
 ### 数据
 [x]批量现有的导过来
