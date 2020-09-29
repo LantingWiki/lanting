@@ -68,7 +68,7 @@ export default defineConfig({
     // ...darkTheme,
     'primary-color': defaultSettings.primaryColor,
   },
-  publicPath: '/',
+  publicPath: '/public/',
   dynamicImport: {
     loading: '@ant-design/pro-layout/lib/PageLoading',
   },
@@ -79,4 +79,11 @@ export default defineConfig({
   manifest: {
     basePath: '/',
   },
+  copy: [
+    'archives',
+    {
+      from: 'archives',
+      to: 'archives',
+    },
+  ],
 });

@@ -1,12 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect, Dispatch } from 'umi';
 import ReactMarkdown from 'react-markdown';
-import miscRecipesMd from '@/assets/archives/1000-随园食单.md';
 import ChapterCard from '../ChapterCard';
+import { StateType } from './model';
 
-const MiscRecipes: React.FC = () => (
-  <ChapterCard title={<h2>随园食单</h2>}>
-    <ReactMarkdown source={miscRecipesMd} escapeHtml={false} />
-  </ChapterCard>
-);
+interface MiscRecipesProps {
+  dispatch: Dispatch;
+  lantingMiscRecipes: StateType;
+  loading: boolean;
+}
 
-export default MiscRecipes;
+const MiscRecipes: React.FC<MiscRecipesProps> = ({
+  dispatch,
+  lantingMiscRecipes: { miscRecipesMd },
+}) => {
+  useEffect(() => {
+    dispatch({
+      type: 'lantingMiscRecipes/fetch',
+    });
+  }, []);
+
+  return (
+    <ChapterCard title={<h2>随园食单</h2>}>
+      <ReactMarkdown source={miscRecipesMd} escapeHtml={false} />
+    </ChapterCard>
+  );
+};
+
+export default connect(
+  ({
+    lantingMiscRecipes,
+    loading,
+  }: {
+    lantingMiscRecipes: StateType;
+    loading: { models: { [key: string]: boolean } };
+  }) => ({
+    lantingMiscRecipes,
+    loading: loading.models.lanting,
+  }),
+)(MiscRecipes);
