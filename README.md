@@ -2,6 +2,30 @@
 
 Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
+
+# Workflow
+
+### 数据源
+
+批量导入老的, 所有的过一遍 (这里不需要建comments)
+浏览器里save singlefile, 需要同时建comments, 尽量抽metadata
+之后如果微信等需要存, 就做一个接口. headless browser + singleFile CLI
+
+### 放的路径
+orig肯定要放public了
+生成archive.json放assets
+随园食单不要直接import了, fetch, 就可以也放到public
+
+### obsidian集成
+整个变成一个vault, 应该没问题, 编辑的时候也OK
+
+### 对应关系
+放在archive.json, 什么后缀名
+从public读, 链接先直接跳到orig, 以后考虑iframe?
+
+### 哪些东西fetch
+archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch
+
 # TODOs
 
 ### 聚合
