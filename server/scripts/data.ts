@@ -1,34 +1,18 @@
-export interface Member {
-  avatar: string;
-  name: string;
-  id: string;
-}
+export const CHAPTERS = ['本纪', '世家', '列传', '游侠', '群像'];
 
-export interface ListItemDataType {
-  id: string;
-  owner: string;
-  title: string;
-  avatar: string;
-  cover: string;
-  status: 'normal' | 'exception' | 'active' | 'success';
-  percent: number;
-  logo: string;
-  href: string;
-  body?: any;
-  updatedAt: number;
-  createdAt: number;
-  subDescription: string;
-  description: string;
-  activeUser: number;
-  newUser: number;
-  star: number;
-  like: number;
-  message: number;
-  content: string;
-  members: Member[];
-}
+export type Chapter = '本纪' | '世家' | '列传' | '游侠' | '群像' | '随园食单' | string;
 
-export type Chapter = '本纪' | '世家' | '列传' | '群像' | '随园食单' | string;
+export class ChapterArchives {
+  '本纪': Archive[] = [];
+
+  '世家': Archive[] = [];
+
+  '列传': Archive[] = [];
+
+  '游侠': Archive[] = [];
+
+  '群像': Archive[] = [];
+}
 
 export class FieldFreqMap {
   author: {
@@ -65,11 +49,18 @@ export class Archive {
 
   remarks: string = '';
 
-  hasOrig: boolean = false;
+  hasOrig: false | string = false;
 }
 
 export class Archives {
   archives: Archive[] = [];
 
   fieldFreqMap: FieldFreqMap = new FieldFreqMap();
+}
+
+export interface FilterValues {
+  author: string[];
+  date: string[];
+  publisher: string[];
+  tag: string[];
 }

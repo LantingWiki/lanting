@@ -80,7 +80,6 @@ export default defineConfig({
     basePath: '/',
   },
   copy: [
-    'archives',
     {
       from: 'archives',
       to: 'archives',

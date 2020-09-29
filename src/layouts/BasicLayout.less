@@ -1,3 +1,5 @@
+@import '~antd/es/style/themes/default.less';
+
 .pro {
   :global {
     .ant-pro-top-nav-header-logo {
@@ -5,7 +7,14 @@
       h1 {
         font-weight: bold;
         font-size: 32px;
+        color: @heading-color !important;
       }
     }
+  }
+}
+
+:global {
+  .ant-pro-sider-light .ant-pro-sider-logo h1 {
+    color: @heading-color !important;
   }
 }

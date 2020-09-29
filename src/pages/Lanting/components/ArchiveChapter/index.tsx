@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, Tag } from 'antd';
-import { BankOutlined, EditOutlined } from '@ant-design/icons';
+import { BankOutlined, EditOutlined, BookOutlined } from '@ant-design/icons';
 import ChapterCard from '../ChapterCard';
 import ArchiveListContent from '../ArchiveListContent';
 import { Archive } from '../../data';
@@ -28,9 +28,17 @@ const renderArchive = (item: Archive) => (
     <List.Item.Meta
       title={
         item.hasOrig ? (
-          <a className={styles.listItemMetaTitle} href="#" target="_blank">
-            {item.title}
-          </a>
+          <>
+            <span>{item.title}</span>
+            <a
+              className={styles.listItemMetaTitle}
+              href={`/public/archives/origs/${item.hasOrig}`}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <BookOutlined />
+            </a>
+          </>
         ) : (
           <span>{item.title}</span>
         )
