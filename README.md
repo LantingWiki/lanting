@@ -6,14 +6,17 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 ### 数据源
 
-批量导入老的, 所有的过一遍 (这里不需要建comments)
-浏览器里save singlefile, 需要同时建comments, 尽量抽metadata
+批量导入现有的, 所有的过一遍 (这里不需要建comments)
+批量导入evernote但是没有comments的 (这里需要建comments)
+
+浏览器里右键save singlefile
 之后如果微信等需要存, 就做一个接口. headless browser + singleFile CLI
+**以上两个都需要同时建comments, 尽量抽metadata**
 
 ### 放的路径
-orig肯定要放public了
-生成archive.json放assets
-随园食单不要直接import了, fetch, 就可以也放到public
+[x] orig肯定要放public了
+[x] 生成archive.json放assets
+[x] 随园食单不要直接import了, fetch, 就可以也放到public
 
 ### obsidian集成
 整个变成一个vault, 应该没问题, 编辑的时候也OK
