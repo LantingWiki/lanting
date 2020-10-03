@@ -11,6 +11,22 @@ export interface ArchiveChapterProps {
   archives: Archive[];
 }
 
+const renderOrig = (item: Archive) => {
+  if (!item.origs || item.origs.length === 0) {
+    return null;
+  }
+  return item.origs.map((orig) => (
+    <a
+      className={styles.listItemMetaTitle}
+      href={`/public/archives/origs/${orig}`}
+      rel="noreferrer"
+      target="_blank"
+    >
+      <BookOutlined />
+    </a>
+  ));
+};
+
 const renderArchive = (item: Archive) => (
   <List.Item
     key={item.id}
@@ -27,21 +43,10 @@ const renderArchive = (item: Archive) => (
   >
     <List.Item.Meta
       title={
-        item.hasOrig ? (
-          <>
-            <span>{item.title}</span>
-            <a
-              className={styles.listItemMetaTitle}
-              href={`/public/archives/origs/${item.hasOrig}`}
-              rel="noreferrer"
-              target="_blank"
-            >
-              <BookOutlined />
-            </a>
-          </>
-        ) : (
+        <>
           <span>{item.title}</span>
-        )
+          {renderOrig(item)}
+        </>
       }
       description={
         <span>

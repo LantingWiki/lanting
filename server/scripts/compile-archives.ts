@@ -7,6 +7,7 @@ import { Archive, Archives } from './data';
 // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ARCHIVE_DIR = `${__dirname}/../../archives`;
+const currentOrigs = fs.readdirSync(`${ARCHIVE_DIR}/origs`);
 
 function setField(archive: Archive, field: string, fileContent: string, archives: Archives) {
   const regexArr = toFieldRegex(field).exec(fileContent);
@@ -76,14 +77,17 @@ function main() {
     });
     archive.remarks = fileContent.replace('# remarks', '');
 
-    ['md', 'html', 'pdf'].some((ext) => {
-      const exists = fs.existsSync(`${ARCHIVE_DIR}/origs/${archive.id}.${ext}`);
-      if (exists) {
-        archive.hasOrig = `${archive.id}.${ext}`;
-        return true;
+    const foundOrigs = currentOrigs.filter((orig) => {
+      const parts = orig.split('.');
+      let id;
+      if (parts[0].includes('-')) {
+        id = +parts[0].split('-')[0];
+      } else {
+        id = +parts[0];
       }
-      return false;
+      return id === +archive.id;
     });
+    archive.origs = foundOrigs;
 
     return archive;
   });

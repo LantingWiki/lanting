@@ -49,7 +49,7 @@ export class Archive {
 
   remarks: string = '';
 
-  hasOrig: false | string = false;
+  origs: false | string[] = false;
 }
 
 export class Archives {
