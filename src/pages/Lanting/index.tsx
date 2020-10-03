@@ -2,6 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { Form } from 'antd';
 import { connect, Dispatch } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
+import { toChineseNumbers } from '@/utils/utils';
 import Filters from './components/Filters';
 import MiscRecipes from './components/MiscRecipes';
 import ArchiveChapter from './components/ArchiveChapter';
@@ -14,6 +15,17 @@ interface LantingProps {
   lanting: StateType;
   loading: boolean;
 }
+
+const getCount = (currentArchives) => {
+  let count = 0;
+  if (!currentArchives) {
+    return count;
+  }
+  Object.keys(currentArchives).forEach((k) => {
+    count += currentArchives[k].length;
+  });
+  return count;
+};
 
 const Lanting: FC<LantingProps> = ({
   dispatch,
@@ -35,9 +47,15 @@ const Lanting: FC<LantingProps> = ({
       },
     });
   };
-
+  const count = getCount(currentArchives);
   return (
     <PageContainer
+      title={
+        <>
+          <>兰亭已矣</>
+          {count ? <span className={styles.count}>凡{toChineseNumbers(`${count}`)}篇</span> : null}
+        </>
+      }
       className={styles.pcontainer}
       content={<Filters archives={compiledArchives} form={form} onValuesChange={onFilterChange} />}
     >
