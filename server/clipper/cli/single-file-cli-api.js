@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable prefer-destructuring */
 /*
  * Copyright 2010-2020 Gildas Lormeau
  * contact : gildas.lormeau <at> gmail.com
@@ -20,8 +22,6 @@
  *   notice and a URL through which recipients can access the Corresponding
  *   Source.
  */
-
-/* global require, module, URL */
 
 const fs = require("fs");
 const path = require("path");
@@ -46,9 +46,8 @@ module.exports = initialize;
 
 async function initialize(options) {
 	maxParallelWorkers = options.maxParallelWorkers;
-	console.log("XXXTEMP", 1, options);
+	// eslint-disable-next-line import/no-dynamic-require
 	backend = require(backEnds[options.backEnd]);
-	console.log("XXXTEMP", 2);
 	await backend.initialize(options);
 	if (options.crawlSyncSession || options.crawlLoadSession) {
 		try {
@@ -73,7 +72,7 @@ async function capture(urls, options) {
 	let newTasks;
 	const taskUrls = tasks.map(task => task.url);
 	newTasks = urls.map((url) => {
-		options.lantingId = `${+options.lantingId + 1}`;
+		options.lantingId += 1;
 		return createTask(url, options);
 	});
 	newTasks = newTasks.filter(task => task && !taskUrls.includes(task.url));
@@ -107,13 +106,13 @@ async function finish(options) {
 		});
 	}
 	if (!options.browserDebug) {
-		return backend.closeBrowser();
+		backend.closeBrowser();
 	}
 }
 
 async function runTasks() {
 	const availableTasks = tasks.filter(task => !task.status).length;
-	const processingTasks = tasks.filter(task => task.status == STATE_PROCESSING).length;
+	const processingTasks = tasks.filter(task => task.status === STATE_PROCESSING).length;
 	const promisesTasks = [];
 	for (let workerIndex = 0; workerIndex < Math.min(availableTasks, maxParallelWorkers - processingTasks); workerIndex++) {
 		promisesTasks.push(runNextTask());
@@ -122,6 +121,7 @@ async function runTasks() {
 }
 
 async function runNextTask() {
+	// eslint-disable-next-line no-shadow
 	const task = tasks.find(task => !task.status);
 	if (task) {
 		const {options} = task;
@@ -137,9 +137,10 @@ async function runNextTask() {
 			if (options.crawlLinks && testMaxDepth(task)) {
 				const newTasks = pageData.links
 					.map(urlLink => createTask(urlLink, options, task, tasks[0]))
+					// eslint-disable-next-line no-shadow
 					.filter(task => task &&
 						testMaxDepth(task) &&
-						!tasks.find(otherTask => otherTask.url == task.url) &&
+						!tasks.find(otherTask => otherTask.url === task.url) &&
 						(!options.crawlInnerLinksOnly || task.isInnerLink));
 				tasks.splice(tasks.length, 0, ...newTasks);
 			}
@@ -151,8 +152,8 @@ async function runNextTask() {
 
 function testMaxDepth(task) {
 	const {options} = task;
-	return (options.crawlMaxDepth == 0 || task.depth <= options.crawlMaxDepth) &&
-		(options.crawlExternalLinksMaxDepth == 0 || task.externalLinkDepth < options.crawlExternalLinksMaxDepth);
+	return (options.crawlMaxDepth === 0 || task.depth <= options.crawlMaxDepth) &&
+		(options.crawlExternalLinksMaxDepth === 0 || task.externalLinkDepth < options.crawlExternalLinksMaxDepth);
 }
 
 function createTask(url, options, parentTask, rootTask) {
@@ -164,19 +165,21 @@ function createTask(url, options, parentTask, rootTask) {
 			isInnerLink,
 			originalUrl: url,
 			depth: parentTask ? parentTask.depth + 1 : 0,
+			// eslint-disable-next-line no-nested-ternary
 			externalLinkDepth: isInnerLink ? -1 : parentTask ? parentTask.externalLinkDepth + 1 : -1,
 			options,
 			lantingId: options.lantingId
 		};
 	}
+	return null;
 }
 
 function saveTasks() {
 	if (sessionFilename) {
 		fs.writeFileSync(sessionFilename, JSON.stringify(
-			tasks.map(task => ({ ...task, status: task.status == STATE_PROCESSING ? undefined : task.status,
+			tasks.map(task => ({ ...task, status: task.status === STATE_PROCESSING ? undefined : task.status,
 				promise: undefined,
-				options: task.status && task.status == STATE_PROCESSED ? undefined : task.options}))
+				options: task.status && task.status === STATE_PROCESSED ? undefined : task.options}))
 		));
 	}
 }
@@ -202,7 +205,7 @@ function getHostURL(url) {
 
 function fillTitle(title) {
 	return `# title
-${title.substring(0, title.lastIndexOf("."))}
+${title}
 
 # author
 TODO
@@ -228,7 +231,7 @@ async function capturePage(options) {
 	const archives  = "/Users/wang.boyang/Projects/mine/lanting/archives";
 	let prefix = "";
 	if (options.lantingId) {
-		prefix = `${options.lantingId  }-`;
+		prefix = `${options.lantingId}-`;
 	}
 
 	try {
@@ -237,16 +240,18 @@ async function capturePage(options) {
 		if (options.output) {
 			console.log("XXXTEMP: do not use output for now");
 		} else if (options.filenameTemplate && pageData.filename) {
-			filename = path.join(archives, "origs", `${options.lantingId  }.html`);
+			filename = path.join(archives, "origs", `${options.lantingId}.html`);
 			fs.writeFileSync(filename, pageData.content);
 			const commentPathname = path.join(archives, "comments",
-				`${prefix}${pageData.filename}`);
+				`${prefix}${pageData.filename}.md`);
 			fs.writeFileSync(commentPathname, fillTitle(pageData.filename));
+			console.log("XXXTEMP DONE");
 		} else {
 			console.log("XXXTEMP no filename"); // eslint-disable-line no-console
 		}
 		return pageData;
 	} catch (error) {
+		console.log("XXXTEMP ERROR", error);
 		const message = `URL: ${  options.url  }\nStack: ${  error.stack  }\n`;
 		if (options.errorFile) {
 			fs.writeFileSync(options.errorFile, message, { flag: "a" });
@@ -254,6 +259,7 @@ async function capturePage(options) {
 			console.error(message); // eslint-disable-line no-console
 		}
 	}
+	return null;
 }
 
 function getFilename(filename, index = 1) {
@@ -268,6 +274,7 @@ function getFilename(filename, index = 1) {
 		}
 	}
 	if (fs.existsSync(newFilename)) {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		return getFilename(filename, index + 1);
 	}
 	return newFilename;

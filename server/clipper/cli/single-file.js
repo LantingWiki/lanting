@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /*
  * Copyright 2010-2020 Gildas Lormeau
  * contact : gildas.lormeau <at> gmail.com
@@ -21,18 +22,25 @@
  *   Source.
  */
 
-/* global require */
-
 const fileUrl = require("file-url");
 const fs = require("fs");
+
 run(require("./args"))
-	.catch(error => console.error(error.message || error)); // eslint-disable-line no-console	
+// eslint-disable-next-line no-console
+.catch(error => console.error(error.message || error));
 
 async function run(options) {
+	const currentArticles = fs.readdirSync("/Users/wang.boyang/Projects/mine/lanting/archives/comments");
 	/**
 	 * XXX boyang: custom option
 	 */
+	const getCurrentId = () => {
+		let files = currentArticles.slice().map(f => +(f.split("-")[0]));
+		files = files.sort((a,b)=>b-a);
+		return files[0];
+	};
 	options.backEnd = "webdriver-chromium";
+	options.lantingId = getCurrentId() + 1;
 	/**
 	 * Steps:
 	 * 1. specify current ID. ID passed as option

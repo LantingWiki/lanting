@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /*
  * Copyright 2010-2020 Gildas Lormeau
  * contact : gildas.lormeau <at> gmail.com
@@ -20,8 +21,6 @@
  *   notice and a URL through which recipients can access the Corresponding 
  *   Source.
  */
-
-/* global __dirname, require, exports, process, setTimeout, clearTimeout, Buffer */
 
 const path = require("path");
 
@@ -56,7 +55,7 @@ function getBrowserOptions(options) {
 		chromeOptions.setChromeBinaryPath(options.browserExecutablePath);
 	}
 	if (options.webDriverExecutablePath) {
-		process.env["PATH"] += ";" + options.webDriverExecutablePath.replace(/chromedriver(\.exe)?$/, "");
+		process.env.PATH += `:${options.webDriverExecutablePath.replace(/chromedriver(\.exe)?$/, "")}`;
 	}
 	if (options.browserArgs) {
 		const args = JSON.parse(options.browserArgs);
@@ -74,7 +73,7 @@ function getBrowserOptions(options) {
 		if (options.browserBypassCSP === undefined || options.browserBypassCSP) {
 			extensions.push(encode(require.resolve("./extensions/signed/bypass_csp-0.0.3-an+fx.xpi")));
 		}
-		if (options.browserWaitUntil === undefined || options.browserWaitUntil == "networkidle0" || options.browserWaitUntil == "networkidle2") {
+		if (options.browserWaitUntil === undefined || options.browserWaitUntil === "networkidle0" || options.browserWaitUntil === "networkidle2") {
 			extensions.push(encode(require.resolve("./extensions/signed/network_idle-0.0.2-an+fx.xpi")));
 		}
 		if (options.browserExtensions && options.browserExtensions.length) {
@@ -83,7 +82,7 @@ function getBrowserOptions(options) {
 		chromeOptions.addExtensions(extensions);
 	}
 	if (options.userAgent) {
-		chromeOptions.addArguments("--user-agent=" + JSON.stringify(options.userAgent));
+		chromeOptions.addArguments(`--user-agent=${  JSON.stringify(options.userAgent)}`);
 	}
 	if (options.browserMobileEmulation) {
 		chromeOptions.setMobileEmulation({
@@ -110,13 +109,13 @@ async function getPageData(driver, options) {
 	}
 	await driver.get(options.url);
 	await driver.executeScript(scripts);
-	if (options.browserWaitUntil != "domcontentloaded") {
+	if (options.browserWaitUntil !== "domcontentloaded") {
 		let scriptPromise;
-		if (!optionHeadless && (options.browserWaitUntil === undefined || options.browserWaitUntil == "networkidle0")) {
+		if (!optionHeadless && (options.browserWaitUntil === undefined || options.browserWaitUntil === "networkidle0")) {
 			scriptPromise = driver.executeAsyncScript("addEventListener(\"single-file-network-idle-0\", () => arguments[0](), true)");
-		} else if (!optionHeadless && options.browserWaitUntil == "networkidle2") {
+		} else if (!optionHeadless && options.browserWaitUntil === "networkidle2") {
 			scriptPromise = driver.executeAsyncScript("addEventListener(\"single-file-network-idle-2\", () => arguments[0](), true)");
-		} else if (optionHeadless || options.browserWaitUntil == "load") {
+		} else if (optionHeadless || options.browserWaitUntil === "load") {
 			scriptPromise = driver.executeAsyncScript("if (document.readyState == \"loading\" || document.readyState == \"interactive\") { addEventListener(\"load\", () => arguments[0]()) } else { arguments[0](); }");
 		}
 		let cancelTimeout;
@@ -139,6 +138,7 @@ async function getPageData(driver, options) {
 }
 
 function encode(file) {
+	// eslint-disable-next-line new-cap
 	return new Buffer.from(require("fs").readFileSync(file)).toString("base64");
 }
 
