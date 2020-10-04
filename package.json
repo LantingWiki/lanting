@@ -3,12 +3,6 @@
   "version": "0.1.0",
   "description": "兰亭已矣",
   "scripts": {
-    "deploy": "yarn build && for f in ./dist/; do ossutilmac64 cp -r -u $f oss://lanting-public/; done",
-    "analyze": "cross-env ANALYZE=1 umi build",
-    "build": "umi build",
-    "dev": "npm run start:dev",
-    "fetch:blocks": "pro fetch-blocks && npm run prettier",
-    "postinstall": "umi g tmp",
     "lint": "umi g tmp && npm run lint:js && npm run lint:prettier",
     "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx ",
     "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
@@ -16,14 +10,21 @@
     "lint:prettier": "prettier --check \"src/**/*\" --end-of-line auto",
     "precommit": "lint-staged",
     "prettier": "prettier -c --write \"src/**/*\"",
+    
     "start": "umi dev",
     "start:dev": "cross-env REACT_APP_ENV=dev MOCK=none umi dev",
     "start:no-mock": "cross-env MOCK=none umi dev",
     "start:no-ui": "cross-env UMI_UI=none umi dev",
     "start:pre": "cross-env REACT_APP_ENV=pre umi dev",
     "start:test": "cross-env REACT_APP_ENV=test MOCK=none umi dev",
-    "tsc": "tsc --noEmit",
-    "compile-archives": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/compile-archives.ts"
+
+    "compile-archives": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/compile-archives.ts",
+    "analyze": "cross-env ANALYZE=1 umi build",
+    
+    "deploy": "yarn build && yarn deploy:oss && deploy:ec2",
+    "build": "umi build",
+    "deploy:oss": "for f in ./dist/; do ossutilmac64 cp -r -u $f oss://lanting-public/; done",
+    "deploy:ec2": "rsync -arvz --progress ./dist/index.html ./config/lanting-nginx.conf root@101.200.34.182:/data/server-apps/lanting"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
