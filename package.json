@@ -18,11 +18,12 @@
     "start:pre": "cross-env REACT_APP_ENV=pre umi dev",
     "start:test": "cross-env REACT_APP_ENV=test MOCK=none umi dev",
 
-    "compile-archives": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/compile-archives.ts",
-    "analyze": "cross-env ANALYZE=1 umi build",
-    
+    "archives:compile": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/compile-archives.ts",
+    "archives:add": "git add ./src/assets/archives.json; git add ./archives; git commit --no-verify -m \"DATA: archives `date \"+%Y-%m-%d-%H:%M:%S\"`\" && git push",
+
     "deploy": "yarn build && yarn deploy:oss && deploy:ec2",
     "build": "umi build",
+    "analyze": "cross-env ANALYZE=1 umi build",
     "deploy:oss": "for f in ./dist/; do ossutilmac64 cp -r -u $f oss://lanting-public/; done",
     "deploy:ec2": "rsync -arvz --progress ./dist/index.html ./config/lanting-nginx.conf root@101.200.34.182:/data/server-apps/lanting"
   },

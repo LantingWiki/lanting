@@ -7,7 +7,7 @@ import Filters from './components/Filters';
 import MiscRecipes from './components/MiscRecipes';
 import ArchiveChapter from './components/ArchiveChapter';
 import { StateType } from './model';
-import { CHAPTERS, FilterValues } from './data';
+import { ChapterArchives, CHAPTERS, FilterValues } from './data';
 import styles from './style.less';
 
 interface LantingProps {
@@ -16,7 +16,7 @@ interface LantingProps {
   loading: boolean;
 }
 
-const getCount = (currentArchives) => {
+const getCount = (currentArchives: ChapterArchives) => {
   let count = 0;
   if (!currentArchives) {
     return count;
