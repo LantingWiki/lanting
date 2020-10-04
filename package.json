@@ -18,8 +18,9 @@
     "start:pre": "cross-env REACT_APP_ENV=pre umi dev",
     "start:test": "cross-env REACT_APP_ENV=test MOCK=none umi dev",
 
+    "archives": "yarn archives:compile && yarn archives:add && git push",
     "archives:compile": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/compile-archives.ts",
-    "archives:add": "git add ./src/assets/archives.json; git add ./archives; git commit --no-verify -m \"DATA: archives `date \"+%Y-%m-%d-%H:%M:%S\"`\" && git push",
+    "archives:add": "git add ./src/assets/archives.json; git add ./archives; git commit --no-verify -m \"DATA: archives `date \"+%Y-%m-%d-%H:%M:%S\"`\"",
 
     "deploy": "yarn build && yarn deploy:oss && deploy:ec2",
     "build": "umi build",
