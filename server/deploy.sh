@@ -3,5 +3,7 @@ rsync -arvz --exclude=node_modules --exclude=run --exclude=logs --progress ./ ro
 ssh -t root@101.200.34.182 '
 cd /data/server-apps/lanting/server
 npm install
-
+npm run ci
+npm run stop
+npm run start
 '

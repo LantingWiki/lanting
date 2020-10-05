@@ -20,7 +20,7 @@
     "autod": "autod",
     "lint": "eslint . --ext .ts",
     "clean": "ets clean",
-    "deploy": "./scripts/deploy.sh"
+    "deploy": "./deploy.sh"
   },
   "dependencies": {
     "egg": "^2.6.1",
@@ -54,7 +54,5 @@
     "coverage"
   ],
   "author": "boyang",
-  "license": "MIT",
-  "type": "module",
-  "module": "esnext"
+  "license": "MIT"
 }
