@@ -1,9 +1,0 @@
-{
-  "extends": "eslint-config-egg/typescript",
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "rules": {
-    "class-methods-use-this": 0
-  }
-}
