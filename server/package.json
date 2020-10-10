@@ -2,5 +2,6 @@
   "name": "lanting-server",
   "version": "1.0.0",
   "description": "",
-  "author": "boyang"
+  "author": "boyang",
+  "type": "module"
 }

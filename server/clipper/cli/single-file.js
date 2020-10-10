@@ -22,46 +22,48 @@
  *   Source.
  */
 
-const fileUrl = require("file-url");
-const fs = require("fs");
+const fileUrl = require('file-url');
+const fs = require('fs');
 
-run(require("./args"))
-// eslint-disable-next-line no-console
-.catch(error => console.error(error.message || error));
+run(require('./args'))
+  // eslint-disable-next-line no-console
+  .catch((error) => console.error(error.message || error));
 
 async function run(options) {
-	const currentArticles = fs.readdirSync("/Users/wang.boyang/Projects/mine/lanting/archives/comments");
-	/**
-	 * XXX boyang: custom option
-	 */
-	const getCurrentId = () => {
-		let files = currentArticles.slice().map(f => +(f.split("-")[0]));
-		files = files.sort((a,b)=>b-a);
-		return files[0];
-	};
-	options.backEnd = "webdriver-chromium";
-	options.lantingId = getCurrentId() + 1;
-	/**
-	 * Steps:
-	 * 1. specify current ID. ID passed as option
-	 * 2. save orig with names ID+1, ID+2 etc. Each task is given an ID
-	 * 3. create templates with ID-title1, ID-title2 etc
-	 */
-	
-	const singlefile = await require("./single-file-cli-api")(options);
-	let urls;
+  const currentArticles = fs.readdirSync(
+    '/Users/wang.boyang/Projects/mine/lanting/archives/comments',
+  );
+  /**
+   * XXX boyang: custom option
+   */
+  const getCurrentId = () => {
+    let files = currentArticles.slice().map((f) => +f.split('-')[0]);
+    files = files.sort((a, b) => b - a);
+    return files[0];
+  };
+  options.backEnd = 'webdriver-chromium';
+  options.lantingId = getCurrentId() + 1;
+  /**
+   * Steps:
+   * 1. specify current ID. ID passed as option
+   * 2. save orig with names ID+1, ID+2 etc. Each task is given an ID
+   * 3. create templates with ID-title1, ID-title2 etc
+   */
+  console.log('XXXTEMP options', options);
+  const singlefile = await require('./single-file-cli-api')(options);
+  let urls;
 
-	if (options.url && !singlefile.VALID_URL_TEST.test(options.url)) {
-		options.url = fileUrl(options.url);
-	}
-	if (options.urlsFile) {
-		urls = fs.readFileSync(options.urlsFile).toString().split("\n");
-	} else {
-		urls = [options.url];
-	}
-	options.retrieveLinks = true;
-	options.browserScripts = options.browserScripts.map(path => require.resolve(path));
+  if (options.url && !singlefile.VALID_URL_TEST.test(options.url)) {
+    options.url = fileUrl(options.url);
+  }
+  if (options.urlsFile) {
+    urls = fs.readFileSync(options.urlsFile).toString().split('\n');
+  } else {
+    urls = [options.url];
+  }
+  options.retrieveLinks = true;
+  options.browserScripts = options.browserScripts.map((path) => require.resolve(path));
 
-	await singlefile.capture(urls);
-	await singlefile.finish();
+  await singlefile.capture(urls);
+  await singlefile.finish();
 }

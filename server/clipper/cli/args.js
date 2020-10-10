@@ -79,6 +79,7 @@ const args = require('yargs')
     'crawl-external-links-max-depth': 1,
     'crawl-replace-urls': false,
     'crawl-rewrite-rules': [],
+    articleinfo: {},
   })
   .options('back-end', { description: 'Back-end to use' })
   .choices('back-end', [
@@ -277,6 +278,7 @@ const args = require('yargs')
     description: 'User-agent of the browser (puppeteer, webdriver-gecko, webdriver-chromium)',
   })
   .string('user-agent')
+  .string('articleinfo')
   .options('user-script-enabled', {
     description: 'Enable the event API allowing to execute scripts before the page is saved',
   })
