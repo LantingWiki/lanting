@@ -276,9 +276,7 @@ async function capturePage(options) {
   try {
     const pageData = await backend.getPageData(options);
     let filename;
-    if (options.output) {
-      console.log('XXXTEMP: do not use output for now');
-    } else if (options.filenameTemplate && pageData.filename) {
+    if (options.filenameTemplate && pageData.filename) {
       filename = path.join(archives, 'origs', `${options.lantingId}.html`);
       fs.writeFileSync(filename, pageData.content);
       const commentPathname = path.join(archives, 'comments', `${prefix}${pageData.filename}.md`);

@@ -19,7 +19,7 @@ if (authorNode) {
 res.publisher = document.querySelector('#js_name').innerText;
 // }
 dt = document.querySelector('#publish_time').innerText;
-if (dt === 'Yesterday' || dt === 'Today' || dt.includes('days ago')) {
+if (dt === 'Yesterday' || dt === 'Today' || dt.includes('days ago') || dt.includes('week ago')) {
   dt = new Date().toISOString().substring(0, 7);
 } else {
   dt = dt.substring(0, 7);
