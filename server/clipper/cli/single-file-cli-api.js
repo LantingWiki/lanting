@@ -283,7 +283,10 @@ async function capturePage(options) {
       console.log('XXXTEMP task options', options);
       fs.writeFileSync(
         commentPathname,
-        fillArticleInfo(pageData.filename, JSON.parse(options.articleinfo)),
+        fillArticleInfo(
+          pageData.filename,
+          options.articleinfo ? JSON.parse(options.articleinfo) : {},
+        ),
       );
       console.log('XXXTEMP DONE');
     } else {
