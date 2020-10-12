@@ -95,6 +95,6 @@ function main() {
     return archive;
   });
 
-  fs.writeFileSync(`${ARCHIVE_DIR}/../src/assets/archives.json`, JSON.stringify(compiledArchives));
+  fs.writeFileSync(`${ARCHIVE_DIR}/archives.json`, JSON.stringify(compiledArchives));
 }
 main();

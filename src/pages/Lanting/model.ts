@@ -1,4 +1,5 @@
 import { Effect, Reducer } from 'umi';
+import request from '@/utils/request';
 import { Archive, Archives, ChapterArchives, CHAPTERS, FilterValues } from './data';
 
 export interface StateType {
@@ -73,7 +74,7 @@ const Model: ModelType = {
       }
       inited = true;
       const response = yield call(() => {
-        return import('@/assets/archives.json');
+        return request('/archives/archives.json');
       });
       compiledArchives = response;
       initedChapterArchives = initArchives(response);
