@@ -20,7 +20,7 @@
 
     "archives": "yarn archives:compile && yarn archives:add && git push",
     "archives:compile": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/compile-archives.ts",
-    "archives:add": "git add ./src/assets/archives.json; git add ./archives; git commit --no-verify -m \"DATA: archives `date \"+%Y-%m-%d-%H:%M:%S\"`\"",
+    "archives:add": "git add ./archives; git commit --no-verify -m \"DATA: archives `date \"+%Y-%m-%d-%H:%M:%S\"`\"",
 
     "deploy": "yarn build && yarn deploy:ec2",
     "build": "umi build",
