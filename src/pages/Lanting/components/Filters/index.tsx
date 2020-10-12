@@ -10,6 +10,10 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const { Panel } = Collapse;
 
+type TagPair = [string, number];
+
+const compareFn = (a: TagPair, b: TagPair) => (b[1] as number) - (a[1] as number);
+
 export interface FilterProps {
   archives: Archives;
   form: FormInstance;
@@ -18,19 +22,23 @@ export interface FilterProps {
 
 const generateOptions = (field: string, archives: Archives) => {
   const map = archives.fieldFreqMap[field];
-  const options = Object.entries(map)
-    .sort((a, b) => (b[1] as number) - (a[1] as number))
-    .map((fieldVal) => (
-      <Option key={fieldVal[0]} value={fieldVal[0]} label={fieldVal[0]}>
-        {fieldVal[0]}: {fieldVal[1]}
-      </Option>
-    ));
-  options.unshift(
+  let options: TagPair[] = Object.entries(map);
+  if (field === 'date') {
+    options = options.sort();
+  } else {
+    options = options.sort(compareFn);
+  }
+  const optionElements = options.map((fieldVal) => (
+    <Option key={fieldVal[0]} value={fieldVal[0]} label={fieldVal[0]}>
+      {fieldVal[0]}: {fieldVal[1]}
+    </Option>
+  ));
+  optionElements.unshift(
     <Option key="all" value="all" label="全选">
       全选
     </Option>,
   );
-  return options;
+  return optionElements;
 };
 
 const generateSelect = (field: string, archives: Archives, isLast: boolean) => {
