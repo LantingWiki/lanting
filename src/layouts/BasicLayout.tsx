@@ -37,20 +37,20 @@ const defaultFooterDom = (
     copyright={`${new Date().getFullYear()} 兰亭已矣`}
     links={[
       {
-        key: 'boyang',
-        title: 'Boyang',
-        href: 'https://wangboyang.com',
+        key: 'legal',
+        title: '京ICP备19033403号',
+        href: 'http://beian.miit.gov.cn/',
         blankTarget: true,
       },
       {
         key: 'github',
         title: <GithubOutlined />,
-        href: 'https://github.com/boyangwang',
+        href: 'https://github.com/boyangwang/lanting',
         blankTarget: true,
       },
       {
         key: 'blog',
-        title: 'Blog',
+        title: '芦柑笔谈',
         href: 'https://blog.wangboyang.com/',
         blankTarget: true,
       },
