@@ -45,7 +45,7 @@ export const toChineseNumbers = (temp: string) => {
     res = res.replace(numeric[0] + units[m], units[m]);
   }
   // 将壹十 壹百 去掉壹
-  if (res.startsWith(numeric[1])) {
+  if (res.startsWith(numeric[1]) && res.length > 1) {
     res = res.substring(1);
   }
   return res;
