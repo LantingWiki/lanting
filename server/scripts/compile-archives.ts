@@ -44,7 +44,10 @@ function getFieldFromFieldLine(field: string, fieldLine: string) {
       return fieldLine;
     case 'author':
     case 'tag':
-      return fieldLine.split(',').map((s) => s.trim());
+      return fieldLine
+        .split(',')
+        .map((s) => s.trim())
+        .sort();
     default:
       return fieldLine;
   }
