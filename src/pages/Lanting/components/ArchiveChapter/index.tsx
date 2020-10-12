@@ -18,7 +18,7 @@ const renderOrig = (item: Archive) => {
   return item.origs.map((orig) => (
     <a
       className={styles.listItemMetaTitle}
-      href={`/public/archives/origs/${orig}`}
+      href={`/archives/origs/${orig}`}
       rel="noreferrer"
       target="_blank"
     >
