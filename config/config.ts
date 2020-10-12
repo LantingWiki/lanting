@@ -68,7 +68,7 @@ export default defineConfig({
     // ...darkTheme,
     'primary-color': defaultSettings.primaryColor,
   },
-  publicPath: '/public/',
+  publicPath: '/',
   dynamicImport: {
     loading: '@ant-design/pro-layout/lib/PageLoading',
   },
