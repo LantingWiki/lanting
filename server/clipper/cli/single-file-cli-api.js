@@ -244,7 +244,7 @@ function getHostURL(url) {
 
 function fillArticleInfo(title, articleinfo) {
   return `# title
-${articleinfo.title || 'TODO'}
+${title || 'TODO'}
 
 # author
 ${articleinfo.author || 'TODO'}
