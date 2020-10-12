@@ -3,10 +3,11 @@
 Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 # Workflow
-
-[] 自己的tag排序
-[] archives把数据理好
-[] 太大了, comments也抽出去, 单独说
+[x] 日期特殊排序
+[x] 自己的tag排序
+[ ] 文章排序?
+[x] archives就把数据理好
+[ ] 太大了, remarkss也抽出去, 单独说
 
 ### 数据源
 [x] 批量导入现有的, 所有的过一遍 (这里不需要建comments)
