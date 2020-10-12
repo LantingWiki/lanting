@@ -4,13 +4,16 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 # Workflow
 
+[] 自己的tag排序
+[] archives把数据理好
+[] 太大了, comments也抽出去, 单独说
+
 ### 数据源
+[x] 批量导入现有的, 所有的过一遍 (这里不需要建comments)
+[ ] 批量导入evernote但是没有comments的 (这里需要建comments)
 
-批量导入现有的, 所有的过一遍 (这里不需要建comments)
-批量导入evernote但是没有comments的 (这里需要建comments)
-
-浏览器里右键save singlefile
-之后如果微信等需要存, 就做一个接口. headless browser + singleFile CLI
+[x] 浏览器里右键save singlefile
+[ ] 之后如果微信等需要存, 就做一个接口. headless browser + singleFile CLI
 **以上两个都需要同时建comments, 尽量抽metadata**
 
 ### 放的路径
@@ -49,8 +52,8 @@ archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch
 
 ### compile
 [x] compile-archives产出一个 json, metadata
-[] 少了一些字段, 等orig好了才能好. 还有就是找不到没有的情况
-[] 实际量大的数据主要去实际.md 里面找
+[x] 少了一些字段, 等orig好了才能好. 还有就是找不到没有的情况
+[x] 实际量大的数据主要去实际.md 里面找
 
 ### 筛选
 ~~分页的话也要给文本搜索框, 不分页先不要~~
@@ -58,7 +61,7 @@ archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch
 [x] 缩上去, 放上面
 
 ### 展示文章
-~~照着抄先. 给个评星功能?~~
+[ ] 照着抄先. 给个评星功能?
 [x] 分chapter
 [x] 本纪
 [x] 随园食单
