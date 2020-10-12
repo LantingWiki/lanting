@@ -19,7 +19,7 @@ export interface ModelType {
 
 const processMdImgSyntax = (md: string) => {
   return md.replace(/!\[\[(.+?)\]\]/g, (match, g1) => {
-    return `![](/public/archives/imgs/${g1})`;
+    return `![](/archives/imgs/${g1})`;
   });
 };
 
@@ -36,7 +36,7 @@ const Model: ModelType = {
         return;
       }
       const response = yield call(() => {
-        return request('/public/archives/1000-随园食单.md');
+        return request('/archives/1000-随园食单.md');
       });
 
       yield put({
