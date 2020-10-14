@@ -61,6 +61,32 @@ function getIdFromCommentFilename(f: string) {
   return f.substring(0, f.indexOf('-'));
 }
 
+function getPRNG(seed: number): () => number {
+  return () => {
+    const x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  };
+}
+
+const shuffle = (array: any[], prng: () => number) => {
+  let currentIndex = array.length;
+  let temporaryValue;
+  let randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex !== 0) {
+    // Pick a remaining element...
+    randomIndex = Math.floor((prng ? prng() : Math.random()) * currentIndex);
+    currentIndex -= 1;
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+};
+
 function main() {
   const compiledArchives = new Archives();
 
@@ -94,6 +120,10 @@ function main() {
 
     return archive;
   });
+  const week = 1000 * 60 * 60 * 24 * 7;
+  const seed = Date.now() - (Date.now() % week);
+  const rand = getPRNG(seed);
+  compiledArchives.archives = shuffle(compiledArchives.archives, rand);
 
   fs.writeFileSync(`${ARCHIVE_DIR}/archives.json`, JSON.stringify(compiledArchives));
 }

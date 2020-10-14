@@ -5,9 +5,9 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 # Workflow
 [x] 日期特殊排序
 [x] 自己的tag排序
-[ ] 文章排序?
 [x] archives就把数据理好
-[ ] 太大了, remarkss也抽出去, 单独说
+[x] 文章排序? 用星期做种子乱序!
+[ ] 芦柑笔谈 in menu
 
 ### 数据源
 [x] 批量导入现有的, 所有的过一遍 (这里不需要建comments)
@@ -23,14 +23,14 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] 随园食单不要直接import了, fetch, 就可以也放到public
 
 ### obsidian集成
-整个变成一个vault, 应该没问题, 编辑的时候也OK
+[x] 整个变成一个vault, 应该没问题, 编辑的时候也OK
 
 ### 对应关系
-放在archive.json, 什么后缀名
-从public读, 链接先直接跳到orig, 以后考虑iframe?
+[x] 放在archive.json, 什么后缀名
+[x] 从public读, 链接先直接跳到orig, 以后考虑iframe?
 
 ### 哪些东西fetch
-archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch
+[ ] archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch
 
 # TODOs
 
@@ -42,10 +42,10 @@ archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch
 
 ### clipper
 两个用例: 微信上存链接 - 公众号. 电脑上打开页面 - chrome extension
-[] 把 joplin 插件代码找到
-[] 还是存到本地不变, 路径变一下, 文件名变一下只需要 ID. ID 哪里来? 去 repo 查. 不要打本地, 打接口, 然后本地 pull 吧
-[] 从第一行解析出标题, 试图解析出 metadata, 解析最后 metadata 里有用的部分. 建对应的 orig 和 comment, metadata都放comment, 都进入compile流程. 通过 ID 来对应. 有了就不建, 等于是补全.
-[] 上传源文件到 OSS. repo 里也存一份只用来存档, 来判断有没有, 页面直接拼 URL -> 可以! markdown这边, 改下代码想办法让图片跟markdown塞在一起吧
+[x] 把 joplin 插件代码找到
+[x] 还是存到本地不变, 路径变一下, 文件名变一下只需要 ID. ID 哪里来? 去 repo 查. 不要打本地, 打接口, 然后本地 pull 吧
+[x] 从第一行解析出标题, 试图解析出 metadata, 解析最后 metadata 里有用的部分. 建对应的 orig 和 comment, metadata都放comment, 都进入compile流程. 通过 ID 来对应. 有了就不建, 等于是补全.
+[ ] 上传源文件到 OSS. repo 里也存一份只用来存档, 来判断有没有, 页面直接拼 URL -> 可以! markdown这边, 改下代码想办法让图片跟markdown塞在一起吧 -> 用OSS那份非https的?
 综合webclipper, 第一图片怎么处理, 第二css是不是OK, 第三下下来之后触发什么
 
 ### 数据
