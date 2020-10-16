@@ -291,7 +291,7 @@ async function capturePage(options) {
       );
       console.log('XXXTEMP DONE');
       execSync(
-        `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code ${commentPathname}`,
+        `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
       );
     } else {
       console.log('XXXTEMP no filename'); // eslint-disable-line no-console
