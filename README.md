@@ -8,11 +8,13 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] archives就把数据理好
 [x] 文章排序? 用星期做种子乱序!
 [ ] 芦柑笔谈 in menu
+[ ] 单个article link
+[ ] 评分功能, 所有东西进DB吧, DB可以commit进来. mongo适合点?
+[ ] archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch. 前X个char在archives.json, 展开的时候fetch. 怎么判断有没有更多 (除了加property, flag)? 看字数行不行. 如果现在的是小于50, 比如49. 就没有. 如果50整, 就有. 怎么解决刚好50的comment? 我能想到的只有砍掉一个char... 哦! 有主意了. 加一个. 弄成51个. 所以凡是[1, 49], [51, Inf], 都是不用展开的
 
 ### 数据源
 [x] 批量导入现有的, 所有的过一遍 (这里不需要建comments)
-[ ] 批量导入evernote但是没有comments的 (这里需要建comments)
-
+[x] 批量导入evernote但是没有comments的 (这里需要建comments)
 [x] 浏览器里右键save singlefile
 [ ] 之后如果微信等需要存, 就做一个接口. headless browser + singleFile CLI
 **以上两个都需要同时建comments, 尽量抽metadata**
@@ -28,9 +30,6 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 ### 对应关系
 [x] 放在archive.json, 什么后缀名
 [x] 从public读, 链接先直接跳到orig, 以后考虑iframe?
-
-### 哪些东西fetch
-[ ] archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch
 
 # TODOs
 

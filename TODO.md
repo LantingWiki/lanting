@@ -1,2 +1,0 @@
-- sort tags for each article
-- sort options in filters (e.g. date-month)
