@@ -17,4 +17,4 @@ Georgios Konstantopoulos
 区块链, 安全, 以太坊
 
 # remarks
-TODO
+`说的是front running`

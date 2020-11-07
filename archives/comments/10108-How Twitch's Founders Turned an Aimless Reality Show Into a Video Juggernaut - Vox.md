@@ -17,4 +17,4 @@ Vox
 直播, Twitch, YCombinator
 
 # remarks
-TODO
+`听了Justin Kan讲, 却是Press Coverage这个话题`
