@@ -17,4 +17,5 @@ Georgios Konstantopoulos
 区块链, 安全, 以太坊
 
 # remarks
-`说的是front running`
+`说的是front running, 更有艺术含量的那种. 所以就算是发现了漏洞, 最后赚到钱也不容易`
+`真正的黑暗森林`
