@@ -9,8 +9,9 @@
     line-height: 22px;
   }
   .extra {
+    display: flex;
+    align-items: center;
     margin-top: 16px;
-    color: @text-color-secondary;
     line-height: 22px;
     & > :global(.ant-avatar) {
       position: relative;
@@ -24,6 +25,28 @@
       margin-left: 16px;
       color: @disabled-color;
       font-style: normal;
+    }
+    .extraUpDiv {
+      .extraUpBtn {
+        height: 32px;
+        padding: 2.4px 8px;
+        font-size: 16px;
+        border-radius: 2px;
+        vertical-align: -1px;
+        .extraUpIcon {
+          transform: rotate(180deg) translate(0px, 2px);
+        }
+      }
+    }
+    .extraUpDiv.hasLikes {
+      .extraUpBtn {
+        // color: #d0a030;
+        color: @primary-color;
+      }
+    }
+    .extraId {
+      color: rgba(0, 0, 0, 0.45);
+      padding-left: 12px;
     }
   }
 }

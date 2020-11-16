@@ -15,6 +15,7 @@ export interface ModelType {
   };
   reducers: {
     putList: Reducer<StateType>;
+    putLikes: Reducer<StateType>;
     queryList: Reducer<StateType>;
   };
 }
@@ -85,6 +86,17 @@ const Model: ModelType = {
           currentArchives: initedChapterArchives,
         },
       });
+
+      const responseLikes = yield call(() => {
+        return request('https://lanting.wiki/api/user/like/read?article_id=-1');
+      });
+
+      yield put({
+        type: 'putLikes',
+        payload: {
+          likesMap: responseLikes,
+        },
+      });
     },
   },
   reducers: {
@@ -93,6 +105,14 @@ const Model: ModelType = {
         ...state,
         compiledArchives: action.payload.compiledArchives,
         currentArchives: action.payload.currentArchives,
+      };
+    },
+    putLikes(state, action) {
+      console.log(action);
+      return {
+        ...state,
+        compiledArchives: state?.compiledArchives || compiledArchives,
+        currentArchives: state?.currentArchives || initedChapterArchives,
       };
     },
     queryList(state, action) {

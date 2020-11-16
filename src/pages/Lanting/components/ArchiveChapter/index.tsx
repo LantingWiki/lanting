@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, Tag } from 'antd';
-import { BankOutlined, EditOutlined, BookOutlined } from '@ant-design/icons';
+import { BankOutlined, EditOutlined, BookOutlined, CalendarOutlined } from '@ant-design/icons';
 import ChapterCard from '../ChapterCard';
 import ArchiveListContent from '../ArchiveListContent';
 import { Archive } from '../../data';
@@ -39,6 +39,10 @@ const renderArchive = (item: Archive) => (
         <BankOutlined style={{ marginRight: 8 }} />
         {item.publisher}
       </div>,
+      <div>
+        <CalendarOutlined style={{ marginRight: 8 }} />
+        {item.date}
+      </div>,
     ]}
   >
     <List.Item.Meta
@@ -61,7 +65,7 @@ const renderArchive = (item: Archive) => (
 );
 
 const ArchiveChapter: React.FC<ArchiveChapterProps> = ({ chapter, archives }) => (
-  <ChapterCard title={<h2>{chapter}</h2>} defaultActive>
+  <ChapterCard title={<h2>{chapter}</h2>} defaultActive={chapter !== '本纪'}>
     <List<Archive>
       className={styles.list}
       size="large"
