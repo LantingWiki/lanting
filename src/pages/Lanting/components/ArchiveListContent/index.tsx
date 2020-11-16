@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { FC } from 'react';
+import { connect, Dispatch } from 'umi';
 import { Button } from 'antd';
 import { SketchOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import ReactMarkdown from 'react-markdown';
@@ -8,9 +9,20 @@ import { Archive } from '../../data';
 
 interface ArchiveListContentProps {
   archive: Archive;
+  dispatch: Dispatch;
 }
 
-const ArchiveListContent: React.FC<ArchiveListContentProps> = ({ archive }) => {
+const like = (dispatch: Dispatch, archive: Archive, isLike: boolean) => {
+  return () => {
+    dispatch({
+      type: 'lanting/like',
+      payload: { id: archive.id, isLike },
+    });
+    console.log('XXXTEMP', 1);
+  };
+};
+
+const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive }) => {
   const likes = 6;
   const classNames = likes ? `${styles.extraUpDiv} ${styles.hasLikes}` : styles.extraUpDiv;
   return (
@@ -36,6 +48,7 @@ const ArchiveListContent: React.FC<ArchiveListContentProps> = ({ archive }) => {
           <Button
             className={styles.extraUpBtn}
             icon={<SketchOutlined className={styles.extraUpIcon} />}
+            onClick={like(dispatch, archive, true)}
           >
             {likes ? ` ${likes} ` : ''}
           </Button>
@@ -44,6 +57,7 @@ const ArchiveListContent: React.FC<ArchiveListContentProps> = ({ archive }) => {
           <Button
             className={styles.extraDownBtn}
             icon={<SketchOutlined className={styles.extraDownIcon} />}
+            onClick={like(dispatch, archive, false)}
           />
         </div>
         <div className={styles.extraId}>{archive.id}</div>
@@ -52,4 +66,4 @@ const ArchiveListContent: React.FC<ArchiveListContentProps> = ({ archive }) => {
   );
 };
 
-export default ArchiveListContent;
+export default connect()(ArchiveListContent);

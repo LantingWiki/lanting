@@ -12,6 +12,7 @@ export interface ModelType {
   state: StateType;
   effects: {
     fetch: Effect;
+    like: Effect;
   };
   reducers: {
     putList: Reducer<StateType>;
@@ -88,13 +89,34 @@ const Model: ModelType = {
       });
 
       const responseLikes = yield call(() => {
-        return request('https://lanting.wiki/api/user/like/read?article_id=-1');
+        return request('https://lanting.wiki/api/user/like/read?articleId=-1');
       });
 
       yield put({
         type: 'putLikes',
         payload: {
           likesMap: responseLikes,
+        },
+      });
+    },
+    *like(action, { call, put }) {
+      console.log('XXXTEMP', action);
+
+      const responseLike = yield call(() => {
+        return request('https://lanting.wiki/api/user/like/create', {
+          method: 'post',
+          data: {
+            articleId: action.payload.id,
+            like: action.payload.isLike,
+          },
+        });
+      });
+      console.log('XXXTEMP', responseLike);
+
+      yield put({
+        type: 'putLikes',
+        payload: {
+          likesMap: {},
         },
       });
     },
