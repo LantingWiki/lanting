@@ -1,10 +1,12 @@
 import React from 'react';
-import { Form, Select, Collapse } from 'antd';
+import { Form, Select, Collapse, InputNumber } from 'antd';
 import { FormInstance } from 'antd/lib/form/Form';
 import { DownOutlined } from '@ant-design/icons';
 import { Archives, FilterValues } from '@/pages/Lanting/data';
 import { fieldToTranslation } from '@/utils/utils';
 import StandardFormRow from '../StandardFormRow';
+
+import styles from './index.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -76,9 +78,21 @@ const Filters: React.FC<FilterProps> = ({ archives, form, onValuesChange }) => (
           publisher: ['all'],
           date: ['all'],
           tag: ['all'],
+          likesMin: 0,
+          likesMax: 255,
         }}
         onValuesChange={onValuesChange}
       >
+        <StandardFormRow title="如琢如磨" key="likes" last>
+          <div className={styles.likesRow}>
+            <FormItem name="likesMin" label="大于等于" labelAlign="left">
+              <InputNumber />
+            </FormItem>
+            <FormItem name="likesMax" label="小于等于" labelAlign="left">
+              <InputNumber />
+            </FormItem>
+          </div>
+        </StandardFormRow>
         {generateSelects(archives)}
       </Form>
     </Panel>

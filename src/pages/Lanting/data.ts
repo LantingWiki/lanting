@@ -65,4 +65,6 @@ export interface FilterValues {
   date: string[];
   publisher: string[];
   tag: string[];
+  likesMin: number;
+  likesMax: number;
 }

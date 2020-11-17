@@ -9,12 +9,14 @@
   :global {
     .ant-form-item,
     .ant-legacy-form-item {
-      margin-right: 24px;
+      margin-right: 12px;
+      flex-direction: row;
     }
     .ant-form-item-label,
+    .ant-form-item-label.ant-form-item-label-left,
     .ant-legacy-form-item-label {
       label {
-        margin-right: 0;
+        margin-right: 6px;
         color: @text-color;
       }
     }
@@ -28,10 +30,11 @@
   }
   .label {
     flex: 0 0 auto;
+    min-width: 64px;
     margin-right: 24px;
     color: @heading-color;
     font-size: @font-size-base;
-    text-align: right;
+    text-align: left;
     & > span {
       display: inline-block;
       height: 32px;
@@ -43,15 +46,6 @@
   }
   .content {
     flex: 1 1 0;
-    :global {
-      .ant-form-item,
-      .ant-legacy-form-item {
-        &:last-child {
-          display: block;
-          margin-right: 0;
-        }
-      }
-    }
   }
 }
 

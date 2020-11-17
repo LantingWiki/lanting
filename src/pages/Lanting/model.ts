@@ -50,6 +50,9 @@ const filterOneChapterArchives = (filters: FilterValues, archives: Archive[]) =>
     if (!filters.tag.includes('all') && !archive.tag.some((a) => filters.tag.includes(a))) {
       return false;
     }
+    if ((archive.likes || 0) < filters.likesMin || (archive.likes || 0) > filters.likesMax) {
+      return false;
+    }
     return true;
   });
   return results;
