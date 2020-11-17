@@ -105,7 +105,7 @@ const Model: ModelType = {
       const { isLike } = action.payload;
 
       const likesMap = {};
-      const newLikes = archive.likes + (isLike ? 1 : -1);
+      const newLikes = (archive.likes || 0) + (isLike ? 1 : -1);
       likesMap[+archive.id] = newLikes;
 
       yield put({
@@ -154,7 +154,7 @@ const Model: ModelType = {
             newCurrentArchives[c] = [
               ...newCurrentArchives[c].slice(0, idx),
               newArchive,
-              ...newCurrentArchives[c].slice(idx),
+              ...newCurrentArchives[c].slice(idx + 1),
             ];
           }
         });
