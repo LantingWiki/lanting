@@ -16,14 +16,13 @@ const like = (dispatch: Dispatch, archive: Archive, isLike: boolean) => {
   return () => {
     dispatch({
       type: 'lanting/like',
-      payload: { id: archive.id, isLike },
+      payload: { archive, isLike },
     });
-    console.log('XXXTEMP', 1);
   };
 };
 
 const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive }) => {
-  const likes = 6;
+  const { likes } = archive;
   const classNames = likes ? `${styles.extraUpDiv} ${styles.hasLikes}` : styles.extraUpDiv;
   return (
     <div className={styles.listContent}>

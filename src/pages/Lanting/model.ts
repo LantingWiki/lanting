@@ -91,33 +91,38 @@ const Model: ModelType = {
       const responseLikes = yield call(() => {
         return request('https://lanting.wiki/api/user/like/read?articleId=-1');
       });
+      if (responseLikes && responseLikes.data) {
+        yield put({
+          type: 'putLikes',
+          payload: {
+            likesMap: responseLikes.data,
+          },
+        });
+      }
+    },
+    *like(action, { call, put }) {
+      const { archive } = action.payload;
+      const { isLike } = action.payload;
+
+      const likesMap = {};
+      const newLikes = archive.likes + (isLike ? 1 : -1);
+      likesMap[+archive.id] = newLikes;
 
       yield put({
         type: 'putLikes',
         payload: {
-          likesMap: responseLikes,
+          likesMap,
         },
       });
-    },
-    *like(action, { call, put }) {
-      console.log('XXXTEMP', action);
 
-      const responseLike = yield call(() => {
+      yield call(() => {
         return request('https://lanting.wiki/api/user/like/create', {
           method: 'post',
           data: {
-            articleId: action.payload.id,
-            like: action.payload.isLike,
+            articleId: archive.id,
+            like: isLike,
           },
         });
-      });
-      console.log('XXXTEMP', responseLike);
-
-      yield put({
-        type: 'putLikes',
-        payload: {
-          likesMap: {},
-        },
       });
     },
   },
@@ -130,11 +135,35 @@ const Model: ModelType = {
       };
     },
     putLikes(state, action) {
-      console.log(action);
+      // here I need to
+      // 1. update the archives that have likes
+      // 2. notify by changing that specific archive
+      // 3. find a way to notify parents, so that it propagates downwards
+      // 一个可能性: 初始化的时候等likes回来; 后续更新写到每个archive的model里
+      const { currentArchives } = state!;
+      const { likesMap } = action.payload;
+
+      const newCurrentArchives = new ChapterArchives();
+      Object.keys(currentArchives).forEach((c) => {
+        newCurrentArchives[c] = currentArchives[c].slice();
+        currentArchives[c].forEach((a: Archive, idx: number) => {
+          const curId = +a.id;
+          if (curId in likesMap) {
+            const newArchive = { ...a };
+            newArchive.likes = likesMap[curId];
+            newCurrentArchives[c] = [
+              ...newCurrentArchives[c].slice(0, idx),
+              newArchive,
+              ...newCurrentArchives[c].slice(idx),
+            ];
+          }
+        });
+      });
+
       return {
         ...state,
-        compiledArchives: state?.compiledArchives || compiledArchives,
-        currentArchives: state?.currentArchives || initedChapterArchives,
+        compiledArchives: state!.compiledArchives,
+        currentArchives: newCurrentArchives,
       };
     },
     queryList(state, action) {

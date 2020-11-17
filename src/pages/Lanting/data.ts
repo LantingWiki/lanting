@@ -50,6 +50,8 @@ export class Archive {
   remarks: string = '';
 
   origs: false | string[] = false;
+
+  likes: number = 0;
 }
 
 export class Archives {
