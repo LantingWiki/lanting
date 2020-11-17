@@ -1,5 +1,5 @@
 # title
-Google 离开那年，马化腾差点抓到了周鸿祎_推荐_i黑马
+Google 离开那年，马化腾差点抓到了周鸿祎
 
 # author
 Keso, 老编辑
