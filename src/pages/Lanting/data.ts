@@ -3,15 +3,15 @@ export const CHAPTERS = ['本纪', '世家', '列传', '游侠', '群像'];
 export type Chapter = '本纪' | '世家' | '列传' | '游侠' | '群像' | '随园食单' | string;
 
 export class ChapterArchives {
-  '本纪': Archive[] = [];
+  '本纪': number[] = [];
 
-  '世家': Archive[] = [];
+  '世家': number[] = [];
 
-  '列传': Archive[] = [];
+  '列传': number[] = [];
 
-  '游侠': Archive[] = [];
+  '游侠': number[] = [];
 
-  '群像': Archive[] = [];
+  '群像': number[] = [];
 }
 
 export class FieldFreqMap {
@@ -55,7 +55,9 @@ export class Archive {
 }
 
 export class Archives {
-  archives: Archive[] = [];
+  archives: {
+    [key: number]: Archive;
+  } = {};
 
   fieldFreqMap: FieldFreqMap = new FieldFreqMap();
 }

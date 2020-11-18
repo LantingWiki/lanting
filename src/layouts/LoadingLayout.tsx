@@ -20,12 +20,6 @@ class LoadingLayout extends React.Component<LoadingLayoutProps, LoadingLayoutSta
     this.setState({
       isReady: true,
     });
-    const { dispatch } = this.props;
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
-    }
   }
 
   render() {

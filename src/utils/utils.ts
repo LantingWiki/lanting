@@ -51,6 +51,40 @@ export const toChineseNumbers = (temp: string) => {
   return res;
 };
 
+const shuffleInternal = (array: any[], prng: () => number) => {
+  let currentIndex = array.length;
+  let temporaryValue;
+  let randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex !== 0) {
+    // Pick a remaining element...
+    randomIndex = Math.floor((prng ? prng() : Math.random()) * currentIndex);
+    currentIndex -= 1;
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+};
+
+export const getPRNG = (seed: number): (() => number) => {
+  return () => {
+    const x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  };
+};
+
+export const shuffleByWeek = (array: any[]) => {
+  const week = 1000 * 60 * 60 * 24 * 7;
+  const seed = Date.now() - (Date.now() % week);
+  const rand = getPRNG(seed);
+  array = shuffleInternal(array, rand);
+  return array;
+};
+
 // console.log(toChineseNumbers('100'));
 // console.log(toChineseNumbers('101'));
 // console.log(toChineseNumbers('110'));

@@ -3,12 +3,13 @@ import { List, Tag } from 'antd';
 import { BankOutlined, EditOutlined, BookOutlined, CalendarOutlined } from '@ant-design/icons';
 import ChapterCard from '../ChapterCard';
 import ArchiveListContent from '../ArchiveListContent';
-import { Archive } from '../../data';
+import { Archive, Archives } from '../../data';
 import styles from './index.less';
 
 export interface ArchiveChapterProps {
   chapter: string;
-  archives: Archive[];
+  compiledArchives: Archives;
+  archiveIds: number[];
 }
 
 const renderOrig = (item: Archive) => {
@@ -66,20 +67,33 @@ const renderArchive = (item: Archive) => (
   </List.Item>
 );
 
-const ArchiveChapter: React.FC<ArchiveChapterProps> = ({ chapter, archives }) => (
-  <ChapterCard title={<h2>{chapter}</h2>} defaultActive={chapter !== '本纪'}>
-    <List<Archive>
-      className={styles.list}
-      size="large"
-      rowKey="id"
-      itemLayout="vertical"
-      locale={{ emptyText: '前不见古人' }}
-      split
-      grid={{ gutter: 0, column: 2, sm: 1, xs: 1 }}
-      dataSource={archives}
-      renderItem={renderArchive}
-    />
-  </ChapterCard>
-);
+const ArchiveChapter: React.FC<ArchiveChapterProps> = ({
+  chapter,
+  archiveIds,
+  compiledArchives,
+}) => {
+  const archives = archiveIds.map((id) => compiledArchives.archives[id]);
+  return (
+    <ChapterCard title={<h2>{chapter}</h2>} defaultActive={chapter !== '本纪'}>
+      <List<Archive>
+        pagination={{
+          size: 'small',
+          showSizeChanger: false,
+          showQuickJumper: false,
+          pageSize: 6,
+        }}
+        className={styles.list}
+        size="large"
+        rowKey="id"
+        itemLayout="vertical"
+        locale={{ emptyText: '前不见古人' }}
+        split
+        grid={{ gutter: 0, column: 2, sm: 1, xs: 1 }}
+        dataSource={archives}
+        renderItem={renderArchive}
+      />
+    </ChapterCard>
+  );
+};
 
 export default ArchiveChapter;

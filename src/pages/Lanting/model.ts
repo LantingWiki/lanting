@@ -1,6 +1,7 @@
 import { Effect, Reducer } from 'umi';
 import request from '@/utils/request';
-import { Archive, Archives, ChapterArchives, CHAPTERS, FilterValues } from './data';
+import { shuffleByWeek } from '@/utils/utils';
+import { Archives, ChapterArchives, CHAPTERS, FilterValues } from './data';
 
 export interface StateType {
   compiledArchives: Archives;
@@ -13,6 +14,7 @@ export interface ModelType {
   effects: {
     fetch: Effect;
     like: Effect;
+    getLikes: Effect;
   };
   reducers: {
     putList: Reducer<StateType>;
@@ -24,17 +26,25 @@ export interface ModelType {
 const initArchives = (archives: Archives) => {
   const chapterArchives = new ChapterArchives();
   CHAPTERS.forEach((c) => {
-    chapterArchives[c] = archives.archives.filter((a) => a.chapter === c);
+    chapterArchives[c] = Object.keys(archives.archives).filter(
+      (id) => archives.archives[id].chapter === c,
+    );
+    chapterArchives[c] = shuffleByWeek(chapterArchives[c]);
   });
   return chapterArchives;
 };
 
 let initedChapterArchives = new ChapterArchives();
-let compiledArchives = new Archives();
+const compiledArchives = new Archives();
 let inited = false;
 
-const filterOneChapterArchives = (filters: FilterValues, archives: Archive[]) => {
-  const results = archives.filter((archive) => {
+const filterOneChapterArchives = (
+  filters: FilterValues,
+  archiveIds: number[],
+  archives: Archives,
+) => {
+  const results = archiveIds.filter((archiveId) => {
+    const archive = archives.archives[archiveId];
     if (!filters.date.includes('all') && !filters.date.includes(archive.date)) {
       return false;
     }
@@ -58,10 +68,10 @@ const filterOneChapterArchives = (filters: FilterValues, archives: Archive[]) =>
   return results;
 };
 
-const filterArchives = (filters: FilterValues) => {
+const filterArchives = (filters: FilterValues, archives: Archives) => {
   const chapterArchives = new ChapterArchives();
   CHAPTERS.forEach((c) => {
-    chapterArchives[c] = filterOneChapterArchives(filters, initedChapterArchives[c]);
+    chapterArchives[c] = filterOneChapterArchives(filters, initedChapterArchives[c], archives);
   });
   return chapterArchives;
 };
@@ -81,16 +91,20 @@ const Model: ModelType = {
       const response = yield call(() => {
         return request('/archives/archives.json');
       });
-      compiledArchives = response;
       initedChapterArchives = initArchives(response);
       yield put({
         type: 'putList',
         payload: {
-          compiledArchives,
+          compiledArchives: response,
           currentArchives: initedChapterArchives,
         },
       });
 
+      yield put({
+        type: 'getLikes',
+      });
+    },
+    *getLikes(_, { call, put }) {
       const responseLikes = yield call(() => {
         return request('https://lanting.wiki/api/user/like/read?articleId=-1');
       });
@@ -147,30 +161,29 @@ const Model: ModelType = {
       const { likesMap } = action.payload;
 
       const newCurrentArchives = new ChapterArchives();
-      Object.keys(currentArchives).forEach((c) => {
-        newCurrentArchives[c] = currentArchives[c].slice();
-        currentArchives[c].forEach((a: Archive, idx: number) => {
-          const curId = +a.id;
-          if (curId in likesMap) {
-            const newArchive = { ...a };
-            newArchive.likes = likesMap[curId];
-            newCurrentArchives[c] = [
-              ...newCurrentArchives[c].slice(0, idx),
-              newArchive,
-              ...newCurrentArchives[c].slice(idx + 1),
-            ];
-          }
-        });
+      const newCompiledArchives = { ...state!.compiledArchives };
+      newCompiledArchives.archives = { ...state!.compiledArchives.archives };
+
+      Object.keys(currentArchives).forEach((chapter) => {
+        newCurrentArchives[chapter] = [...currentArchives[chapter]];
+      });
+
+      Object.keys(likesMap).forEach((id) => {
+        newCompiledArchives.archives[id] = { ...newCompiledArchives.archives[id] };
+        newCompiledArchives.archives[id].likes = likesMap[id];
       });
 
       return {
         ...state,
-        compiledArchives: state!.compiledArchives,
+        compiledArchives: newCompiledArchives,
         currentArchives: newCurrentArchives,
       };
     },
     queryList(state, action) {
-      const filteredArchives = filterArchives(action.payload.values);
+      const filteredArchives = filterArchives(
+        action.payload.values,
+        state?.compiledArchives || compiledArchives,
+      );
       return {
         ...state,
         currentArchives: filteredArchives,

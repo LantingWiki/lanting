@@ -60,7 +60,12 @@ const Lanting: FC<LantingProps> = ({
       content={<Filters archives={compiledArchives} form={form} onValuesChange={onFilterChange} />}
     >
       {CHAPTERS.map((c) => (
-        <ArchiveChapter key={c} chapter={c} archives={currentArchives[c]} />
+        <ArchiveChapter
+          key={c}
+          chapter={c}
+          archiveIds={currentArchives[c]}
+          compiledArchives={compiledArchives}
+        />
       ))}
       <MiscRecipes />
     </PageContainer>

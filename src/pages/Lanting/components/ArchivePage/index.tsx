@@ -67,7 +67,7 @@ const findFromArchives = (match: RouteMatch | undefined, compiledArchives: Archi
   if (!id) {
     return null;
   }
-  return compiledArchives.archives[0];
+  return compiledArchives.archives[id];
 };
 
 interface RouteMatch {
@@ -90,7 +90,7 @@ const ArchivePage: FC<ArchivePageProps> = ({ dispatch, lanting: { compiledArchiv
     });
   }, []);
 
-  if (!compiledArchives?.archives.length) {
+  if (!Object.keys(compiledArchives?.archives).length) {
     return (
       <PageContainer
         title="兰亭文存"
