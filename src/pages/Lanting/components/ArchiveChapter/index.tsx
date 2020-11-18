@@ -48,7 +48,9 @@ const renderArchive = (item: Archive) => (
     <List.Item.Meta
       title={
         <>
-          <span>{item.title}</span>
+          <a href={`/lanting/archive/${item.id}`} target="_blank" rel="noreferrer">
+            {item.title}
+          </a>
           {renderOrig(item)}
         </>
       }
