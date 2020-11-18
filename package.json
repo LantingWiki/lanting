@@ -1,7 +1,7 @@
 {
   "name": "lanting",
   "version": "0.1.0",
-  "description": "兰亭已矣",
+  "description": "兰亭文存",
   "scripts": {
     "lint": "umi g tmp && npm run lint:js && npm run lint:prettier",
     "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx ",

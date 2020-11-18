@@ -52,7 +52,7 @@ const Lanting: FC<LantingProps> = ({
     <PageContainer
       title={
         <>
-          <>兰亭已矣</>
+          <>兰亭文存</>
           {count ? <span className={styles.count}>凡{toChineseNumbers(`${count}`)}篇</span> : null}
         </>
       }

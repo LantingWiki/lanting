@@ -34,7 +34,7 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 };
 const defaultFooterDom = (
   <DefaultFooter
-    copyright={`${new Date().getFullYear()} 兰亭已矣`}
+    copyright={`${new Date().getFullYear()} 兰亭文存`}
     links={[
       {
         key: 'legal',

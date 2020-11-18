@@ -45,7 +45,7 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
             <div className={styles.header}>
               <Link to="/">
                 <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>兰亭已矣</span>
+                <span className={styles.title}>兰亭文存</span>
               </Link>
             </div>
             <div className={styles.desc}>兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?</div>

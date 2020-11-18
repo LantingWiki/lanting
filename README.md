@@ -12,7 +12,7 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [ ] 评分优化性能
 [x] 评分筛选
 [ ] 重做redux tree design. 只存在一个地方, 一个大map. 其他地方记ID, 不记数据. map的subtree给很多地方
-[ ] 单个article link
+[ ] 单个article link, title就link到single page
 [ ] archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch. 前X个char在archives.json, 展开的时候fetch. 怎么判断有没有更多 (除了加property, flag)? 看字数行不行. 如果现在的是小于50, 比如49. 就没有. 如果50整, 就有. 怎么解决刚好50的comment? 我能想到的只有砍掉一个char... 哦! 有主意了. 加一个. 弄成51个. 所以凡是[1, 49], [51, Inf], 都是不用展开的
 [x] 加上ID, 灰一点
 
@@ -39,7 +39,7 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 ### 聚合
 
-兰亭 - 兰亭已矣
+兰亭 - 兰亭文存
 芦柑 - 芦柑笔谈
 异端 - 异端十二
 
@@ -65,7 +65,7 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] 缩上去, 放上面
 
 ### 展示文章
-[ ] 照着抄先. 给个评星功能?
+[x] 照着抄先. 给个评星功能?
 [x] 分chapter
 [x] 本纪
 [x] 随园食单
