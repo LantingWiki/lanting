@@ -1,11 +1,11 @@
 // https://umijs.org/config/
-import { defineConfig } from 'umi';
+import { defineConfig, IConfig } from 'umi';
 
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 
 const { REACT_APP_ENV } = process.env;
-export default defineConfig({
+export default defineConfig(({
   externals: {
     react: 'window.React',
     'react-dom': 'window.ReactDOM',
@@ -44,10 +44,13 @@ export default defineConfig({
               redirect: '/lanting',
             },
             {
-              name: '兰亭已矣',
+              name: '兰亭文存',
               path: '/lanting',
               icon: 'BookOutlined',
-              component: './Lanting',
+              routes: [
+                { path: '/lanting', component: './Lanting' },
+                { path: '/lanting/archive/:id', component: './Lanting/components/ArchivePage' },
+              ],
             },
             {
               component: './404',
@@ -85,4 +88,5 @@ export default defineConfig({
       to: 'archives',
     },
   ],
-});
+} as unknown) as IConfig);
+// TODO umi fix this stupid casting
