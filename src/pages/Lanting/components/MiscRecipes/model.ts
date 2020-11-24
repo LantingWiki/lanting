@@ -18,8 +18,8 @@ export interface ModelType {
 }
 
 const processMdImgSyntax = (md: string) => {
-  return md.replace(/!\[\[(.+?)\]\]/g, (match, g1) => {
-    return `![](/archives/imgs/${g1})`;
+  return md.replace(/!\[\]\((.+?)\)/g, (match, g1) => {
+    return `![](/archives/${g1})`;
   });
 };
 
