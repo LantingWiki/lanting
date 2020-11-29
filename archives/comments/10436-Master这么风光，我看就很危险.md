@@ -11,7 +11,7 @@ Master这么风光，我看就很危险
 2017-01
 
 # chapter
-列传
+搜神
 
 # tag
 AI, Google, AlphaGo
