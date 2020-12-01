@@ -1,11 +1,13 @@
-export const CHAPTERS = ['本纪', '世家', '列传', '游侠', '群像'];
+export const CHAPTERS = ['本纪', '世家', '搜神', '列传', '游侠', '群像'];
 
-export type Chapter = '本纪' | '世家' | '列传' | '游侠' | '群像' | '随园食单' | string;
+export type Chapter = '本纪' | '世家' | '搜神' | '列传' | '游侠' | '群像' | '随园食单' | string;
 
 export class ChapterArchives {
   '本纪': number[] = [];
 
   '世家': number[] = [];
+
+  '搜神': number[] = [];
 
   '列传': number[] = [];
 
