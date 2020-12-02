@@ -1,8 +1,9 @@
-import { DefaultFooter, MenuDataItem, getMenuData, getPageTitle } from '@ant-design/pro-layout';
+import { MenuDataItem, getMenuData, getPageTitle } from '@ant-design/pro-layout';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Link, ConnectProps, connect } from 'umi';
 import React from 'react';
 import { ConnectState } from '@/models/connect';
+import defaultFooterDom from './Footer';
 import logo from '../assets/icon.png';
 import styles from './UserLayout.less';
 
@@ -52,7 +53,7 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
           </div>
           {children}
         </div>
-        <DefaultFooter />
+        {defaultFooterDom}
       </div>
     </HelmetProvider>
   );
