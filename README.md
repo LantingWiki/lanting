@@ -9,13 +9,19 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] 文章排序? 用星期做种子乱序!
 [x] 芦柑笔谈 in menu
 [x] 评分功能, 所有东西进DB吧, DB可以commit进来. mongo适合点?
-[ ] 评分优化性能
+[x] 评分优化性能
 [x] 评分筛选
 [x] 重做redux tree design. 只存在一个地方, 一个大map. 其他地方记ID, 不记数据. map的subtree给很多地方
 [x] 单个article link, title就link到single page
 [ ] archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch. 前X个char在archives.json, 展开的时候fetch. 怎么判断有没有更多 (除了加property, flag)? 看字数行不行. 如果现在的是小于50, 比如49. 就没有. 如果50整, 就有. 怎么解决刚好50的comment? 我能想到的只有砍掉一个char... 哦! 有主意了. 加一个. 弄成51个. 所以凡是[1, 49], [51, Inf], 都是不用展开的
 [x] 渲染两次问题?? -> 好像没有这个现象了?... 第一次渲染之后就有东西了?
 [x] 加上ID, 灰一点
+
+# Tribute页面 - 添加新archive
+- TODO: specs
+
+
+
 
 ### 数据源
 [x] 批量导入现有的, 所有的过一遍 (这里不需要建comments)
