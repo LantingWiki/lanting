@@ -20,17 +20,16 @@ export default defineConfig(({
   },
   // umi routes: https://umijs.org/docs/routing
   routes: [
-    // {
-    //   path: '/user',
-    //   component: '../layouts/UserLayout',
-    //   routes: [
-    //     {
-    //       name: 'login',
-    //       path: '/user',
-    //       component: './User',
-    //     },
-    //   ],
-    // },
+    {
+      path: '/tribute',
+      component: '../layouts/UserLayout',
+      routes: [
+        {
+          path: '/tribute',
+          component: './Tribute',
+        },
+      ],
+    },
     {
       path: '/',
       component: '../layouts/LoadingLayout',
