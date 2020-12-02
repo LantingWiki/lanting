@@ -21,11 +21,11 @@ export default defineConfig(({
   // umi routes: https://umijs.org/docs/routing
   routes: [
     {
-      path: '/tribute',
+      path: '/lanting/tribute',
       component: '../layouts/UserLayout',
       routes: [
         {
-          path: '/tribute',
+          path: '/lanting/tribute',
           component: './Tribute',
         },
       ],
