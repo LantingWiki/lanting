@@ -267,12 +267,15 @@ TODO
 `;
 }
 
+const sanitizeFilename = (filename) => {
+  filename = filename.replace(/ ?_ ?/g, '_');
+  filename = filename.replace(/[：， 「」“”？、…《》%,【】！&’。、！？：；﹑•＂…‘’“”〝〞∕¦‖—　〈〉﹞﹝「」‹›〖〗】【»«』『〕〔》《﹐¸﹕︰﹔！¡？¿﹖﹌﹏﹋＇´ˊˋ―﹫︳︴¯＿￣﹢﹦﹤‐­˜﹟﹩﹠﹪﹡﹨﹍﹉﹎﹊ˇ︵︶︷︸︹︿﹀︺︽︾ˉ﹁﹂﹃﹄︻︼（）·]/g, '_');
+  return filename;
+};
+
 async function capturePage(options) {
   const archives = '/Users/wang.boyang/Projects/mine/lanting/archives';
-  let prefix = '';
-  if (options.lantingId) {
-    prefix = `${options.lantingId}-`;
-  }
+  const prefix = `${options.lantingId}-`;
 
   try {
     const pageData = await backend.getPageData(options);
@@ -283,7 +286,7 @@ async function capturePage(options) {
       const commentPathname = path.join(archives, 'comments', `${prefix}${pageData.filename}.md`);
       console.log('XXXTEMP task options', options);
       fs.writeFileSync(
-        commentPathname,
+        sanitizeFilename(commentPathname),
         fillArticleInfo(
           pageData.filename,
           options.articleinfo ? JSON.parse(options.articleinfo) : {},
