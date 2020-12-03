@@ -269,7 +269,8 @@ TODO
 
 const sanitizeFilename = (filename) => {
   filename = filename.replace(/ ?_ ?/g, '_');
-  filename = filename.replace(/[：， 「」“”？、…《》%,【】！&’。、！？：；﹑•＂…‘’“”〝〞∕¦‖—　〈〉﹞﹝「」‹›〖〗】【»«』『〕〔》《﹐¸﹕︰﹔！¡？¿﹖﹌﹏﹋＇´ˊˋ―﹫︳︴¯＿￣﹢﹦﹤‐­˜﹟﹩﹠﹪﹡﹨﹍﹉﹎﹊ˇ︵︶︷︸︹︿﹀︺︽︾ˉ﹁﹂﹃﹄︻︼（）·]/g, '_');
+  // eslint-disable-next-line no-irregular-whitespace
+  filename = filename.replace(/[：， 「」“”？、…《》%,【】！&’。、！？：；﹑•＂…‘’“”〝〞∕¦‖—　〈〉﹞﹝「」‹›〖〗】【»«』『〕〔》《﹐¸﹕︰﹔！¡？¿﹖﹌﹏﹋＇´ˊˋ―﹫︳︴¯＿￣﹢﹦﹤‐­˜﹟﹩﹠﹪﹡﹨﹍﹉﹎﹊ˇ︵︶︷︸︹︿﹀︺︽︾ˉ﹁﹂﹃﹄︻︼（）·?]/g, '_');
   return filename;
 };
 
@@ -285,8 +286,9 @@ async function capturePage(options) {
       fs.writeFileSync(filename, pageData.content);
       const commentPathname = path.join(archives, 'comments', `${prefix}${pageData.filename}.md`);
       console.log('XXXTEMP task options', options);
+      const sanitizedCommentFilename = sanitizeFilename(commentPathname);
       fs.writeFileSync(
-        sanitizeFilename(commentPathname),
+        sanitizedCommentFilename,
         fillArticleInfo(
           pageData.filename,
           options.articleinfo ? JSON.parse(options.articleinfo) : {},
@@ -294,7 +296,7 @@ async function capturePage(options) {
       );
       console.log('XXXTEMP DONE');
       execSync(
-        `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
+        `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${sanitizedCommentFilename}"`,
       );
     } else {
       console.log('XXXTEMP no filename'); // eslint-disable-line no-console
