@@ -51,8 +51,8 @@ const Tribute: React.FC<TributeProps> = (props) => {
     let result: any;
     const fetchData = async () => {
       result = await fetch(`https://lanting.wiki/api/user/tribute/info?link=${tributeState.links}`);
-      if (result) {
-        const { title, author, publisher, date } = result;
+      if (result && result.data) {
+        const { title, author, publisher, date } = result.data;
         const newTributeState = { ...tributeState };
         newTributeState.title = title;
         newTributeState.author = author;
