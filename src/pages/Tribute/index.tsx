@@ -4,6 +4,7 @@ import { connect, Dispatch } from 'umi';
 // import { TributeParamsType } from '@/services/tribute';
 import { BookOutlined, DownOutlined } from '@ant-design/icons';
 import { Input, Select } from 'antd';
+import request from '@/utils/request';
 import LoginForm from './tribute';
 import styles from './style.less';
 
@@ -16,24 +17,23 @@ interface TributeProps {
 const Tribute: React.FC<TributeProps> = (props) => {
   // states
   const [tributeState, setTributeState] = useState({
-    links: '',
+    link: '',
     title: '',
     author: '',
     publisher: '',
     date: '',
     chapter: '',
     tag: '',
-    comment: '',
+    remarks: '',
   });
   const { submitting } = props;
 
-  // const handleSubmit = (values: TributeParamsType) => {
-  //   const { dispatch } = props;
-  //   dispatch({
-  //     type: 'lantingTribute/tribute',
-  //     payload: { ...values },
-  //   });
-  // };
+  const handleSubmit = () => {
+    request('https://lanting.wiki/api/archive/tribute/save', {
+      method: 'post',
+      data: tributeState,
+    });
+  };
 
   const handleInput = (event: { target: { value: string; id: string } }) => {
     const newTributeState = { ...tributeState };
@@ -50,9 +50,9 @@ const Tribute: React.FC<TributeProps> = (props) => {
   const handleInitRequest = () => {
     let result: any;
     const fetchData = async () => {
-      result = await fetch(`https://lanting.wiki/api/archive/tribute/info`, {
-        method: 'POST',
-        body: tributeState.links,
+      result = await request(`https://lanting.wiki/api/archive/tribute/info`, {
+        method: 'post',
+        data: tributeState.link,
       });
       if (result && result.data) {
         const { title, author, publisher, date } = result.data;
@@ -67,17 +67,6 @@ const Tribute: React.FC<TributeProps> = (props) => {
     fetchData();
   };
 
-  const handleSubmit = () => {
-    let result;
-    const postData = async () => {
-      result = await fetch('https://lanting.wiki/api/archive/tribute/save', {
-        method: 'POST',
-        body: JSON.stringify(tributeState),
-      });
-    };
-    postData();
-  };
-
   return (
     <div className={styles.main}>
       <LoginForm activeKey="tribute" onSubmit={handleSubmit}>
@@ -86,8 +75,8 @@ const Tribute: React.FC<TributeProps> = (props) => {
             size="large"
             placeholder="link"
             prefix={<BookOutlined />}
-            value={tributeState.links}
-            id="links"
+            value={tributeState.link}
+            id="link"
             onChange={handleInput}
             onBlur={handleInitRequest}
           />
@@ -138,9 +127,9 @@ const Tribute: React.FC<TributeProps> = (props) => {
           />
           <Input
             size="large"
-            placeholder="comment"
-            value={tributeState.comment}
-            id="comment"
+            placeholder="remarks"
+            value={tributeState.remarks}
+            id="remarks"
             onChange={handleInput}
           />
         </Tab>
