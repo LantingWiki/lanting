@@ -50,7 +50,10 @@ const Tribute: React.FC<TributeProps> = (props) => {
   const handleInitRequest = () => {
     let result: any;
     const fetchData = async () => {
-      result = await fetch(`https://lanting.wiki/api/user/tribute/info?link=${tributeState.links}`);
+      result = await fetch(`https://lanting.wiki/api/archive/tribute/info`, {
+        method: 'POST',
+        body: tributeState.links,
+      });
       if (result && result.data) {
         const { title, author, publisher, date } = result.data;
         const newTributeState = { ...tributeState };
@@ -67,7 +70,7 @@ const Tribute: React.FC<TributeProps> = (props) => {
   const handleSubmit = () => {
     let result;
     const postData = async () => {
-      result = await fetch('https://lanting.wiki/api/user/like/read?articleId=-1', {
+      result = await fetch('https://lanting.wiki/api/archive/tribute/save', {
         method: 'POST',
         body: JSON.stringify(tributeState),
       });
