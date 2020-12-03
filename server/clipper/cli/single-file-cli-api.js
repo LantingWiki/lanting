@@ -269,8 +269,8 @@ TODO
 
 const sanitizeFilename = (filename) => {
   filename = filename.replace(/ ?_ ?/g, '_');
-  // eslint-disable-next-line no-irregular-whitespace
-  filename = filename.replace(/[：， 「」“”？、…《》%,【】！&’。、！？：；﹑•＂…‘’“”〝〞∕¦‖—　〈〉﹞﹝「」‹›〖〗】【»«』『〕〔》《﹐¸﹕︰﹔！¡？¿﹖﹌﹏﹋＇´ˊˋ―﹫︳︴¯＿￣﹢﹦﹤‐­˜﹟﹩﹠﹪﹡﹨﹍﹉﹎﹊ˇ︵︶︷︸︹︿﹀︺︽︾ˉ﹁﹂﹃﹄︻︼（）·?]/g, '_');
+  // eslint-disable-next-line no-irregular-whitespace,no-useless-escape
+  filename = filename.replace(/[+,\/#!$%\^&\*;:{}=`~()：， 「」“”？、…《》%,【】！&’。、！？：；﹑•＂…‘’“”〝〞∕¦‖—　〈〉﹞﹝「」‹›〖〗】【»«』『〕〔》《﹐¸﹕︰﹔！¡？¿﹖﹌﹏﹋＇´ˊˋ―﹫︳︴¯＿￣﹢﹦﹤‐­˜﹟﹩﹠﹪﹡﹨﹍﹉﹎﹊ˇ︵︶︷︸︹︿﹀︺︽︾ˉ﹁﹂﹃﹄︻︼（）·?]/g, '_');
   return filename;
 };
 
