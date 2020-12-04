@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { connect, Dispatch } from 'umi';
 // import { TributeParamsType } from '@/services/tribute';
 import { BookOutlined, DownOutlined } from '@ant-design/icons';
-import { Input, Select } from 'antd';
+import { Input, Select, Form } from 'antd';
 import request from '@/utils/request';
 import LoginForm from './tribute';
 import styles from './style.less';
@@ -54,7 +54,7 @@ const Tribute: React.FC<TributeProps> = (props) => {
         method: 'post',
         data: tributeState.link,
       });
-      if (result && result.data) {
+      if (result && result.data && result.response === 'success') {
         const { title, author, publisher, date } = result.data;
         const newTributeState = { ...tributeState };
         newTributeState.title = title;
@@ -64,6 +64,7 @@ const Tribute: React.FC<TributeProps> = (props) => {
         setTributeState(newTributeState);
       }
     };
+
     fetchData();
   };
 
@@ -71,67 +72,80 @@ const Tribute: React.FC<TributeProps> = (props) => {
     <div className={styles.main}>
       <LoginForm activeKey="tribute" onSubmit={handleSubmit}>
         <Tab key="tribute" tab="归档">
-          <Input
-            size="large"
-            placeholder="link"
-            prefix={<BookOutlined />}
-            value={tributeState.link}
-            id="link"
-            onChange={handleInput}
-            onBlur={handleInitRequest}
-          />
-          <Input
-            size="large"
-            placeholder="title"
-            value={tributeState.title}
-            id="title"
-            onChange={handleInput}
-          />
-          <Input
-            size="large"
-            placeholder="author"
-            value={tributeState.author}
-            id="author"
-            onChange={handleInput}
-          />
-          <Input
-            size="large"
-            placeholder="publisher"
-            value={tributeState.publisher}
-            id="publisher"
-            onChange={handleInput}
-          />
-          <Input
-            size="large"
-            placeholder="date"
-            value={tributeState.date}
-            id="date"
-            onChange={handleInput}
-          />
-          <Select
-            suffixIcon={<DownOutlined />}
-            placeholder="chapter"
-            id="chapter"
-            onChange={handleSelect}
+          <Form.Item
+            name="link"
+            rules={[
+              {
+                required: true,
+                message: 'Please input the link!',
+              },
+            ]}
           >
-            {['本纪', '世家', '搜神', '列传', '游侠', '群像'].map((chapter) => (
-              <Select.Option value={chapter}>{chapter}</Select.Option>
-            ))}
-          </Select>
-          <Input
-            size="large"
-            placeholder="tag"
-            value={tributeState.tag}
-            id="tag"
-            onChange={handleInput}
-          />
-          <Input
-            size="large"
-            placeholder="remarks"
-            value={tributeState.remarks}
-            id="remarks"
-            onChange={handleInput}
-          />
+            <Input
+              size="large"
+              placeholder="link"
+              prefix={<BookOutlined />}
+              value={tributeState.link}
+              id="link"
+              onChange={handleInput}
+              onBlur={handleInitRequest}
+            />
+          </Form.Item>
+
+          <div className={styles.gridbox}>
+            <Input
+              size="large"
+              placeholder="title"
+              value={tributeState.title}
+              id="title"
+              onChange={handleInput}
+            />
+            <Input
+              size="large"
+              placeholder="author"
+              value={tributeState.author}
+              id="author"
+              onChange={handleInput}
+            />
+            <Input
+              size="large"
+              placeholder="publisher"
+              value={tributeState.publisher}
+              id="publisher"
+              onChange={handleInput}
+            />
+            <Input
+              size="large"
+              placeholder="date"
+              value={tributeState.date}
+              id="date"
+              onChange={handleInput}
+            />
+            <Select
+              suffixIcon={<DownOutlined />}
+              placeholder="chapter"
+              id="chapter"
+              onChange={handleSelect}
+            >
+              {['本纪', '世家', '搜神', '列传', '游侠', '群像'].map((chapter) => (
+                <Select.Option value={chapter}>{chapter}</Select.Option>
+              ))}
+            </Select>
+            <Input
+              size="large"
+              placeholder="tag"
+              value={tributeState.tag}
+              id="tag"
+              onChange={handleInput}
+            />
+            <Input
+              size="large"
+              placeholder="remarks"
+              value={tributeState.remarks}
+              id="remarks"
+              onChange={handleInput}
+            />
+          </div>
         </Tab>
         <Submit loading={submitting}>归档</Submit>
       </LoginForm>
