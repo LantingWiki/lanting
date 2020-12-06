@@ -285,11 +285,10 @@ async function capturePage(options) {
     if (options.filenameTemplate && pageData.filename) {
       filename = path.join(archives, 'origs', `${options.lantingId}.html`);
       fs.writeFileSync(filename, pageData.content);
-      const commentPathname = path.join(archives, 'comments', `${prefix}${pageData.filename}.md`);
+      const commentPathname = path.join(archives, 'comments', sanitizeFilename(`${prefix}${pageData.filename}.md`));
       console.log('XXXTEMP task options', options);
-      const sanitizedCommentFilename = sanitizeFilename(commentPathname);
       fs.writeFileSync(
-        sanitizedCommentFilename,
+        commentPathname,
         fillArticleInfo(
           pageData.filename,
           options.articleinfo ? JSON.parse(options.articleinfo) : {},
@@ -297,7 +296,7 @@ async function capturePage(options) {
       );
       console.log('XXXTEMP DONE');
       execSync(
-        `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${sanitizedCommentFilename}"`,
+        `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
       );
     } else {
       console.log('XXXTEMP no filename'); // eslint-disable-line no-console
