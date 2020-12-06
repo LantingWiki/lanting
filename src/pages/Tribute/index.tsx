@@ -138,8 +138,7 @@ const Tribute: React.FC<TributeProps> = (props) => {
               id="tag"
               onChange={handleInput}
             />
-            <Input
-              size="large"
+            <textarea
               placeholder="remarks"
               value={tributeState.remarks}
               id="remarks"
