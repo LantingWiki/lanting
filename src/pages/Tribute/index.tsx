@@ -54,7 +54,7 @@ const Tribute: React.FC<TributeProps> = (props) => {
         method: 'post',
         data: tributeState.link,
       });
-      if (result && result.data && result.response === 'success') {
+      if (result && result.data && result.status === 'success') {
         const { title, author, publisher, date } = result.data;
         const newTributeState = { ...tributeState };
         newTributeState.title = title;
