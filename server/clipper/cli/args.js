@@ -31,6 +31,7 @@ const args = require('yargs')
     yargs.positional('output', { description: 'Output filename', type: 'string' });
   })
   .default({
+    noopen: false,
     'back-end': 'webdriver-chromium',
     'browser-headless': true,
     'browser-executable-path': '',
@@ -81,6 +82,7 @@ const args = require('yargs')
     'crawl-rewrite-rules': [],
     articleinfo: {},
   })
+  .boolean('noopen')
   .options('back-end', { description: 'Back-end to use' })
   .choices('back-end', [
     'jsdom',

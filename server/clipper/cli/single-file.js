@@ -25,14 +25,14 @@
 const fileUrl = require('file-url');
 const fs = require('fs');
 
+const ARCHIVE_DIR = `${__dirname}/../../../archives`;
+
 run(require('./args'))
   // eslint-disable-next-line no-console
   .catch((error) => console.error(error.message || error));
 
 async function run(options) {
-  const currentArticles = fs.readdirSync(
-    '/Users/wang.boyang/Projects/mine/lanting/archives/comments',
-  );
+  const currentArticles = fs.readdirSync(`${ARCHIVE_DIR}/comments`);
   /**
    * XXX boyang: custom option
    */

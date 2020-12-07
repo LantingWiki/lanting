@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 /* eslint-disable no-shadow */
 /* eslint-disable prefer-destructuring */
+/* eslint-disable no-irregular-whitespace,no-useless-escape */
 /*
  * Copyright 2010-2020 Gildas Lormeau
  * contact : gildas.lormeau <at> gmail.com
@@ -257,26 +258,28 @@ ${articleinfo.publisher || 'TODO'}
 ${articleinfo.date || 'TODO'}
 
 # chapter
-TODO
+${articleinfo.chapter || 'TODO'}
 
 # tag
-TODO
+${articleinfo.tag || 'TODO'}
 
 # remarks
-TODO
+${articleinfo.remarks || 'TODO'}
 `;
 }
 
 const sanitizeFilename = (filename) => {
   filename = filename.replace(/ ?_ ?/g, '_');
   filename = filename.replace(/_+/g, '_');
-  // eslint-disable-next-line no-irregular-whitespace,no-useless-escape
-  filename = filename.replace(/[\|\+,\/#!$%\^&\*;:{}=`~()：， 「」“”？、…《》%,【】！&’。、！？：；﹑•＂…‘’“”〝〞∕¦‖—　〈〉﹞﹝「」‹›〖〗】【»«』『〕〔》《﹐¸﹕︰﹔！¡？¿﹖﹌﹏﹋＇´ˊˋ―﹫︳︴¯＿￣﹢﹦﹤‐­˜﹟﹩﹠﹪﹡﹨﹍﹉﹎﹊ˇ︵︶︷︸︹︿﹀︺︽︾ˉ﹁﹂﹃﹄︻︼（）·?]/g, '_');
+  filename = filename.replace(
+    /[\|\+,\/#!$%\^&\*;:{}=`~()：， 「」“”？、…《》%,【】！&’。、！？：；﹑•＂…‘’“”〝〞∕¦‖—　〈〉﹞﹝「」‹›〖〗】【»«』『〕〔》《﹐¸﹕︰﹔！¡？¿﹖﹌﹏﹋＇´ˊˋ―﹫︳︴¯＿￣﹢﹦﹤‐­˜﹟﹩﹠﹪﹡﹨﹍﹉﹎﹊ˇ︵︶︷︸︹︿﹀︺︽︾ˉ﹁﹂﹃﹄︻︼（）·?]/g,
+    '_',
+  );
   return filename;
 };
 
 async function capturePage(options) {
-  const archives = '/Users/wang.boyang/Projects/mine/lanting/archives';
+  const archives = `${__dirname}/../../../archives`;
   const prefix = `${options.lantingId}-`;
 
   try {
@@ -285,7 +288,11 @@ async function capturePage(options) {
     if (options.filenameTemplate && pageData.filename) {
       filename = path.join(archives, 'origs', `${options.lantingId}.html`);
       fs.writeFileSync(filename, pageData.content);
-      const commentPathname = path.join(archives, 'comments', sanitizeFilename(`${prefix}${pageData.filename}.md`));
+      const commentPathname = path.join(
+        archives,
+        'comments',
+        sanitizeFilename(`${prefix}${pageData.filename}.md`),
+      );
       console.log('XXXTEMP task options', options);
       fs.writeFileSync(
         commentPathname,
@@ -295,9 +302,11 @@ async function capturePage(options) {
         ),
       );
       console.log('XXXTEMP DONE');
-      execSync(
-        `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
-      );
+      if (!options.noopen) {
+        execSync(
+          `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
+        );
+      }
     } else {
       console.log('XXXTEMP no filename'); // eslint-disable-line no-console
     }
