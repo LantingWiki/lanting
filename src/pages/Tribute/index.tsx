@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { connect, Dispatch } from 'umi';
 // import { TributeParamsType } from '@/services/tribute';
-import { BookOutlined, DownOutlined } from '@ant-design/icons';
-import { Input, Select, Form } from 'antd';
+import { BookOutlined, DownOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { Input, Select, Form, notification } from 'antd';
 import request from '@/utils/request';
 import LoginForm from './tribute';
 import styles from './style.less';
@@ -57,6 +57,11 @@ const Tribute: React.FC<TributeProps> = (props) => {
         data: tributeState.link,
       });
       if (result && result.data && result.status === 'success') {
+        notification.open({
+          message: '获取成功',
+          description: `成功从${tributeState.link}获取相关信息!`,
+          icon: <CheckCircleOutlined style={{ color: '#008000' }} />,
+        });
         const { title, author, publisher, date } = result.data;
         const newTributeState = { ...tributeState };
         newTributeState.title = title;
