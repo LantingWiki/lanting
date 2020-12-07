@@ -30,11 +30,18 @@ const Tribute: React.FC<TributeProps> = (props) => {
   });
   const { submitting } = props;
 
-  const handleSubmit = () => {
-    request('https://lanting.wiki/api/archive/tribute/save', {
+  const handleSubmit = async () => {
+    const result = await request('https://lanting.wiki/api/archive/tribute/save', {
       method: 'post',
       data: tributeState,
     });
+    if (result && result.status === 'success') {
+      notification.open({
+        message: '成功',
+        description: `成功保存!`,
+        icon: <CheckCircleOutlined style={{ color: '#008000' }} />,
+      });
+    }
   };
 
   const handleInput = (event: { target: { value: string; id: string } }) => {
