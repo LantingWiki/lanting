@@ -28,9 +28,11 @@ const Tribute: React.FC<TributeProps> = (props) => {
     tag: '',
     remarks: '',
   });
-  const { submitting } = props;
+
+  const [submitLoading, submitLoadingToggle] = useState(false);
 
   const handleSubmit = async () => {
+    submitLoadingToggle(true);
     const result = await request('https://lanting.wiki/api/archive/tribute/save', {
       method: 'post',
       data: tributeState,
@@ -42,6 +44,8 @@ const Tribute: React.FC<TributeProps> = (props) => {
         icon: <CheckCircleOutlined style={{ color: '#008000' }} />,
       });
     }
+
+    submitLoadingToggle(false);
   };
 
   const handleInput = (event: { target: { value: string; id: string } }) => {
@@ -161,7 +165,7 @@ const Tribute: React.FC<TributeProps> = (props) => {
             />
           </div>
         </Tab>
-        <Submit loading={submitting}>归档</Submit>
+        <Submit loading={submitLoading}>归档</Submit>
       </LoginForm>
     </div>
   );
