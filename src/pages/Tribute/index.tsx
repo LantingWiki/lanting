@@ -8,6 +8,8 @@ import request from '@/utils/request';
 import LoginForm from './tribute';
 import styles from './style.less';
 
+const { TextArea } = Input;
+
 const { Tab, Submit } = LoginForm;
 interface TributeProps {
   dispatch: Dispatch;
@@ -138,8 +140,9 @@ const Tribute: React.FC<TributeProps> = (props) => {
               id="tag"
               onChange={handleInput}
             />
-            <textarea
+            <TextArea
               placeholder="remarks"
+              rows={4}
               value={tributeState.remarks}
               id="remarks"
               onChange={handleInput}
