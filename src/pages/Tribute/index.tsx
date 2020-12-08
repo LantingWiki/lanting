@@ -2,7 +2,12 @@
 import React, { useState } from 'react';
 import { connect, Dispatch } from 'umi';
 // import { TributeParamsType } from '@/services/tribute';
-import { BookOutlined, DownOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import {
+  BookOutlined,
+  DownOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+} from '@ant-design/icons';
 import { Input, Select, Form, notification } from 'antd';
 import request from '@/utils/request';
 import LoginForm from './tribute';
@@ -42,6 +47,13 @@ const Tribute: React.FC<TributeProps> = (props) => {
         message: '成功',
         description: `成功保存!`,
         icon: <CheckCircleOutlined style={{ color: '#008000' }} />,
+      });
+    } else if (result && result.status === 'fail') {
+      const warnMessage = result.code ? result.code : '';
+      notification.open({
+        message: '失败',
+        description: `保存失败，原因是${warnMessage}。`,
+        icon: <CloseCircleOutlined style={{ color: '#FF0000' }} />,
       });
     }
 
