@@ -109,3 +109,19 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] padding: 0;
 [x] font-size: 20px;
 [x] line-height: 1;
+
+# 后端架构
+
+## mysql
+把现在的metadata装到一个表里. 把静态文件的部分存一个链接或者说是object id, 能去云服务里找到
+
+## S3
+html静态文件的部分, 存到object store一类的里面. 设为private, 访问的时候用access key
+
+## 存文章
+不管是本地还是远程, 还是手机, 都用网页来存. 存了的网页可以preview, 如果preview结果不对, 允许手动上传 (还允许上传多个)
+存的时候摒弃现在的git commit的方式, 而是做 上传 -> mysql -> OK
+这样ID也是从数据库来
+
+## 读文章
+为了前端速度, 现在还是可以打包到前端. 也就是 mysql -> 生成一个json -> 打到包里
