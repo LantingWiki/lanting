@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, Tag } from 'antd';
 import { BankOutlined, EditOutlined, BookOutlined, CalendarOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 import ChapterCard from '../ChapterCard';
 import ArchiveListContent from '../ArchiveListContent';
 import { Archive, Archives } from '../../data';
@@ -10,6 +11,7 @@ export interface ArchiveChapterProps {
   chapter: string;
   compiledArchives: Archives;
   archiveIds: number[];
+  search: String;
 }
 
 const renderOrig = (item: Archive) => {
@@ -28,21 +30,23 @@ const renderOrig = (item: Archive) => {
   ));
 };
 
-const renderArchive = (item: Archive) => (
+const renderArchive = (search: any, item: Archive) => (
   <List.Item
     key={item.id}
     actions={[
       <h4 key="edit">
         <EditOutlined style={{ marginRight: 4 }} />
-        {item.author.map((a) => ` ${a}`)}
+        {item.author.map((a) => (
+          <Highlighter searchWords={[search]} autoEscape textToHighlight={a} />
+        ))}
       </h4>,
       <div>
         <BankOutlined style={{ marginRight: 8 }} />
-        {item.publisher}
+        <Highlighter searchWords={[search]} autoEscape textToHighlight={item.publisher} />
       </div>,
       <div>
         <CalendarOutlined style={{ marginRight: 8 }} />
-        {item.date}
+        <Highlighter searchWords={[search]} autoEscape textToHighlight={item.date} />
       </div>,
     ]}
   >
@@ -50,7 +54,7 @@ const renderArchive = (item: Archive) => (
       title={
         <>
           <a href={`/lanting/archive/${item.id}`} target="_blank" rel="noreferrer">
-            {item.title}
+            <Highlighter searchWords={[search]} autoEscape textToHighlight={item.title} />
           </a>
           {renderOrig(item)}
         </>
@@ -58,12 +62,14 @@ const renderArchive = (item: Archive) => (
       description={
         <span>
           {item.tag.map((t) => (
-            <Tag key={t}>{t}</Tag>
+            <Tag key={t}>
+              <Highlighter searchWords={[search]} autoEscape textToHighlight={t} />
+            </Tag>
           ))}
         </span>
       }
     />
-    <ArchiveListContent archive={item} />
+    <ArchiveListContent archive={item} search={search} />
   </List.Item>
 );
 
@@ -71,6 +77,7 @@ const ArchiveChapter: React.FC<ArchiveChapterProps> = ({
   chapter,
   archiveIds,
   compiledArchives,
+  search,
 }) => {
   const archives = archiveIds.map((id) => compiledArchives.archives[id]);
   return (
@@ -90,7 +97,7 @@ const ArchiveChapter: React.FC<ArchiveChapterProps> = ({
         split
         grid={{ gutter: 0, column: 2, sm: 1, xs: 1 }}
         dataSource={archives}
-        renderItem={renderArchive}
+        renderItem={(item) => renderArchive(search, item)}
       />
     </ChapterCard>
   );

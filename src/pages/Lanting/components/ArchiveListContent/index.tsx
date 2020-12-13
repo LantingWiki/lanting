@@ -2,13 +2,15 @@ import React, { FC } from 'react';
 import { connect, Dispatch } from 'umi';
 import { Button } from 'antd';
 import { SketchOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
-import ReactMarkdown from 'react-markdown';
+import Highlighter from 'react-highlight-words';
+// import ReactMarkdown from 'react-markdown';
 import ExpandCollapse from '@/components/vendor/ExpandCollapse';
 import styles from './index.less';
 import { Archive } from '../../data';
 
 interface ArchiveListContentProps {
   archive: Archive;
+  search: string;
   dispatch: Dispatch;
 }
 
@@ -21,7 +23,7 @@ const like = (dispatch: Dispatch, archive: Archive, isLike: boolean) => {
   };
 };
 
-const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive }) => {
+const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive, search }) => {
   const { likes } = archive;
   const classNames = likes ? `${styles.extraUpDiv} ${styles.hasLikes}` : styles.extraUpDiv;
   return (
@@ -40,7 +42,8 @@ const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive }) 
         }
         ellipsis={false}
       >
-        <ReactMarkdown source={archive.remarks} skipHtml />
+        <Highlighter searchWords={[search]} autoEscape textToHighlight={archive.remarks} />
+        {/* <ReactMarkdown source={archive.remarks} skipHtml /> */}
       </ExpandCollapse>
       <div className={styles.extra}>
         <div className={classNames}>
@@ -59,7 +62,9 @@ const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive }) 
             onClick={like(dispatch, archive, false)}
           />
         </div>
-        <div className={styles.extraId}>{archive.id}</div>
+        <div className={styles.extraId}>
+          <Highlighter searchWords={[search]} autoEscape textToHighlight={archive.id} />
+        </div>
       </div>
     </div>
   );

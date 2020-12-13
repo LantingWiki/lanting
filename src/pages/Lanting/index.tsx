@@ -29,7 +29,7 @@ const getCount = (currentArchives: ChapterArchives) => {
 
 const Lanting: FC<LantingProps> = ({
   dispatch,
-  lanting: { compiledArchives, currentArchives },
+  lanting: { compiledArchives, currentArchives, search },
 }) => {
   const [form] = Form.useForm();
 
@@ -65,6 +65,7 @@ const Lanting: FC<LantingProps> = ({
           chapter={c}
           archiveIds={currentArchives[c]}
           compiledArchives={compiledArchives}
+          search={search}
         />
       ))}
       <MiscRecipes />

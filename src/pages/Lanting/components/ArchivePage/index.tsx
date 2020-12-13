@@ -25,7 +25,7 @@ const renderOrig = (item: Archive) => {
   ));
 };
 
-const renderArchive = (item: Archive) => (
+const renderArchive = (search: string, item: Archive) => (
   <List.Item
     key={item.id}
     actions={[
@@ -58,7 +58,7 @@ const renderArchive = (item: Archive) => (
         </span>
       }
     />
-    <ArchiveListContent archive={item} />
+    <ArchiveListContent archive={item} search={search} />
   </List.Item>
 );
 
@@ -81,9 +81,15 @@ interface ArchivePageProps {
   lanting: StateType;
   loading: boolean;
   match: RouteMatch;
+  search: string;
 }
 
-const ArchivePage: FC<ArchivePageProps> = ({ dispatch, lanting: { compiledArchives }, match }) => {
+const ArchivePage: FC<ArchivePageProps> = ({
+  dispatch,
+  lanting: { compiledArchives },
+  search,
+  match,
+}) => {
   useEffect(() => {
     dispatch({
       type: 'lanting/fetch',
@@ -123,7 +129,7 @@ const ArchivePage: FC<ArchivePageProps> = ({ dispatch, lanting: { compiledArchiv
           split
           grid={{ gutter: 0, column: 1, sm: 1, xs: 1 }}
           dataSource={[archive]}
-          renderItem={renderArchive}
+          renderItem={(item) => renderArchive(search, item)}
         />
       </Card>
     </PageContainer>

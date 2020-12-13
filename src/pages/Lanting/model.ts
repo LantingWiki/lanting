@@ -15,6 +15,7 @@ const sortByLikes = (arr: number[], archives: Archives) => {
 export interface StateType {
   compiledArchives: Archives;
   currentArchives: ChapterArchives;
+  search: String;
 }
 
 export interface ModelType {
@@ -105,6 +106,7 @@ const Model: ModelType = {
   state: {
     compiledArchives,
     currentArchives: initedChapterArchives,
+    search: '',
   },
   effects: {
     *fetch(_, { call, put }) {
@@ -173,7 +175,7 @@ const Model: ModelType = {
         ...state,
         compiledArchives: action.payload.compiledArchives,
         currentArchives: action.payload.currentArchives,
-      };
+      } as StateType;
     },
     putLikes(state, action) {
       // here I need to
@@ -203,7 +205,7 @@ const Model: ModelType = {
         ...state,
         compiledArchives: newCompiledArchives,
         currentArchives: newCurrentArchives,
-      };
+      } as StateType;
     },
     queryList(state, action) {
       const filteredArchives = filterArchives(
@@ -213,6 +215,7 @@ const Model: ModelType = {
       return {
         ...state,
         currentArchives: filteredArchives,
+        search: action.payload.values.search,
       } as StateType;
     },
   },
