@@ -2,7 +2,7 @@
 Forrest Li’s Sea Story 李小冬与冬海集团的故事
 
 # author
-TODO
+SG Global Network
 
 # publisher
 SG Global Network
