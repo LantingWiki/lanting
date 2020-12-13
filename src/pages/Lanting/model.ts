@@ -3,6 +3,15 @@ import request from '@/utils/request';
 import { shuffleByWeek } from '@/utils/utils';
 import { Archives, ChapterArchives, CHAPTERS, FilterValues } from './data';
 
+const sortByLikes = (arr: number[], archives: Archives) => {
+  return arr
+    .slice()
+    .sort(
+      (a: number, b: number) =>
+        (archives.archives[b].likes || 0) - (archives.archives[a].likes || 0),
+    );
+};
+
 export interface StateType {
   compiledArchives: Archives;
   currentArchives: ChapterArchives;
@@ -53,11 +62,14 @@ const filterOneChapterArchives = (
     }
     if (
       !filters.author.includes('all') &&
-      !archive.author.some((a) => filters.author.includes(a))
+      !filters.author.some((a) => archive.author.some((b) => b === a))
     ) {
       return false;
     }
-    if (!filters.tag.includes('all') && !archive.tag.some((a) => filters.tag.includes(a))) {
+    if (
+      !filters.tag.includes('all') &&
+      !filters.tag.some((a) => archive.tag.some((b) => b === a))
+    ) {
       return false;
     }
     if ((archive.likes || 0) < filters.likesMin || (archive.likes || 0) > filters.likesMax) {
@@ -65,7 +77,7 @@ const filterOneChapterArchives = (
     }
     return true;
   });
-  return results;
+  return sortByLikes(results, archives);
 };
 
 const filterArchives = (filters: FilterValues, archives: Archives) => {
@@ -164,13 +176,15 @@ const Model: ModelType = {
       const newCompiledArchives = { ...state!.compiledArchives };
       newCompiledArchives.archives = { ...state!.compiledArchives.archives };
 
-      Object.keys(currentArchives).forEach((chapter) => {
-        newCurrentArchives[chapter] = [...currentArchives[chapter]];
-      });
-
       Object.keys(likesMap).forEach((id) => {
         newCompiledArchives.archives[id] = { ...newCompiledArchives.archives[id] };
         newCompiledArchives.archives[id].likes = likesMap[id];
+      });
+
+      Object.keys(currentArchives).forEach((chapter) => {
+        newCurrentArchives[chapter] = [
+          ...sortByLikes(currentArchives[chapter], newCompiledArchives),
+        ];
       });
 
       return {
