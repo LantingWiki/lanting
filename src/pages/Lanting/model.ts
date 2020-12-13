@@ -54,6 +54,18 @@ const filterOneChapterArchives = (
 ) => {
   const results = archiveIds.filter((archiveId) => {
     const archive = archives.archives[archiveId];
+    if (
+      !archive.author.some((a) => a.includes(filters.search)) &&
+      !archive.chapter.includes(filters.search) &&
+      !archive.date.includes(filters.search) &&
+      !archive.id.includes(filters.search) &&
+      !archive.publisher.includes(filters.search) &&
+      !archive.remarks.includes(filters.search) &&
+      !archive.tag.some((a) => a.includes(filters.search)) &&
+      !archive.title.includes(filters.search)
+    ) {
+      return false;
+    }
     if (!filters.date.includes('all') && !filters.date.includes(archive.date)) {
       return false;
     }

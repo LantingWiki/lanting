@@ -65,6 +65,7 @@ export class Archives {
 }
 
 export interface FilterValues {
+  search: string;
   author: string[];
   date: string[];
   publisher: string[];

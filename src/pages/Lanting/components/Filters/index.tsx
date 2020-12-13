@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Select, Collapse, InputNumber } from 'antd';
+import { Form, Select, Collapse, InputNumber, Input } from 'antd';
 import { FormInstance } from 'antd/lib/form/Form';
 import { DownOutlined } from '@ant-design/icons';
 import { Archives, FilterValues } from '@/pages/Lanting/data';
@@ -80,9 +80,15 @@ const Filters: React.FC<FilterProps> = ({ archives, form, onValuesChange }) => (
           tag: ['all'],
           likesMin: 0,
           likesMax: 255,
+          search: '',
         }}
         onValuesChange={onValuesChange}
       >
+        <StandardFormRow title="搜索" key="search" last>
+          <FormItem name="search">
+            <Input />
+          </FormItem>
+        </StandardFormRow>
         <StandardFormRow title="如琢如磨" key="likes" last>
           <div className={styles.likesRow}>
             <FormItem name="likesMin" label="大于等于" labelAlign="left">
