@@ -16,6 +16,7 @@ export interface StateType {
   compiledArchives: Archives;
   currentArchives: ChapterArchives;
   search: String;
+  searchList: String[];
 }
 
 export interface ModelType {
@@ -25,11 +26,13 @@ export interface ModelType {
     fetch: Effect;
     like: Effect;
     getLikes: Effect;
+    getSearchList: Effect;
   };
   reducers: {
     putList: Reducer<StateType>;
     putLikes: Reducer<StateType>;
     queryList: Reducer<StateType>;
+    putSearchList: Reducer<StateType>;
   };
 }
 
@@ -107,6 +110,7 @@ const Model: ModelType = {
     compiledArchives,
     currentArchives: initedChapterArchives,
     search: '',
+    searchList: [],
   },
   effects: {
     *fetch(_, { call, put }) {
@@ -118,6 +122,7 @@ const Model: ModelType = {
         return request('/archives/archives.json');
       });
       initedChapterArchives = initArchives(response);
+
       yield put({
         type: 'putList',
         payload: {
@@ -129,6 +134,10 @@ const Model: ModelType = {
       yield put({
         type: 'getLikes',
       });
+
+      yield put({
+        type: 'getSearchList',
+      });
     },
     *getLikes(_, { call, put }) {
       const responseLikes = yield call(() => {
@@ -139,6 +148,19 @@ const Model: ModelType = {
           type: 'putLikes',
           payload: {
             likesMap: responseLikes.data,
+          },
+        });
+      }
+    },
+    *getSearchList(_, { call, put }) {
+      const responseSearchList = yield call(() => {
+        return request('https://lanting.wiki/api/archive/search/keyword/read');
+      });
+      if (responseSearchList && responseSearchList.data) {
+        yield put({
+          type: 'putSearchList',
+          payload: {
+            searchList: responseSearchList.data,
           },
         });
       }
@@ -216,6 +238,18 @@ const Model: ModelType = {
         ...state,
         currentArchives: filteredArchives,
         search: action.payload.values.search,
+      } as StateType;
+    },
+    putSearchList(state, action) {
+      const searchList = [];
+      for (let i = 0; i < 10; i++) {
+        if (action.payload.searchList[i]) {
+          searchList.push(action.payload.searchList[i].keyword);
+        }
+      }
+      return {
+        ...state,
+        searchList,
       } as StateType;
     },
   },

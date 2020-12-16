@@ -29,7 +29,7 @@ const getCount = (currentArchives: ChapterArchives) => {
 
 const Lanting: FC<LantingProps> = ({
   dispatch,
-  lanting: { compiledArchives, currentArchives, search },
+  lanting: { compiledArchives, currentArchives, search, searchList },
 }) => {
   const [form] = Form.useForm();
 
@@ -57,7 +57,14 @@ const Lanting: FC<LantingProps> = ({
         </>
       }
       className={styles.pcontainer}
-      content={<Filters archives={compiledArchives} form={form} onValuesChange={onFilterChange} />}
+      content={
+        <Filters
+          archives={compiledArchives}
+          form={form}
+          searchList={searchList}
+          onValuesChange={onFilterChange}
+        />
+      }
     >
       {CHAPTERS.map((c) => (
         <ArchiveChapter

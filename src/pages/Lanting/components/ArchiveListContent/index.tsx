@@ -3,7 +3,7 @@ import { connect, Dispatch } from 'umi';
 import { Button } from 'antd';
 import { SketchOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-// import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import ExpandCollapse from '@/components/vendor/ExpandCollapse';
 import styles from './index.less';
 import { Archive } from '../../data';
@@ -26,6 +26,14 @@ const like = (dispatch: Dispatch, archive: Archive, isLike: boolean) => {
 const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive, search }) => {
   const { likes } = archive;
   const classNames = likes ? `${styles.extraUpDiv} ${styles.hasLikes}` : styles.extraUpDiv;
+  const deepCopiedString = ` ${archive.remarks}`.slice(1);
+  let result;
+
+  if (search) {
+    result = deepCopiedString.replaceAll(search, `<span>${search}</span>`);
+  } else {
+    result = deepCopiedString;
+  }
   return (
     <div className={styles.listContent}>
       <ExpandCollapse
@@ -42,8 +50,8 @@ const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive, se
         }
         ellipsis={false}
       >
-        <Highlighter searchWords={[search]} autoEscape textToHighlight={archive.remarks} />
-        {/* <ReactMarkdown source={archive.remarks} skipHtml /> */}
+        {/* <Highlighter searchWords={[search]} autoEscape textToHighlight={archive.remarks} /> */}
+        <ReactMarkdown source={result} skipHtml />
       </ExpandCollapse>
       <div className={styles.extra}>
         <div className={classNames}>

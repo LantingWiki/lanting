@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Select, Collapse, InputNumber, Input } from 'antd';
+import { Form, Select, Collapse, InputNumber, Input, Tag } from 'antd';
 import { FormInstance } from 'antd/lib/form/Form';
 import { DownOutlined } from '@ant-design/icons';
 import { Archives, FilterValues } from '@/pages/Lanting/data';
@@ -19,6 +19,7 @@ const compareFn = (a: TagPair, b: TagPair) => (b[1] as number) - (a[1] as number
 export interface FilterProps {
   archives: Archives;
   form: FormInstance;
+  searchList: String[];
   onValuesChange: (changedValues: any, values: FilterValues) => void;
 }
 
@@ -67,7 +68,15 @@ const generateSelects = (archives: Archives) => {
   );
 };
 
-const Filters: React.FC<FilterProps> = ({ archives, form, onValuesChange }) => (
+const onClickChange = (form: any, event: any, onValuesChange: any) => {
+  const textIn = event.target.textContent;
+  const values = form.getFieldValue();
+  values.search = textIn;
+  const changedValues = { search: textIn };
+  onValuesChange(changedValues, values);
+};
+
+const Filters: React.FC<FilterProps> = ({ archives, form, searchList, onValuesChange }) => (
   <Collapse ghost>
     <Panel header="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" key="1" forceRender showArrow={false}>
       <Form
@@ -84,6 +93,16 @@ const Filters: React.FC<FilterProps> = ({ archives, form, onValuesChange }) => (
         }}
         onValuesChange={onValuesChange}
       >
+        <FormItem className={styles.tagContainer}>
+          {searchList.map((hotSpot) => (
+            <Tag
+              className={styles.tagClass}
+              onClick={(event) => onClickChange(form, event, onValuesChange)}
+            >
+              {hotSpot}
+            </Tag>
+          ))}
+        </FormItem>
         <StandardFormRow title="搜索" key="search" last>
           <FormItem name="search">
             <Input />
