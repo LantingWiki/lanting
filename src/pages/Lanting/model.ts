@@ -1,7 +1,7 @@
 import { Effect, Reducer } from 'umi';
 import request from '@/utils/request';
 import { shuffleByWeek } from '@/utils/utils';
-import { Archives, ChapterArchives, CHAPTERS, FilterValues } from './data';
+import { Archives, ChapterArchives, CHAPTERS, FilterValues, SearchList } from './data';
 
 const sortByLikes = (arr: number[], archives: Archives) => {
   return arr
@@ -15,8 +15,8 @@ const sortByLikes = (arr: number[], archives: Archives) => {
 export interface StateType {
   compiledArchives: Archives;
   currentArchives: ChapterArchives;
-  search: String;
-  searchList: String[];
+  confirmSearch: string;
+  searchLists: SearchList[];
 }
 
 export interface ModelType {
@@ -27,6 +27,7 @@ export interface ModelType {
     like: Effect;
     getLikes: Effect;
     getSearchList: Effect;
+    saveSearch: Effect;
   };
   reducers: {
     putList: Reducer<StateType>;
@@ -59,14 +60,14 @@ const filterOneChapterArchives = (
   const results = archiveIds.filter((archiveId) => {
     const archive = archives.archives[archiveId];
     if (
-      !archive.author.some((a) => a.includes(filters.search)) &&
-      !archive.chapter.includes(filters.search) &&
-      !archive.date.includes(filters.search) &&
-      !archive.id.includes(filters.search) &&
-      !archive.publisher.includes(filters.search) &&
-      !archive.remarks.includes(filters.search) &&
-      !archive.tag.some((a) => a.includes(filters.search)) &&
-      !archive.title.includes(filters.search)
+      !archive.author.some((a) => a.includes(filters.confirmSearch)) &&
+      !archive.chapter.includes(filters.confirmSearch) &&
+      !archive.date.includes(filters.confirmSearch) &&
+      !archive.id.includes(filters.confirmSearch) &&
+      !archive.publisher.includes(filters.confirmSearch) &&
+      !archive.remarks.includes(filters.confirmSearch) &&
+      !archive.tag.some((a) => a.includes(filters.confirmSearch)) &&
+      !archive.title.includes(filters.confirmSearch)
     ) {
       return false;
     }
@@ -109,8 +110,8 @@ const Model: ModelType = {
   state: {
     compiledArchives,
     currentArchives: initedChapterArchives,
-    search: '',
-    searchList: [],
+    confirmSearch: '',
+    searchLists: [],
   },
   effects: {
     *fetch(_, { call, put }) {
@@ -156,11 +157,17 @@ const Model: ModelType = {
       const responseSearchList = yield call(() => {
         return request('https://lanting.wiki/api/archive/search/keyword/read');
       });
+      const searchLists = [];
+      for (let i = 0; i < responseSearchList.data.length; i++) {
+        const { keyword, searchCount } = responseSearchList.data[i];
+        const newSearchList = { keyword, count: searchCount };
+        searchLists.push(newSearchList);
+      }
       if (responseSearchList && responseSearchList.data) {
         yield put({
           type: 'putSearchList',
           payload: {
-            searchList: responseSearchList.data,
+            searchLists,
           },
         });
       }
@@ -187,6 +194,27 @@ const Model: ModelType = {
             articleId: archive.id,
             like: isLike,
           },
+        });
+      });
+    },
+    *saveSearch(action, { call, put }) {
+      const { keyword, searchLists } = action.payload;
+      const index = searchLists.map((x: { keyword: any }) => x.keyword).indexOf(keyword);
+      if (index < 0) {
+        searchLists.push({ keyword, count: 1 });
+      } else {
+        searchLists[index].count += 1;
+      }
+      yield put({
+        type: 'putSearchList',
+        payload: {
+          searchLists,
+        },
+      });
+      yield call(() => {
+        return request('https://lanting.wiki/api/archive/search/keyword/create', {
+          method: 'post',
+          data: keyword,
         });
       });
     },
@@ -237,19 +265,13 @@ const Model: ModelType = {
       return {
         ...state,
         currentArchives: filteredArchives,
-        search: action.payload.values.search,
+        confirmSearch: action.payload.values.confirmSearch,
       } as StateType;
     },
     putSearchList(state, action) {
-      const searchList = [];
-      for (let i = 0; i < 10; i++) {
-        if (action.payload.searchList[i]) {
-          searchList.push(action.payload.searchList[i].keyword);
-        }
-      }
       return {
         ...state,
-        searchList,
+        searchLists: action.payload.searchLists,
       } as StateType;
     },
   },

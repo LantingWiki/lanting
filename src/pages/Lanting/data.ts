@@ -66,10 +66,16 @@ export class Archives {
 
 export interface FilterValues {
   search: string;
+  confirmSearch: string;
   author: string[];
   date: string[];
   publisher: string[];
   tag: string[];
   likesMin: number;
   likesMax: number;
+}
+
+export interface SearchList {
+  keyword: string;
+  count: number;
 }

@@ -1,8 +1,9 @@
 import React from 'react';
+import { Dispatch } from 'umi';
 import { Form, Select, Collapse, InputNumber, Input, Tag } from 'antd';
 import { FormInstance } from 'antd/lib/form/Form';
 import { DownOutlined } from '@ant-design/icons';
-import { Archives, FilterValues } from '@/pages/Lanting/data';
+import { Archives, FilterValues, SearchList } from '@/pages/Lanting/data';
 import { fieldToTranslation } from '@/utils/utils';
 import StandardFormRow from '../StandardFormRow';
 
@@ -11,6 +12,7 @@ import styles from './index.less';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { Panel } = Collapse;
+const { Search } = Input;
 
 type TagPair = [string, number];
 
@@ -19,7 +21,8 @@ const compareFn = (a: TagPair, b: TagPair) => (b[1] as number) - (a[1] as number
 export interface FilterProps {
   archives: Archives;
   form: FormInstance;
-  searchList: String[];
+  searchLists: SearchList[];
+  dispatch: Dispatch;
   onValuesChange: (changedValues: any, values: FilterValues) => void;
 }
 
@@ -73,10 +76,55 @@ const onClickChange = (form: any, event: any, onValuesChange: any) => {
   const values = form.getFieldValue();
   values.search = textIn;
   const changedValues = { search: textIn };
+  form.setFieldsValue(values);
   onValuesChange(changedValues, values);
 };
 
-const Filters: React.FC<FilterProps> = ({ archives, form, searchList, onValuesChange }) => (
+const onSearch = (
+  form: any,
+  value: any,
+  onValuesChange: any,
+  dispatch: Dispatch,
+  searchLists: SearchList[],
+) => {
+  const values = form.getFieldValue();
+  values.confirmSearch = value;
+  const changedValues = { confirmSearch: value };
+  onValuesChange(changedValues, values);
+  dispatch({
+    type: 'lanting/saveSearch',
+    payload: {
+      keyword: value,
+      searchLists,
+    },
+  });
+};
+
+const generateTags = (searchLists: SearchList[], form: any, onValuesChange: any) => {
+  const resultSearchLists = [];
+  searchLists.sort((a, b) => b.count - a.count);
+  for (let i = 0; i < 10; i++) {
+    if (searchLists[i]) {
+      resultSearchLists.push(searchLists[i]);
+    }
+  }
+  return searchLists.map((hotSpot) => (
+    <Tag
+      className={styles.tagClass}
+      onClick={(event) => onClickChange(form, event, onValuesChange)}
+    >
+      {hotSpot.keyword}
+    </Tag>
+  ));
+};
+
+const Filters: React.FC<FilterProps> = ({
+  dispatch,
+  archives,
+  form,
+  searchLists,
+  onValuesChange,
+}) => (
   <Collapse ghost>
     <Panel header="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" key="1" forceRender showArrow={false}>
       <Form
@@ -90,22 +138,20 @@ const Filters: React.FC<FilterProps> = ({ archives, form, searchList, onValuesCh
           likesMin: 0,
           likesMax: 255,
           search: '',
+          confirmSearch: '',
         }}
         onValuesChange={onValuesChange}
       >
         <FormItem className={styles.tagContainer}>
-          {searchList.map((hotSpot) => (
-            <Tag
-              className={styles.tagClass}
-              onClick={(event) => onClickChange(form, event, onValuesChange)}
-            >
-              {hotSpot}
-            </Tag>
-          ))}
+          {generateTags(searchLists, form, onValuesChange)}
         </FormItem>
         <StandardFormRow title="搜索" key="search" last>
           <FormItem name="search">
-            <Input />
+            <Search
+              placeholder="input search text"
+              onSearch={(value) => onSearch(form, value, onValuesChange, dispatch, searchLists)}
+              enterButton
+            />
           </FormItem>
         </StandardFormRow>
         <StandardFormRow title="如琢如磨" key="likes" last>
