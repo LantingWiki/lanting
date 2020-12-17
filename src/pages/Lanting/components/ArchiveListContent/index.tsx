@@ -26,14 +26,18 @@ const like = (dispatch: Dispatch, archive: Archive, isLike: boolean) => {
 const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive, search }) => {
   const { likes } = archive;
   const classNames = likes ? `${styles.extraUpDiv} ${styles.hasLikes}` : styles.extraUpDiv;
-  const deepCopiedString = ` ${archive.remarks}`.slice(1);
-  let result;
 
-  if (search) {
-    result = deepCopiedString.replaceAll(search, `<span>${search}</span>`);
-  } else {
-    result = deepCopiedString;
-  }
+  const renderers = {
+    text: ({ value }: { value: any }) => (
+      <Highlighter searchWords={[search]} autoEscape textToHighlight={value} />
+    ),
+    inlineCode: ({ value }: { value: any }) => (
+      <code>
+        <Highlighter searchWords={[search]} autoEscape textToHighlight={value} />
+      </code>
+    ),
+  };
+
   return (
     <div className={styles.listContent}>
       <ExpandCollapse
@@ -51,7 +55,7 @@ const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive, se
         ellipsis={false}
       >
         {/* <Highlighter searchWords={[search]} autoEscape textToHighlight={archive.remarks} /> */}
-        <ReactMarkdown source={result} skipHtml />
+        <ReactMarkdown renderers={renderers} source={archive.remarks} />
       </ExpandCollapse>
       <div className={styles.extra}>
         <div className={classNames}>
