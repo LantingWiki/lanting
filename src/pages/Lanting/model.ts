@@ -59,6 +59,7 @@ const filterOneChapterArchives = (
 ) => {
   const results = archiveIds.filter((archiveId) => {
     const archive = archives.archives[archiveId];
+    console.log(filters.confirmSearch);
     if (
       !archive.author.some((a) => a.includes(filters.confirmSearch)) &&
       !archive.chapter.includes(filters.confirmSearch) &&
@@ -258,6 +259,9 @@ const Model: ModelType = {
       } as StateType;
     },
     queryList(state, action) {
+      if (!action.payload.values.confirmSearch) {
+        action.payload.values.confirmSearch = '';
+      }
       const filteredArchives = filterArchives(
         action.payload.values,
         state?.compiledArchives || compiledArchives,
