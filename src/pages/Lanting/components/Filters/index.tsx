@@ -102,7 +102,13 @@ const onSearch = (
 
 const generateTags = (searchLists: SearchList[], form: any, onValuesChange: any) => {
   const resultSearchLists = [];
-  searchLists.sort((a, b) => b.count - a.count);
+  searchLists.sort((a, b) => {
+    if (b.count !== a.count) {
+      return b.count - a.count;
+    }
+    return b.updatedAt - a.updatedAt;
+  });
+
   for (let i = 0; i < 10; i++) {
     if (searchLists[i]) {
       resultSearchLists.push(searchLists[i]);
@@ -145,10 +151,10 @@ const Filters: React.FC<FilterProps> = ({
         <FormItem className={styles.tagContainer}>
           {generateTags(searchLists, form, onValuesChange)}
         </FormItem>
-        <StandardFormRow title="搜索" key="search" last>
+        <StandardFormRow title="如切如磋" key="search" last>
           <FormItem name="search">
             <Search
-              placeholder="input search text"
+              placeholder="如切如磋"
               onSearch={(value) => onSearch(form, value, onValuesChange, dispatch, searchLists)}
               enterButton
             />

@@ -78,4 +78,5 @@ export interface FilterValues {
 export interface SearchList {
   keyword: string;
   count: number;
+  updatedAt: number;
 }
