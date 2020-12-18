@@ -59,7 +59,6 @@ const filterOneChapterArchives = (
 ) => {
   const results = archiveIds.filter((archiveId) => {
     const archive = archives.archives[archiveId];
-    console.log(filters.confirmSearch);
     if (
       !archive.author.some((a) => a.includes(filters.confirmSearch)) &&
       !archive.chapter.includes(filters.confirmSearch) &&
