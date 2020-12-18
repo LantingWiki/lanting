@@ -159,8 +159,8 @@ const Model: ModelType = {
       });
       const searchLists = [];
       for (let i = 0; i < responseSearchList.data.length; i++) {
-        const { keyword, searchCount } = responseSearchList.data[i];
-        const newSearchList = { keyword, count: searchCount };
+        const { keyword, searchCount, updatedAt } = responseSearchList.data[i];
+        const newSearchList = { keyword, count: searchCount, updatedAt };
         searchLists.push(newSearchList);
       }
       if (responseSearchList && responseSearchList.data) {
