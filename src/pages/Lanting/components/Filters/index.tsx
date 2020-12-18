@@ -108,7 +108,7 @@ const generateTags = (searchLists: SearchList[], form: any, onValuesChange: any)
       resultSearchLists.push(searchLists[i]);
     }
   }
-  return searchLists.map((hotSpot) => (
+  return resultSearchLists.map((hotSpot) => (
     <Tag
       className={styles.tagClass}
       onClick={(event) => onClickChange(form, event, onValuesChange)}
