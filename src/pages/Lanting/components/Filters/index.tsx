@@ -91,13 +91,15 @@ const onSearch = (
   values.confirmSearch = value;
   const changedValues = { confirmSearch: value };
   onValuesChange(changedValues, values);
-  dispatch({
-    type: 'lanting/saveSearch',
-    payload: {
-      keyword: value,
-      searchLists,
-    },
-  });
+  if (value !== '') {
+    dispatch({
+      type: 'lanting/saveSearch',
+      payload: {
+        keyword: value,
+        searchLists,
+      },
+    });
+  }
 };
 
 const generateTags = (searchLists: SearchList[], form: any, onValuesChange: any) => {
