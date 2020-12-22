@@ -113,6 +113,7 @@ const ArchivePage: FC<ArchivePageProps> = ({
     return <Redirect to="/404" />;
   }
 
+  document.title = `兰亭文存 - ${archive.title}`;
   return (
     <PageContainer
       title="兰亭文存"
