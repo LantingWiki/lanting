@@ -55,7 +55,7 @@ const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive, se
         ellipsis={false}
       >
         {/* <Highlighter searchWords={[search]} autoEscape textToHighlight={archive.remarks} /> */}
-        <ReactMarkdown renderers={renderers} source={archive.remarks} />
+        <ReactMarkdown className="react-markdown" renderers={renderers} source={archive.remarks} />
       </ExpandCollapse>
       <div className={styles.extra}>
         <div className={classNames}>

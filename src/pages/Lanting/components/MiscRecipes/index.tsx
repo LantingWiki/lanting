@@ -22,7 +22,7 @@ const MiscRecipes: React.FC<MiscRecipesProps> = ({
 
   return (
     <ChapterCard title={<h2>随园食单</h2>}>
-      <ReactMarkdown source={miscRecipesMd} escapeHtml={false} />
+      <ReactMarkdown className="react-markdown" source={miscRecipesMd} escapeHtml={false} />
     </ChapterCard>
   );
 };
