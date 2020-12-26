@@ -11,10 +11,10 @@ GameLook
 2020-12
 
 # chapter
-TODO
+搜神
 
 # tag
-TODO
+游戏, 社区, Reddit
 
 # remarks
 `70亿GPT-3 NPC，就对了`
