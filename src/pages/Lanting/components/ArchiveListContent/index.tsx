@@ -4,6 +4,7 @@ import { Button } from 'antd';
 import { SketchOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import ExpandCollapse from '@/components/vendor/ExpandCollapse';
 import styles from './index.less';
 import { Archive } from '../../data';
@@ -55,7 +56,12 @@ const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive, se
         ellipsis={false}
       >
         {/* <Highlighter searchWords={[search]} autoEscape textToHighlight={archive.remarks} /> */}
-        <ReactMarkdown className="react-markdown" renderers={renderers} source={archive.remarks} />
+        <ReactMarkdown
+          plugins={[remarkGfm]}
+          className="react-markdown"
+          renderers={renderers}
+          source={archive.remarks}
+        />
       </ExpandCollapse>
       <div className={styles.extra}>
         <div className={classNames}>

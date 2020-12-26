@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect, Dispatch } from 'umi';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import ChapterCard from '../ChapterCard';
 import { StateType } from './model';
 
@@ -22,7 +23,12 @@ const MiscRecipes: React.FC<MiscRecipesProps> = ({
 
   return (
     <ChapterCard title={<h2>随园食单</h2>}>
-      <ReactMarkdown className="react-markdown" source={miscRecipesMd} escapeHtml={false} />
+      <ReactMarkdown
+        plugins={[remarkGfm]}
+        className="react-markdown"
+        source={miscRecipesMd}
+        escapeHtml={false}
+      />
     </ChapterCard>
   );
 };
