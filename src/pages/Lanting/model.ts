@@ -60,14 +60,18 @@ const filterOneChapterArchives = (
   const results = archiveIds.filter((archiveId) => {
     const archive = archives.archives[archiveId];
     if (
-      !archive.author.some((a) => a.includes(filters.confirmSearch)) &&
-      !archive.chapter.includes(filters.confirmSearch) &&
-      !archive.date.includes(filters.confirmSearch) &&
-      !archive.id.includes(filters.confirmSearch) &&
-      !archive.publisher.includes(filters.confirmSearch) &&
-      !archive.remarks.includes(filters.confirmSearch) &&
-      !archive.tag.some((a) => a.includes(filters.confirmSearch)) &&
-      !archive.title.includes(filters.confirmSearch)
+      !archive.author.some((a) =>
+        a.toLocaleUpperCase().includes(filters.confirmSearch.toLocaleUpperCase()),
+      ) &&
+      !archive.chapter.toLocaleUpperCase().includes(filters.confirmSearch.toLocaleUpperCase()) &&
+      !archive.date.toLocaleUpperCase().includes(filters.confirmSearch.toLocaleUpperCase()) &&
+      !archive.id.toLocaleUpperCase().includes(filters.confirmSearch.toLocaleUpperCase()) &&
+      !archive.publisher.toLocaleUpperCase().includes(filters.confirmSearch.toLocaleUpperCase()) &&
+      !archive.remarks.toLocaleUpperCase().includes(filters.confirmSearch.toLocaleUpperCase()) &&
+      !archive.tag.some((a) =>
+        a.toLocaleUpperCase().includes(filters.confirmSearch.toLocaleUpperCase()),
+      ) &&
+      !archive.title.toLocaleUpperCase().includes(filters.confirmSearch.toLocaleUpperCase())
     ) {
       return false;
     }
@@ -198,8 +202,12 @@ const Model: ModelType = {
       });
     },
     *saveSearch(action, { call, put }) {
-      const { keyword, searchLists } = action.payload;
-      const index = searchLists.map((x: { keyword: any }) => x.keyword).indexOf(keyword);
+      let { keyword } = action.payload;
+      const { searchLists } = action.payload;
+      keyword = keyword.toLocaleUpperCase();
+      const index = searchLists
+        .map((x: { keyword: string }) => x.keyword.toLocaleUpperCase())
+        .indexOf(keyword);
       if (index < 0) {
         searchLists.push({ keyword, count: 1 });
       } else {
