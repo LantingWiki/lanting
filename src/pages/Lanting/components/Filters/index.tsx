@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dispatch } from 'umi';
 import { Form, Select, Collapse, InputNumber, Input, Tag } from 'antd';
 import { FormInstance } from 'antd/lib/form/Form';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import { Archives, FilterValues, SearchList } from '@/pages/Lanting/data';
 import { fieldToTranslation } from '@/utils/utils';
 import StandardFormRow from '../StandardFormRow';
@@ -102,7 +102,12 @@ const onSearch = (
   }
 };
 
-const generateTags = (searchLists: SearchList[], form: any, onValuesChange: any) => {
+const generateTags = (
+  tagLimit: Number,
+  searchLists: SearchList[],
+  form: any,
+  onValuesChange: any,
+) => {
   const resultSearchLists = [];
   searchLists.sort((a, b) => {
     if (b.count !== a.count) {
@@ -111,7 +116,7 @@ const generateTags = (searchLists: SearchList[], form: any, onValuesChange: any)
     return b.updatedAt - a.updatedAt;
   });
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < tagLimit; i++) {
     if (searchLists[i]) {
       resultSearchLists.push(searchLists[i]);
     }
@@ -132,50 +137,57 @@ const Filters: React.FC<FilterProps> = ({
   form,
   searchLists,
   onValuesChange,
-}) => (
-  <Collapse ghost>
-    <Panel header="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" key="1" forceRender showArrow={false}>
-      <Form
-        layout="vertical"
-        form={form}
-        initialValues={{
-          author: ['all'],
-          publisher: ['all'],
-          date: ['all'],
-          tag: ['all'],
-          likesMin: 0,
-          likesMax: 255,
-          search: '',
-          confirmSearch: '',
-        }}
-        onValuesChange={onValuesChange}
-      >
-        <FormItem className={styles.tagContainer}>
-          {generateTags(searchLists, form, onValuesChange)}
-        </FormItem>
-        <StandardFormRow title="如切如磋" key="search" last>
-          <FormItem name="search">
-            <Search
-              placeholder="如切如磋"
-              onSearch={(value) => onSearch(form, value, onValuesChange, dispatch, searchLists)}
-              enterButton
-            />
+}) => {
+  const [tagLimit, addTagLimit] = useState(10);
+  const handleSubmit = () => {
+    addTagLimit(tagLimit + 5);
+  };
+  return (
+    <Collapse ghost>
+      <Panel header="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" key="1" forceRender showArrow={false}>
+        <Form
+          layout="vertical"
+          form={form}
+          initialValues={{
+            author: ['all'],
+            publisher: ['all'],
+            date: ['all'],
+            tag: ['all'],
+            likesMin: 0,
+            likesMax: 255,
+            search: '',
+            confirmSearch: '',
+          }}
+          onValuesChange={onValuesChange}
+        >
+          <FormItem className={styles.tagContainer}>
+            {generateTags(tagLimit, searchLists, form, onValuesChange)}
+            <Tag icon={<DoubleRightOutlined />} onClick={handleSubmit} />
           </FormItem>
-        </StandardFormRow>
-        <StandardFormRow title="如琢如磨" key="likes" last>
-          <div className={styles.likesRow}>
-            <FormItem name="likesMin" label="大于等于" labelAlign="left">
-              <InputNumber />
+          <StandardFormRow title="如切如磋" key="search" last>
+            <FormItem name="search">
+              <Search
+                placeholder="如切如磋"
+                onSearch={(value) => onSearch(form, value, onValuesChange, dispatch, searchLists)}
+                enterButton
+              />
             </FormItem>
-            <FormItem name="likesMax" label="小于等于" labelAlign="left">
-              <InputNumber />
-            </FormItem>
-          </div>
-        </StandardFormRow>
-        {generateSelects(archives)}
-      </Form>
-    </Panel>
-  </Collapse>
-);
+          </StandardFormRow>
+          <StandardFormRow title="如琢如磨" key="likes" last>
+            <div className={styles.likesRow}>
+              <FormItem name="likesMin" label="大于等于" labelAlign="left">
+                <InputNumber />
+              </FormItem>
+              <FormItem name="likesMax" label="小于等于" labelAlign="left">
+                <InputNumber />
+              </FormItem>
+            </div>
+          </StandardFormRow>
+          {generateSelects(archives)}
+        </Form>
+      </Panel>
+    </Collapse>
+  );
+};
 
 export default Filters;
