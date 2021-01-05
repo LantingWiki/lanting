@@ -31,7 +31,7 @@ const renderArchive = (search: string, item: Archive) => (
     actions={[
       <h4 key="edit">
         <EditOutlined style={{ marginRight: 4 }} />
-        {item.author.map((a) => ` ${a}`)}
+        {item.author.join(' ')}
       </h4>,
       <div>
         <BankOutlined style={{ marginRight: 8 }} />

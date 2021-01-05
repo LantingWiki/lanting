@@ -37,7 +37,7 @@ const renderArchive = (search: any, item: Archive) => (
       <h4 key="edit">
         <EditOutlined style={{ marginRight: 4 }} />
         {item.author.map((a) => (
-          <Highlighter searchWords={[search]} autoEscape textToHighlight={a} />
+          <Highlighter searchWords={[search]} autoEscape textToHighlight={`${a} `} />
         ))}
       </h4>,
       <div>
