@@ -47,6 +47,7 @@ const Tribute: React.FC<TributeProps> = (props) => {
         message: '成功',
         description: `成功保存!`,
         icon: <CheckCircleOutlined style={{ color: '#008000' }} />,
+        duration: null,
       });
     } else if (result && result.status === 'fail') {
       const warnMessage = result.code ? result.code : '';
@@ -54,6 +55,7 @@ const Tribute: React.FC<TributeProps> = (props) => {
         message: '失败',
         description: `保存失败，原因是${warnMessage}。`,
         icon: <CloseCircleOutlined style={{ color: '#FF0000' }} />,
+        duration: null,
       });
     }
 
