@@ -3,13 +3,15 @@ import request from '@/utils/request';
 import { shuffleByWeek } from '@/utils/utils';
 import { Archives, ChapterArchives, CHAPTERS, FilterValues, SearchList } from './data';
 
-const sortByLikes = (arr: number[], archives: Archives) => {
-  return arr
-    .slice()
-    .sort(
-      (a: number, b: number) =>
-        (archives.archives[b].likes || 0) - (archives.archives[a].likes || 0),
-    );
+const sortByLikesAndId = (arr: number[], archives: Archives) => {
+  return arr.slice().sort((a: number, b: number) => {
+    const alikes = archives.archives[a].likes || 0;
+    const blikes = archives.archives[b].likes || 0;
+    if (alikes !== blikes) {
+      return blikes - alikes;
+    }
+    return b - a;
+  });
 };
 
 export interface StateType {
@@ -98,7 +100,7 @@ const filterOneChapterArchives = (
     }
     return true;
   });
-  return sortByLikes(results, archives);
+  return sortByLikesAndId(results, archives);
 };
 
 const filterArchives = (filters: FilterValues, archives: Archives) => {
@@ -255,7 +257,7 @@ const Model: ModelType = {
 
       Object.keys(currentArchives).forEach((chapter) => {
         newCurrentArchives[chapter] = [
-          ...sortByLikes(currentArchives[chapter], newCompiledArchives),
+          ...sortByLikesAndId(currentArchives[chapter], newCompiledArchives),
         ];
       });
 
