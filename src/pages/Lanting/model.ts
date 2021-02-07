@@ -7,10 +7,7 @@ const sortByLikesAndId = (arr: number[], archives: Archives) => {
   return arr.slice().sort((a: number, b: number) => {
     const alikes = archives.archives[a].likes || 0;
     const blikes = archives.archives[b].likes || 0;
-    if (alikes !== blikes) {
-      return blikes - alikes;
-    }
-    return b - a;
+    return b + blikes * 100 - (a + alikes * 100);
   });
 };
 
