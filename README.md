@@ -5,14 +5,13 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] 日期特殊排序
 [x] 自己的tag排序
 [x] archives就把数据理好
-[x] 文章排序? 用星期做种子乱序!
+[x] ~文章排序? 用星期做种子乱序!~ -> timestamp + likes
 [x] 芦柑笔谈 in menu
 [x] 评分功能, 所有东西进DB吧, DB可以commit进来. mongo适合点?
 [x] 评分优化性能
 [x] 评分筛选
 [x] 重做redux tree design. 只存在一个地方, 一个大map. 其他地方记ID, 不记数据. map的subtree给很多地方
 [x] 单个article link, title就link到single page
-[ ] archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch. 前X个char在archives.json, 展开的时候fetch. 怎么判断有没有更多 (除了加property, flag)? 看字数行不行. 如果现在的是小于50, 比如49. 就没有. 如果50整, 就有. 怎么解决刚好50的comment? 我能想到的只有砍掉一个char... 哦! 有主意了. 加一个. 弄成51个. 所以凡是[1, 49], [51, Inf], 都是不用展开的
 [x] 渲染两次问题?? -> 好像没有这个现象了?... 第一次渲染之后就有东西了?
 [x] 加上ID, 灰一点
 
@@ -47,7 +46,7 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] 批量导入现有的, 所有的过一遍 (这里不需要建comments)
 [x] 批量导入evernote但是没有comments的 (这里需要建comments)
 [x] 浏览器里右键save singlefile
-[ ] 之后如果微信等需要存, 就做一个接口. headless browser + singleFile CLI
+[x] 之后如果微信等需要存, 就做一个接口. headless browser + singleFile CLI
 **以上两个都需要同时建comments, 尽量抽metadata**
 
 ### 放的路径
@@ -75,7 +74,7 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] 把 joplin 插件代码找到
 [x] 还是存到本地不变, 路径变一下, 文件名变一下只需要 ID. ID 哪里来? 去 repo 查. 不要打本地, 打接口, 然后本地 pull 吧
 [x] 从第一行解析出标题, 试图解析出 metadata, 解析最后 metadata 里有用的部分. 建对应的 orig 和 comment, metadata都放comment, 都进入compile流程. 通过 ID 来对应. 有了就不建, 等于是补全.
-[ ] 上传源文件到 OSS. repo 里也存一份只用来存档, 来判断有没有, 页面直接拼 URL -> 可以! markdown这边, 改下代码想办法让图片跟markdown塞在一起吧 -> 用OSS那份非https的?
+
 综合webclipper, 第一图片怎么处理, 第二css是不是OK, 第三下下来之后触发什么
 
 ### 数据
@@ -112,11 +111,27 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 # 后端架构
 
+重来一遍. 又是当初几个步骤. 等于是ver2.0:
+
+- add
+  - 现有的文章的迁移
+  - 从PC上, 添加文章
+  - 从Mobile上, 添加文章
+- save 两种形式
+  - 一种是存好的html文件, 上传html + 发送metadata, 服务端会把html文件再上传到OSS (并正确命名), 然后metadata + OSS链接存到mysql里. 然后更新archives json obj缓存
+  - 一种是没有存好的html, 发送原url + 发送metadata, 服务端会先存好html, 然后把html文件再上传到OSS (并正确命名), 然后metadata + OSS链接存到mysql里. 然后更新archives json obj缓存
+- data structure
+  - 在mysql, 有一个表. 数据可以需要经常备份经常dump
+    - 主表是archives表
+    - 还需要tag表, author表, publisher表. 把现有数据导进去作为示例, 就能理解看懂了
+- query
+  - 上来就处理好一个archives json obj, 存在内存里, 用于发给前端
+
 ## mysql
 把现在的metadata装到一个表里. 把静态文件的部分存一个链接或者说是object id, 能去云服务里找到
 
 ## S3
-html静态文件的部分, 存到object store一类的里面. 设为private, 访问的时候用access key
+html静态文件的部分, 存到object store一类的里面. 设为private, 访问的时候用access key -> 或者public, 也行
 
 ## 存文章
 不管是本地还是远程, 还是手机, 都用网页来存. 存了的网页可以preview, 如果preview结果不对, 允许手动上传 (还允许上传多个)
@@ -124,4 +139,11 @@ html静态文件的部分, 存到object store一类的里面. 设为private, 访
 这样ID也是从数据库来
 
 ## 读文章
-为了前端速度, 现在还是可以打包到前端. 也就是 mysql -> 生成一个json -> 打到包里
+~为了前端速度, 现在还是可以打包到前端. 也就是 mysql -> 生成一个json -> 打到包里~
+走API吧, 保证最新
+
+[ ] archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch. 前X个char在archives.json, 展开的时候fetch. 怎么判断有没有更多 (除了加property, flag)? 看字数行不行. 如果现在的是小于50, 比如49. 就没有. 如果50整, 就有. 怎么解决刚好50的comment? 我能想到的只有砍掉一个char... 哦! 有主意了. 加一个. 弄成51个. 所以凡是[1, 49], [51, Inf], 都是不用展开的
+  - 加一个API, 用于获取一个文章的full comment. 如果之前拿到的是前50个char, 就可以用这个API来获取
+  - 这样的话搜索就不能用前端, 需要走后端接口了. 后端返回的东西会有点复杂. 还要highlight, 有点麻烦了
+
+[ ] 上传源文件到 OSS. repo 里也存一份只用来存档, 来判断有没有, 页面直接拼 URL -> 可以! markdown这边, 改下代码想办法让图片跟markdown塞在一起吧 -> 用OSS那份非https的?
