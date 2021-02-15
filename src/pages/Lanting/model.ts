@@ -7,7 +7,8 @@ const sortByLikesAndId = (arr: number[], archives: Archives) => {
   return arr.slice().sort((a: number, b: number) => {
     const alikes = archives.archives[a].likes || 0;
     const blikes = archives.archives[b].likes || 0;
-    return b + blikes * 100 - (a + alikes * 100);
+
+    return +b + blikes * 100 - (+a + alikes * 100);
   });
 };
 
@@ -257,6 +258,8 @@ const Model: ModelType = {
           ...sortByLikesAndId(currentArchives[chapter], newCompiledArchives),
         ];
       });
+
+      console.log('XXXTEMP', newCurrentArchives);
 
       return {
         ...state,
