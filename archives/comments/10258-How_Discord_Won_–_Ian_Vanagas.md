@@ -11,7 +11,7 @@ ianvanagas
 2020-10
 
 # chapter
-列传
+搜神
 
 # tag
 IM, Discord
