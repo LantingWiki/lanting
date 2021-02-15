@@ -1,6 +1,6 @@
 import { Effect, Reducer } from 'umi';
 import request from '@/utils/request';
-import { shuffleByWeek } from '@/utils/utils';
+// import { shuffleByWeek } from '@/utils/utils';
 import { Archives, ChapterArchives, CHAPTERS, FilterValues, SearchList } from './data';
 
 const sortByLikesAndId = (arr: number[], archives: Archives) => {
@@ -43,7 +43,8 @@ const initArchives = (archives: Archives) => {
     chapterArchives[c] = Object.keys(archives.archives).filter(
       (id) => archives.archives[id].chapter === c,
     );
-    chapterArchives[c] = shuffleByWeek(chapterArchives[c]);
+    // boyang: no shuffle; sort by ID + likes
+    // chapterArchives[c] = shuffleByWeek(chapterArchives[c]);
   });
   return chapterArchives;
 };
