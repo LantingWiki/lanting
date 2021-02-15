@@ -79,6 +79,9 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 ### 数据
 [x]批量现有的导过来
+[ ] archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch. 前X个char在archives.json, 展开的时候fetch. 怎么判断有没有更多 (除了加property, flag)? 看字数行不行. 如果现在的是小于50, 比如49. 就没有. 如果50整, 就有. 怎么解决刚好50的comment? 我能想到的只有砍掉一个char... 哦! 有主意了. 加一个. 弄成51个. 所以凡是[1, 49], [51, Inf], 都是不用展开的
+  - 加一个API, 用于获取一个文章的full comment. 如果之前拿到的是前50个char, 就可以用这个API来获取
+  - 这样的话搜索就不能用前端, 需要走后端接口了. 后端返回的东西会有点复杂. 还要highlight, 有点麻烦了
 
 ### compile
 [x] compile-archives产出一个 json, metadata
@@ -142,8 +145,9 @@ html静态文件的部分, 存到object store一类的里面. 设为private, 访
 ~为了前端速度, 现在还是可以打包到前端. 也就是 mysql -> 生成一个json -> 打到包里~
 走API吧, 保证最新
 
-[ ] archive.json会不会越来越大. 如果会, 就把remarks字段也用fetch. 前X个char在archives.json, 展开的时候fetch. 怎么判断有没有更多 (除了加property, flag)? 看字数行不行. 如果现在的是小于50, 比如49. 就没有. 如果50整, 就有. 怎么解决刚好50的comment? 我能想到的只有砍掉一个char... 哦! 有主意了. 加一个. 弄成51个. 所以凡是[1, 49], [51, Inf], 都是不用展开的
-  - 加一个API, 用于获取一个文章的full comment. 如果之前拿到的是前50个char, 就可以用这个API来获取
-  - 这样的话搜索就不能用前端, 需要走后端接口了. 后端返回的东西会有点复杂. 还要highlight, 有点麻烦了
+~上传源文件到 OSS. repo 里也存一份只用来存档, 来判断有没有, 页面直接拼 URL -> 可以! markdown这边, 改下代码想办法让图片跟markdown塞在一起吧 -> 用OSS那份非https的?~
 
-[ ] 上传源文件到 OSS. repo 里也存一份只用来存档, 来判断有没有, 页面直接拼 URL -> 可以! markdown这边, 改下代码想办法让图片跟markdown塞在一起吧 -> 用OSS那份非https的?
+- 连上mysql (没在navicat里面加过, 怀疑可能bind 127 IP)
+- 备份数据库的routine (用scheduled task + 上传OSS)
+- OSS / CDN会有https的问题, 怎么办? 因为阿里云如果要上https, 需要每三个月上传我的certbot证书. 或者也许阿里云有更新证书的API, 但是调起来比较麻烦吧. 哦, 想到一个好办法, 就是nginx做反向代理, 不改url的那种. 这样就算是解决了问题, 就是确实速度上可能慢一些
+- 建表. 我知道可以加索引, 懒还没加. 
