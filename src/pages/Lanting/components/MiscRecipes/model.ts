@@ -19,7 +19,7 @@ export interface ModelType {
 
 const processMdImgSyntax = (md: string) => {
   return md.replace(/!\[\]\((.+?)\)/g, (match, g1) => {
-    return `![](/archives/${g1})`;
+    return `![](https://lanting-public.oss-accelerate.aliyuncs.com/archives/${g1})`;
   });
 };
 

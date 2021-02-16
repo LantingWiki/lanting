@@ -16,15 +16,16 @@
     "start:no-ui": "cross-env UMI_UI=none umi dev",
     "start:pre": "cross-env REACT_APP_ENV=pre umi dev",
     "start:test": "cross-env REACT_APP_ENV=test MOCK=none umi dev",
-    "archives": "yarn archives:compile && yarn archives:add && git push",
+    "archives": "yarn archives:compile && yarn archives:add && yarn archives:upload",
     "archives:compile": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/compile-archives.ts",
-    "archives:add": "git add ./archives; git commit --no-verify -m \"DATA: archives `date \"+%Y-%m-%d-%H:%M:%S\"`\"",
+    "archives:add": "git pull --rebase && git add ./archives; git commit --no-verify -m \"DATA: archives `date \"+%Y-%m-%d-%H:%M:%S\"`\"",
+    "archives:upload": "git push && ossutilmac64 cp -r -u ./archives oss://lanting-public/archives",
     "archives:migrate-backend2": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/migrate-backend2.ts",
-    "deploy": "yarn build && yarn deploy:ec2",
-    "build": "umi build",
+    "deploy": "yarn build && yarn deploy:ec2 && yarn deploy:oss",
+    "build": "UMI_ENV=prod umi build",
     "analyze": "cross-env ANALYZE=1 umi build",
     "deploy:oss": "for f in ./dist/; do ossutilmac64 cp -r -u $f oss://lanting-public/; done",
-    "deploy:ec2": "rsync -arvz --progress ./dist ./config/lanting-nginx.conf root@101.200.34.182:/data/server-apps/lanting"
+    "deploy:ec2": "rsync -arvz --progress ./config/lanting-nginx.conf root@101.200.34.182:/data/server-apps/lanting; rsync -arvz --progress ./dist/index.html root@101.200.34.182:/data/server-apps/lanting/dist"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",

@@ -161,3 +161,8 @@ html静态文件的部分, 存到object store一类的里面. 设为private, 访
 
 发布流程 (代码):
 - yarn deploy -> build, index.html上ec2, 剩下上oss
+
+添加流程PC:
+- 用旧流程保存html, 到origs. 保存comments
+- 跑yarn archive:compile, 还是会更新archives.json, 会添加comments, 但是不会加orig. 因为gitignore了
+- yarn archive:upload, 会上传所有. 然后deploy那里的routine不会上传, 因为dist里只会复制2个文件. 这样, 就对了. 代码和archive data分开了. 加archive的时候, 上传archive; 改代码的时候, 上传代码. 只是上传dest位置混在一起罢了
