@@ -18,7 +18,7 @@
     "start:test": "cross-env REACT_APP_ENV=test MOCK=none umi dev",
     "archives": "yarn archives:compile && yarn archives:add && yarn archives:upload",
     "archives:compile": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/compile-archives.ts",
-    "archives:add": "git pull --rebase && git add ./archives; git commit --no-verify -m \"DATA: archives `date \"+%Y-%m-%d-%H:%M:%S\"`\"",
+    "archives:add": "git stash && git pull --rebase && git stash pop && git add ./archives; git commit --no-verify -m \"DATA: archives `date \"+%Y-%m-%d-%H:%M:%S\"`\"",
     "archives:upload": "git push && ossutilmac64 cp -r -u ./archives oss://lanting-public/archives",
     "archives:migrate-backend2": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/scripts/migrate-backend2.ts",
     "deploy": "yarn build && yarn deploy:ec2 && yarn deploy:oss",
