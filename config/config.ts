@@ -10,7 +10,7 @@ export default defineConfig(({
     react: 'window.React',
     'react-dom': 'window.ReactDOM',
   },
-  hash: true,
+  hash: false,
   antd: {},
   dva: {
     hmr: true,
@@ -71,6 +71,7 @@ export default defineConfig(({
     'primary-color': defaultSettings.primaryColor,
   },
   publicPath: '/',
+  runtimePublicPath: true,
   dynamicImport: {
     loading: '@ant-design/pro-layout/lib/PageLoading',
   },
@@ -83,8 +84,12 @@ export default defineConfig(({
   },
   copy: [
     {
-      from: 'archives',
-      to: 'archives',
+      from: 'archives/archives.json',
+      to: 'archives/archives.json',
+    },
+    {
+      from: 'archives/1000-随园食单.md',
+      to: 'archives/1000-随园食单.md',
     },
   ],
 } as unknown) as IConfig);

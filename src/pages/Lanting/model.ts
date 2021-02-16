@@ -125,7 +125,7 @@ const Model: ModelType = {
       }
       inited = true;
       const response = yield call(() => {
-        return request('/archives/archives.json');
+        return request('https://lanting-public.oss-accelerate.aliyuncs.com/archives/archives.json');
       });
       initedChapterArchives = initArchives(response);
 

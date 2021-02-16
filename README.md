@@ -158,3 +158,6 @@ html静态文件的部分, 存到object store一类的里面. 设为private, 访
 
 1. 所有archive, orig + archives.json
 2. 所有代码, 就上传build / dist就可以了
+
+发布流程 (代码):
+- yarn deploy -> build, index.html上ec2, 剩下上oss

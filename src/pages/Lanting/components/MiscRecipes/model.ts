@@ -36,7 +36,9 @@ const Model: ModelType = {
         return;
       }
       const response = yield call(() => {
-        return request('/archives/1000-随园食单.md');
+        return request(
+          'https://lanting-public.oss-accelerate.aliyuncs.com/archives/1000-%E9%9A%8F%E5%9B%AD%E9%A3%9F%E5%8D%95.md',
+        );
       });
 
       yield put({
