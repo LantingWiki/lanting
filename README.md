@@ -147,7 +147,14 @@ html静态文件的部分, 存到object store一类的里面. 设为private, 访
 
 ~上传源文件到 OSS. repo 里也存一份只用来存档, 来判断有没有, 页面直接拼 URL -> 可以! markdown这边, 改下代码想办法让图片跟markdown塞在一起吧 -> 用OSS那份非https的?~
 
-- 连上mysql (没在navicat里面加过, 怀疑可能bind 127 IP)
+- [x] 连上mysql (没在navicat里面加过, 怀疑可能bind 127 IP). 晚点可以再关了, 现在不用
 - 备份数据库的routine (用scheduled task + 上传OSS)
-- OSS / CDN会有https的问题, 怎么办? 因为阿里云如果要上https, 需要每三个月上传我的certbot证书. 或者也许阿里云有更新证书的API, 但是调起来比较麻烦吧. 哦, 想到一个好办法, 就是nginx做反向代理, 不改url的那种. 这样就算是解决了问题, 就是确实速度上可能慢一些
-- 建表. 我知道可以加索引, 懒还没加. 
+- ~OSS / CDN会有https的问题, 怎么办? 因为阿里云如果要上https, 需要每三个月上传我的certbot证书. 或者也许阿里云有更新证书的API, 但是调起来比较麻烦吧. 可以用nginx做反向代理, 不改url的那种. 但是这样速度上可能慢, 不是跟没搞一样吗. 唯一一个是数据源唯一了. 不行, 还是买阿里云证书吧... 烦哦~ 没有https问题... 允许跨域就行了
+- [x] 建表. 我知道可以加索引, 懒还没加
+
+## 上OSS
+
+想想步骤和需要的改变
+
+1. 所有archive, orig + archives.json
+2. 所有代码, 就上传build / dist就可以了
