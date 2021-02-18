@@ -16,7 +16,7 @@ const renderOrig = (item: Archive) => {
   return item.origs.map((orig) => (
     <a
       className={styles.listItemMetaTitle}
-      href={`https://lanting-public.oss-accelerate.aliyuncs.com/archives/origs/${orig}`}
+      href={`https://cdn.lanting.wiki/archives/origs/${orig}`}
       rel="noreferrer"
       target="_blank"
     >

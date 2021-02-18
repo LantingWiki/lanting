@@ -125,7 +125,7 @@ const Model: ModelType = {
       }
       inited = true;
       const response = yield call(() => {
-        return request('https://lanting-public.oss-accelerate.aliyuncs.com/archives/archives.json');
+        return request('https://cdn.lanting.wiki/archives/archives.json');
       });
       initedChapterArchives = initArchives(response);
 
@@ -259,8 +259,6 @@ const Model: ModelType = {
           ...sortByLikesAndId(currentArchives[chapter], newCompiledArchives),
         ];
       });
-
-      console.log('XXXTEMP', newCurrentArchives);
 
       return {
         ...state,
