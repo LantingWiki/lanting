@@ -21,8 +21,9 @@
  *   notice and a URL through which recipients can access the Corresponding
  *   Source.
  */
-
+const { execSync } = require('child_process');
 const fileUrl = require('file-url');
+const path = require('path');
 const fs = require('fs');
 
 const ARCHIVE_DIR = `${__dirname}/../../../archives`;
@@ -64,6 +65,63 @@ async function run(options) {
   options.retrieveLinks = true;
   options.browserScripts = options.browserScripts.map((path) => require.resolve(path));
 
-  await singlefile.capture(urls);
-  await singlefile.finish();
+  const articleInfo = JSON.parse(options.articleinfo);
+  const prefix = `${options.lantingId}-`;
+  // XXX boyang: this is moved from single-file exec code
+  const commentPathname = path.join(
+    ARCHIVE_DIR,
+    'comments',
+    sanitizeFilename(`${prefix}${articleInfo.title}.md`),
+  );
+  console.log('XXXTEMP task options', options);
+  fs.writeFileSync(
+    commentPathname,
+    fillArticleInfo(
+      articleInfo.title,
+      articleInfo,
+    ),
+  );
+  console.log('XXXTEMP DONE');
+  if (!options.noopen) {
+    execSync(
+      `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
+    );
+  }
+
+  // await singlefile.capture(urls);
+  // await singlefile.finish();
+}
+
+function sanitizeFilename(filename) {
+  filename = filename.replace(/ ?_ ?/g, '_');
+  filename = filename.replace(/_+/g, '_');
+  filename = filename.replace(
+    /[\|\+,\/#!$%\^&\*;:{}=`~()：， 「」“”？、…《》%,【】！&’。、！？：；﹑•＂…‘’“”〝〞∕¦‖—　〈〉﹞﹝「」‹›〖〗】【»«』『〕〔》《﹐¸﹕︰﹔！¡？¿﹖﹌﹏﹋＇´ˊˋ―﹫︳︴¯＿￣﹢﹦﹤‐­˜﹟﹩﹠﹪﹡﹨﹍﹉﹎﹊ˇ︵︶︷︸︹︿﹀︺︽︾ˉ﹁﹂﹃﹄︻︼（）·?]/g,
+    '_',
+  );
+  return filename;
+};
+
+function fillArticleInfo(title, articleinfo) {
+  return `# title
+${title || 'TODO'}
+
+# author
+${articleinfo.author || 'TODO'}
+
+# publisher
+${articleinfo.publisher || 'TODO'}
+
+# date
+${articleinfo.date || 'TODO'}
+
+# chapter
+${articleinfo.chapter || 'TODO'}
+
+# tag
+${articleinfo.tag || 'TODO'}
+
+# remarks
+${articleinfo.remarks || 'TODO'}
+`;
 }

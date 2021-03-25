@@ -244,40 +244,6 @@ function getHostURL(url) {
   }`;
 }
 
-function fillArticleInfo(title, articleinfo) {
-  return `# title
-${title || 'TODO'}
-
-# author
-${articleinfo.author || 'TODO'}
-
-# publisher
-${articleinfo.publisher || 'TODO'}
-
-# date
-${articleinfo.date || 'TODO'}
-
-# chapter
-${articleinfo.chapter || 'TODO'}
-
-# tag
-${articleinfo.tag || 'TODO'}
-
-# remarks
-${articleinfo.remarks || 'TODO'}
-`;
-}
-
-const sanitizeFilename = (filename) => {
-  filename = filename.replace(/ ?_ ?/g, '_');
-  filename = filename.replace(/_+/g, '_');
-  filename = filename.replace(
-    /[\|\+,\/#!$%\^&\*;:{}=`~()：， 「」“”？、…《》%,【】！&’。、！？：；﹑•＂…‘’“”〝〞∕¦‖—　〈〉﹞﹝「」‹›〖〗】【»«』『〕〔》《﹐¸﹕︰﹔！¡？¿﹖﹌﹏﹋＇´ˊˋ―﹫︳︴¯＿￣﹢﹦﹤‐­˜﹟﹩﹠﹪﹡﹨﹍﹉﹎﹊ˇ︵︶︷︸︹︿﹀︺︽︾ˉ﹁﹂﹃﹄︻︼（）·?]/g,
-    '_',
-  );
-  return filename;
-};
-
 async function capturePage(options) {
   const archives = `${__dirname}/../../../archives`;
   const prefix = `${options.lantingId}-`;
@@ -288,25 +254,28 @@ async function capturePage(options) {
     if (options.filenameTemplate && pageData.filename) {
       filename = path.join(archives, 'origs', `${options.lantingId}.html`);
       fs.writeFileSync(filename, pageData.content);
-      const commentPathname = path.join(
-        archives,
-        'comments',
-        sanitizeFilename(`${prefix}${pageData.filename}.md`),
-      );
-      console.log('XXXTEMP task options', options);
-      fs.writeFileSync(
-        commentPathname,
-        fillArticleInfo(
-          pageData.filename,
-          options.articleinfo ? JSON.parse(options.articleinfo) : {},
-        ),
-      );
-      console.log('XXXTEMP DONE');
-      if (!options.noopen) {
-        execSync(
-          `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
-        );
-      }
+      
+      // XXX boyang: because single-file and chrome driver are just unreliable, or my setup is not robust enough. Chrome screams to get updated and chrome driver is version-specific
+
+      // const commentPathname = path.join(
+      //   archives,
+      //   'comments',
+      //   sanitizeFilename(`${prefix}${pageData.filename}.md`),
+      // );
+      // console.log('XXXTEMP task options', options);
+      // fs.writeFileSync(
+      //   commentPathname,
+      //   fillArticleInfo(
+      //     pageData.filename,
+      //     options.articleinfo ? JSON.parse(options.articleinfo) : {},
+      //   ),
+      // );
+      // console.log('XXXTEMP DONE');
+      // if (!options.noopen) {
+      //   execSync(
+      //     `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
+      //   );
+      // }
     } else {
       console.log('XXXTEMP no filename'); // eslint-disable-line no-console
     }
