@@ -2,7 +2,7 @@
 /* eslint-disable vars-on-top */
 /* eslint-disable no-var */
 /* eslint-disable no-console */
-res = { title: document.title };
+res = { title: document.querySelector('.rich_media_title').innerText };
 xPost = document.querySelector('.original_primary_card_tips');
 
 if (xPost) {
