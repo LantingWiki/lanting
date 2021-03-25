@@ -80,7 +80,7 @@ const args = require('yargs')
     'crawl-external-links-max-depth': 1,
     'crawl-replace-urls': false,
     'crawl-rewrite-rules': [],
-    articleinfo: {},
+    articleinfo: '',
   })
   .boolean('noopen')
   .options('back-end', { description: 'Back-end to use' })
