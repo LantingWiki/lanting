@@ -45,6 +45,9 @@ async function run(options) {
   );
   console.log('XXXTEMP DONE');
   execSync(
+    `export lantingid=${options.lantingId}`
+  );
+  execSync(
     `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
   );
 }

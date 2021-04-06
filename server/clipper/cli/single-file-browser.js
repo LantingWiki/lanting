@@ -15,13 +15,21 @@ if (xPost) {
   if (authorNode) {
     res.author = authorNode.innerText.split(' ').join(', ');
   }
-  res.publisher = document.querySelector('#js_name').innerText;
+
+  publisherNode = document.querySelector('#js_name');
+  if (publisherNode) {
+    res.publisher = publisherNode.innerText;
+  }
 }
-dt = document.querySelector('#publish_time').innerText;
-if (dt === 'Yesterday' || dt === 'Today' || dt.includes('days ago') || dt.includes('week ago')) {
-  dt = new Date().toISOString().substring(0, 7);
-} else {
-  dt = dt.substring(0, 7);
+
+dtNode = document.querySelector('#publish_time');
+if (dtNode) {
+  dt = dtNode.innerText;
+  if (dt === 'Yesterday' || dt === 'Today' || dt.includes('days ago') || dt.includes('week ago')) {
+    dt = new Date().toISOString().substring(0, 7);
+  } else {
+    dt = dt.substring(0, 7);
+  }
+  res.date = dt;
 }
-res.date = dt;
 JSON.stringify(res);
