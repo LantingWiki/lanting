@@ -1,2 +1,0 @@
-# node single-file.js --lanting-id=10092 https://mp.weixin.qq.com/s/eHJpehc2Ug8rTXBUov6szg
-# node single-file.js --lanting-id=10093 'https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&mid=2247486350&idx=2&sn=dc2fbbfb42d2312e9a97fdabfca79d2d&chksm=fcc9b437cbbe3d21ac9abf8d0bff60329cfa68dc3aca51e31592a2803a4c2c71685040e92fd2&scene=0&xtrack=1%23rd'
