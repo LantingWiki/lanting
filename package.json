@@ -16,12 +16,14 @@
     "start:no-ui": "cross-env UMI_UI=none umi dev",
     "start:pre": "cross-env REACT_APP_ENV=pre umi dev",
     "start:test": "cross-env REACT_APP_ENV=test MOCK=none umi dev",
-    "archives:sync": "git pull"
+    
+    "archives:sync": "echo TODO",
     "archives": "yarn archives:compile && yarn archives:add && yarn archives:upload",
     "archives:compile": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/compile-archives.ts",
     "archives:add": "git stash; git pull --rebase; git stash pop; git add ./archives; git commit --no-verify -m \"DATA: archives `date \"+%Y-%m-%d-%H:%M:%S\"`\" && git push",
     "archives:upload": "ossutilmac64 cp -r -u ./archives oss://lanting-public/archives",
     "archives:migrate-backend2": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/migrate-backend2.ts",
+    
     "deploy": "yarn build && yarn deploy:ec2 && yarn deploy:oss",
     "build": "UMI_ENV=prod umi build",
     "analyze": "cross-env ANALYZE=1 umi build",

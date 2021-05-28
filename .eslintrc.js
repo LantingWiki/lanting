@@ -9,5 +9,6 @@ module.exports = {
     'no-param-reassign': 0,
     'max-classes-per-file': 0,
     'no-plusplus': 0,
+    'no-unused-vars': ['warn', { 'varsIgnorePattern': '^_' }]
   },
 };

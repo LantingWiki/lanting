@@ -3,6 +3,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import mysql from 'mysql';
+import secrets from './secrets.json';
 
 // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url));
