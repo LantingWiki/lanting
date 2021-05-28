@@ -2,12 +2,23 @@
 import * as fs from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import OSS from 'ali-oss';
 import { Archive, Archives } from './data';
+import secrets from './secrets.json';
+
+const client = new OSS({
+  region: 'oss-cn-beijing',
+  accessKeyId: secrets.oss.accessKeyId,
+  accessKeySecret: secrets.oss.accessKeySecret,
+  bucket: 'lanting-public'
+});
 
 // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ARCHIVE_DIR = `${__dirname}/../../archives`;
-const currentOrigs = fs.readdirSync(`${ARCHIVE_DIR}/origs`);
+const ARCHIVE_DIR = `${__dirname}/../archives`;
+// XXX boyang: old way
+// const currentOrigs = fs.readdirSync(`${ARCHIVE_DIR}/origs`);
+let currentOrigs: string[] = [];
 
 function setField(archive: Archive, field: string, fileContent: string, archives: Archives) {
   const regexArr = toFieldRegex(field).exec(fileContent);
@@ -61,7 +72,40 @@ function getIdFromCommentFilename(f: string) {
   return f.substring(0, f.indexOf('-'));
 }
 
-function main() {
+async function init() {
+  currentOrigs = (await client.list({ prefix: 'archives/origs/', 'max-keys': 1000 }, {}))
+    .objects
+    .map(o => o.name.replace(/^archives\/origs\//, ''));
+}
+
+async function origsMap() {
+  const commentsFiles = fs.readdirSync(`${ARCHIVE_DIR}/comments`);
+  const archives = commentsFiles.map((f) => {
+    console.log('Processing: ', f);
+
+    const archive = new Archive();
+    archive.id = getIdFromCommentFilename(f);
+
+    const foundOrigs = currentOrigs.filter((orig) => {
+      const parts = orig.split('.');
+      let id;
+      if (parts[0].includes('-')) {
+        id = +parts[0].split('-')[0];
+      } else {
+        id = +parts[0];
+      }
+      return id === +archive.id;
+    });
+    archive.origs = foundOrigs;
+    return archive;
+  });
+  const noOrig = archives.filter(a => (a.origs || []).length === 0).map(a => a.id);
+  const noComment = currentOrigs.filter(o => !archives.find(a => `${  a.id}` === o.split('.')[0]));
+
+  console.log('XXXTEMP noOrig noComment', noOrig, noComment);
+}
+
+async function compileArchives() {
   const compiledArchives = new Archives();
 
   const commentsFiles = fs.readdirSync(`${ARCHIVE_DIR}/comments`);
@@ -102,4 +146,11 @@ function main() {
 
   fs.writeFileSync(`${ARCHIVE_DIR}/archives.json`, JSON.stringify(compiledArchives));
 }
+
+async function main() {
+  await init();
+  await origsMap();
+  // await compileArchives();
+}
+
 main();
