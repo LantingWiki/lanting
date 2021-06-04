@@ -30,7 +30,7 @@ const ARCHIVE_DIR = `${__dirname}/../archives`;
 // XXX boyang: old way
 // const currentOrigFiles = fs.readdirSync(`${ARCHIVE_DIR}/origs`);
 let currentOrigFiles: string[] = [];
-let currentOrigDb: string[] = [];
+const currentOrigDb: string[] = [];
 const commentsFiles = fs.readdirSync(`${ARCHIVE_DIR}/comments`);
 
 function setField(archive: Archive, field: string, fileContent: string, archives: Archives) {
@@ -161,31 +161,36 @@ async function compileArchives() {
 
 async function findCreationDate() {
   // console.log('XXXTEMP', commentsFiles);
-  commentsFiles.forEach((commentsFile) => {
+  commentsFiles.forEach(async (commentsFile) => {
     const id = +getIdFromCommentFilename(commentsFile);
     const timestamp = +execSync(`git log --format=%at '${ARCHIVE_DIR}/comments/${commentsFile}' | tail -1`);
-    await connection.query(
-      `UPDATE archives SET created_at = ?, updated_at = ? where id = ?;`,
-      [timestamp, timestamp, id],
-      (error, results) => {
-        if (error) {
-          console.log('XXXTEMP error setting timestamps', error);
-          throw error;
-        }
-        console.log('XXXTEMP results', results);
-      },
-    );
+    await (function() {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          `UPDATE archives SET created_at = ?, updated_at = ? where id = ?;`,
+          [timestamp, timestamp, id],
+          (error, results) => {
+            if (error) {
+              console.log('XXXTEMP error setting timestamps', error);
+              reject(error);
+            }
+            console.log('XXXTEMP results', results);
+            resolve(results);
+          },
+        );
+      });
+    })();
   });
 }
 
-async function fillOrigUrl() {
+// async function fillOrigUrl() {
 
-}
+// }
 
 async function main() {
   await init();
-  // await findCreationDate();
-  await origsMap();
+  await findCreationDate();
+  // await origsMap();
   // await compileArchives();
   connection.end();
 }
