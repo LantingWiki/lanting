@@ -3,8 +3,19 @@ import * as fs from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import OSS from 'ali-oss';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import mysql from 'mysql';
+import { execSync } from 'child_process';
 import { Archive, Archives } from './data';
 import secrets from './secrets.json';
+
+const connection = mysql.createConnection({
+  host: 'lanting.wiki',
+  user: 'root',
+  password: secrets.db.password,
+  database: 'lanting',
+  connectTimeout: 60000,
+});
 
 const client = new OSS({
   region: 'oss-cn-beijing',
@@ -17,8 +28,10 @@ const client = new OSS({
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ARCHIVE_DIR = `${__dirname}/../archives`;
 // XXX boyang: old way
-// const currentOrigs = fs.readdirSync(`${ARCHIVE_DIR}/origs`);
-let currentOrigs: string[] = [];
+// const currentOrigFiles = fs.readdirSync(`${ARCHIVE_DIR}/origs`);
+let currentOrigFiles: string[] = [];
+let currentOrigDb: string[] = [];
+const commentsFiles = fs.readdirSync(`${ARCHIVE_DIR}/comments`);
 
 function setField(archive: Archive, field: string, fileContent: string, archives: Archives) {
   const regexArr = toFieldRegex(field).exec(fileContent);
@@ -73,20 +86,21 @@ function getIdFromCommentFilename(f: string) {
 }
 
 async function init() {
-  currentOrigs = (await client.list({ prefix: 'archives/origs/', 'max-keys': 1000 }, {}))
+  currentOrigFiles = (await client.list({ prefix: 'archives/origs/', 'max-keys': 1000 }, {}))
     .objects
     .map(o => o.name.replace(/^archives\/origs\//, ''));
+
+  connection.query();
 }
 
 async function origsMap() {
-  const commentsFiles = fs.readdirSync(`${ARCHIVE_DIR}/comments`);
   const archives = commentsFiles.map((f) => {
     console.log('Processing: ', f);
 
     const archive = new Archive();
     archive.id = getIdFromCommentFilename(f);
 
-    const foundOrigs = currentOrigs.filter((orig) => {
+    const foundOrigs = currentOrigFiles.filter((orig) => {
       const parts = orig.split('.');
       let id;
       if (parts[0].includes('-')) {
@@ -100,15 +114,13 @@ async function origsMap() {
     return archive;
   });
   const noOrig = archives.filter(a => (a.origs || []).length === 0).map(a => a.id);
-  const noComment = currentOrigs.filter(o => !archives.find(a => `${  a.id}` === o.split('.')[0]));
+  const noComment = currentOrigFiles.filter(o => !archives.find(a => `${  a.id}` === o.split('.')[0]));
 
   console.log('XXXTEMP noOrig noComment', noOrig, noComment);
 }
 
 async function compileArchives() {
   const compiledArchives = new Archives();
-
-  const commentsFiles = fs.readdirSync(`${ARCHIVE_DIR}/comments`);
   console.log('Comments count: ', commentsFiles.length);
 
   const archives: Archive[] = commentsFiles.map((f) => {
@@ -124,7 +136,7 @@ async function compileArchives() {
     });
     archive.remarks = fileContent.replace('# remarks', '');
 
-    const foundOrigs = currentOrigs.filter((orig) => {
+    const foundOrigs = currentOrigFiles.filter((orig) => {
       const parts = orig.split('.');
       let id;
       if (parts[0].includes('-')) {
@@ -147,10 +159,35 @@ async function compileArchives() {
   fs.writeFileSync(`${ARCHIVE_DIR}/archives.json`, JSON.stringify(compiledArchives));
 }
 
+async function findCreationDate() {
+  // console.log('XXXTEMP', commentsFiles);
+  commentsFiles.forEach((commentsFile) => {
+    const id = +getIdFromCommentFilename(commentsFile);
+    const timestamp = +execSync(`git log --format=%at '${ARCHIVE_DIR}/comments/${commentsFile}' | tail -1`);
+    await connection.query(
+      `UPDATE archives SET created_at = ?, updated_at = ? where id = ?;`,
+      [timestamp, timestamp, id],
+      (error, results) => {
+        if (error) {
+          console.log('XXXTEMP error setting timestamps', error);
+          throw error;
+        }
+        console.log('XXXTEMP results', results);
+      },
+    );
+  });
+}
+
+async function fillOrigUrl() {
+
+}
+
 async function main() {
   await init();
+  // await findCreationDate();
   await origsMap();
   // await compileArchives();
+  connection.end();
 }
 
 main();
