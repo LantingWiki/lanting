@@ -15,7 +15,7 @@ const { archives } = compiled;
 const connection = mysql.createConnection({
   host: 'lanting.wiki',
   user: 'root',
-  password: 'XXX',
+  password: secrets.db.password,
   database: 'lanting',
 });
 connection.connect();
