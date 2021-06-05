@@ -6,6 +6,7 @@ import OSS from 'ali-oss';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import mysql from 'mysql';
 import { execSync } from 'child_process';
+import axios from "axios";
 import { Archive, Archives } from './data';
 import secrets from './secrets.json';
 
@@ -30,7 +31,7 @@ const ARCHIVE_DIR = `${__dirname}/../archives`;
 // XXX boyang: old way
 // const currentOrigFiles = fs.readdirSync(`${ARCHIVE_DIR}/origs`);
 let currentOrigFiles: string[] = [];
-const currentOrigDb: string[] = [];
+let currentOrigDb: any[] = [];
 const commentsFiles = fs.readdirSync(`${ARCHIVE_DIR}/comments`);
 
 function setField(archive: Archive, field: string, fileContent: string, archives: Archives) {
@@ -89,13 +90,24 @@ async function init() {
   currentOrigFiles = (await client.list({ prefix: 'archives/origs/', 'max-keys': 1000 }, {}))
     .objects
     .map(o => o.name.replace(/^archives\/origs\//, ''));
+  console.log('XXXTEMP currentOrigFiles OSS', currentOrigFiles.length);
 
-  connection.query();
+  currentOrigDb = await (new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT * from archive_origs`,
+      (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results)
+        }
+      }
+    );
+  }));
 }
 
 async function origsMap() {
   const archives = commentsFiles.map((f) => {
-    console.log('Processing: ', f);
 
     const archive = new Archive();
     archive.id = getIdFromCommentFilename(f);
@@ -113,10 +125,114 @@ async function origsMap() {
     archive.origs = foundOrigs;
     return archive;
   });
-  const noOrig = archives.filter(a => (a.origs || []).length === 0).map(a => a.id);
-  const noComment = currentOrigFiles.filter(o => !archives.find(a => `${  a.id}` === o.split('.')[0]));
+  // In essense, this is a 3-party diff. But we don't do all 3 pairs of comparisons
+  // The 3 parties are:
+  // local comments === git comments === DB comments
+  // DB origs
+  // OSS origs
 
-  console.log('XXXTEMP noOrig noComment', noOrig, noComment);
+  console.log('XXXTEMP archives length', archives.length);
+
+  const inCommentsButNotInDbOrig = archives.reduce((prev: string[], cur) => {
+    const found = currentOrigDb.find(a => a.archive_id === +cur.id);
+    if (!found) {
+      prev.push(cur.id);
+    }
+    return prev;
+  }, []);
+  console.log("XXX in comments but not in db", inCommentsButNotInDbOrig);
+
+  // const inCommentsButNotInOssOrig = archives.reduce((prev: string[], cur) => {
+  //   const found = currentOrigFiles.find(o => o.split('.')[0] === cur.id);
+  //   if (!found) {
+  //     prev.push(cur.id);
+  //   }
+  //   return prev;
+  // }, []);
+  // console.log("XXX in comments but not in oss", inCommentsButNotInOssOrig);
+
+  // const noOrig = archives.filter(a => (a.origs || []).length === 0).map(a => a.id);
+  const noComment = currentOrigDb.filter(o => !archives.find(a => +a.id === o.archive_id));
+
+  // console.log('XXXTEMP db origs', currentOrigDb);
+  console.log('XXXTEMP in db but noComment', noComment);
+}
+
+async function giveNotationsForNoOrigArchives() {
+  // console.log('XXXTEMP', parseOrigFilename('1000.html'));
+  // console.log('XXXTEMP', parseOrigFilename('1000-10.pdf'));
+
+  // await Promise.all(['100', '10050', '10089', '10090', '101', '102', '103', '104',].map(async (id) => {
+  //   return new Promise((resolve, reject) => {
+  //     connection.query(
+  //       `INSERT IGNORE INTO archive_origs (archive_id, type, orig_url, filename, oss_prefix)
+  //       values (?, 'book', 'about:blank#', ?, 'about:blank#')`,
+  //       [id, `${id}`],
+  //       (error, results) => {
+  //         if (error) {
+  //           reject(error);
+  //         } else {
+  //           resolve(results)
+  //         }
+  //       }
+  //     );
+  //   });
+  // }));
+
+  // currentOrigFiles.forEach(async (id) => {
+  await Promise.all(currentOrigFiles.map(async (id) => {
+    const idParts = parseOrigFilename(id);
+    if (!idParts || !idParts[0] || idParts[0] === '' || !/[0-9]+/.test(idParts[0])) {
+      return Promise.resolve();
+    }
+    let origUrl = await getOrigUrlFromOss(`https://lanting-public.oss-cn-beijing.aliyuncs.com/archives/origs/${id}`);
+    let type = 'article';
+    let ossPrefix = 'https://lanting-public.oss-cn-beijing.aliyuncs.com/archives/origs/';
+    if (id[2] !== 'html') {
+      origUrl = 'about:blank#';
+      type = 'document';
+      ossPrefix = 'about:blank#';
+    }
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `INSERT IGNORE INTO archive_origs (archive_id, type, orig_url, filename, oss_prefix)
+        values (?, ?, ?, ?, ?)`,
+        [idParts[0], type, origUrl, `${id}`, ossPrefix],
+        (error, results) => {
+          if (error) {
+            reject(error);
+          } else {
+            console.log('XXXTEMP done', id);
+            resolve(results);
+          }
+        }
+      );
+    });
+  }));
+  // ['10428', '10886', '10888', '10890',
+  // '10906', '10908', '10910', '10912',
+  // '10914', '10916', '10918', '10920',
+  // '10922', '10950', '10952', '10954',
+  // '10956', '10972', '10974', '10976',
+  // '10978'];
+}
+
+async function getOrigUrlFromOss(url: string): Promise<string | null> {
+  const res = await axios.get(url);
+  const searchArea: string = await res.data.slice(0, 6 * 1024);
+  const groups = searchArea.match(/Page saved with SingleFile\s+url: ([^\s]+)\s+/);
+  return groups ? groups[1] : null;
+}
+
+function parseOrigFilename(filename: string) {
+  if (!/^[0-9]+\.[0-9a-zA-Z]+$/.test(filename)) {
+    return null;
+  }
+  const suffix = filename.substring(filename.lastIndexOf('.')+1);
+  if (!filename.includes('-')) {
+    return [filename.substring(0, filename.indexOf('.')), null, suffix];
+  }
+  return filename.split(/[.-]+/);
 }
 
 async function compileArchives() {
@@ -124,7 +240,6 @@ async function compileArchives() {
   console.log('Comments count: ', commentsFiles.length);
 
   const archives: Archive[] = commentsFiles.map((f) => {
-    console.log('Processing: ', f);
 
     const archive = new Archive();
     archive.id = getIdFromCommentFilename(f);
@@ -160,11 +275,10 @@ async function compileArchives() {
 }
 
 async function findCreationDate() {
-  // console.log('XXXTEMP', commentsFiles);
   commentsFiles.forEach(async (commentsFile) => {
     const id = +getIdFromCommentFilename(commentsFile);
     const timestamp = +execSync(`git log --format=%at '${ARCHIVE_DIR}/comments/${commentsFile}' | tail -1`);
-    await (function() {
+    await (() => {
       return new Promise((resolve, reject) => {
         connection.query(
           `UPDATE archives SET created_at = ?, updated_at = ? where id = ?;`,
@@ -173,9 +287,10 @@ async function findCreationDate() {
             if (error) {
               console.log('XXXTEMP error setting timestamps', error);
               reject(error);
+            } else {
+              console.log('XXXTEMP results', results);
+              resolve(results);
             }
-            console.log('XXXTEMP results', results);
-            resolve(results);
           },
         );
       });
@@ -189,8 +304,9 @@ async function findCreationDate() {
 
 async function main() {
   await init();
-  await findCreationDate();
+  // await findCreationDate();
   // await origsMap();
+  await giveNotationsForNoOrigArchives();
   // await compileArchives();
   connection.end();
 }

@@ -7,7 +7,7 @@ import secrets from './secrets.json';
 
 // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ARCHIVE_DIR = `${__dirname}/../../archives`;
+const ARCHIVE_DIR = `${__dirname}/../archives`;
 
 const rawFile = fs.readFileSync(`${ARCHIVE_DIR}/archives.json`, 'utf-8');
 const compiled = JSON.parse(rawFile);
@@ -131,11 +131,11 @@ Object.keys(compiled.archives).forEach((id) => {
   archive.origs.forEach((orig: string) => {
     connection.query(
       `INSERT IGNORE INTO archive_origs(
-      archive_id,
-      orig
-    ) values (
-      ?,?
-    )`,
+        archive_id,
+        orig
+      ) values (
+        ?,?
+      )`,
       [id, `https://lanting-public.oss-cn-beijing.aliyuncs.com/archives/origs/${orig}`],
       (error) => {
         if (error) {
@@ -151,4 +151,4 @@ setTimeout(() => {
   connection.end();
   console.log('XXXTEMP origTotal', origTotal);
   console.log('XXXTEMP remarksTotal', remarksTotal);
-}, 60000);
+}, 600000);
