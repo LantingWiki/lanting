@@ -63,6 +63,8 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 # TODOs
 
+
+
 ### 聚合
 
 兰亭 - 兰亭文存
@@ -153,6 +155,8 @@ html静态文件的部分, 存到object store一类的里面. 设为private, 访
 - [x] 建表. 我知道可以加索引, 懒还没加
 
 ## 上OSS
+
+[ ] compile archives.json的时候, orig不能走本地了. 走DB
 
 想想步骤和需要的改变
 
