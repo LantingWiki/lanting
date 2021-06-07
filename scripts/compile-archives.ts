@@ -425,7 +425,7 @@ async function main() {
   // await findCreationDate();
   // await origsMap();
   // await giveNotationsForNoOrigArchives();
-  // await newMasterSync([]);
+  await newMasterSync([]);
   await compileArchives();
   connection.end();
 }
