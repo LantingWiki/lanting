@@ -18,6 +18,7 @@ const connection = mysql.createConnection({
   password: secrets.db.password,
   database: 'lanting',
   connectTimeout: 60000,
+  multipleStatements: true,
 });
 
 const ossClient = new OSS({
@@ -254,11 +255,13 @@ function parseOrigFilename(filename: string) {
  */
 async function newMasterSync(specifiedIds: number[]) {
   const changedFiles = findChangedFiles()
-    .concat(specifiedIds.map(id => findCorrespondingCommentFiles(id)))
-    .filter(a => a);
+    .concat(specifiedIds.map(id => findCorrespondingCommentFiles(id)));
   console.log('changedFiles: ', changedFiles);
-  const changedIds = findChangedIds(changedFiles).concat(specifiedIds);
+  const changedIds = findChangedIds(changedFiles);
   console.log('changedIds: ', changedIds);
+
+  const deletedFiles = findDeletedFiles();
+  await removeArchive(findChangedIds(deletedFiles));
 
   let involvedOrigFiles: string[] = [];
   // for each ID, orig handling
@@ -279,13 +282,23 @@ async function newMasterSync(specifiedIds: number[]) {
   exec(individualArchives);
 }
 
+function findDeletedFiles() {
+  return `${execSync(`git status --porcelain -- ./archives`)}`
+    .split('\n')
+    .filter(a => a && a.length > 0)
+    .filter(f => /^\s*D archives\/comments\//.test(f))
+    .map(f => f
+      .replace(/^\s*D archives\/comments\//, '')
+      .replace(/"/g, ''));
+}
+
 function findChangedFiles() {
   return `${execSync(`git status --porcelain -- ./archives`)}`
     .split('\n')
-    .filter(f => /^(\?\?|M) archives\/comments\//.test(f))
+    .filter(f => /^\s*(\?\?|M) archives\/comments\//.test(f))
     .map(f => f
-      .replace(/^\?\? archives\/comments\//, '')
-      .replace(/^ M archives\/comments\//, '')
+      .replace(/^\s*\?\? archives\/comments\//, '')
+      .replace(/^\s*M archives\/comments\//, '')
       .replace(/"/g, ''))
       .filter(a => a && a.length > 0);
 }
@@ -294,19 +307,20 @@ function findCorrespondingCommentFiles(id: number) {
   return commentsFiles.find(f => new RegExp(`^${id}-`).test(f)) || '';
 }
 
-function findChangedIds(changedFiles: string[]) {
+function findChangedIds(changedFiles: string[]): number[] {
   return changedFiles.map(f => {
     const matches = /([0-9]+)-/.exec(f);
     if (!matches) {
       console.log('error wrong archive id format: ', f);
-      return null;
+      return -1;
     }
     return +(matches![1]);
-  }).filter(a => a);
+  }).filter(a => a !== -1);
 }
 
 async function origFileUploadToOss(filename: string) {
-  await ossClient.put(filename, filename);
+  await ossClient.put(filename, filename, { timeout: 600000 });
+  console.log('Done put file to oss', filename);
 }
 
 async function origFileRecordToDb(shortFilename: string, content: string) {
@@ -421,15 +435,39 @@ async function findCreationDate() {
 
 // }
 
+async function removeArchive(ids: number[]) {
+  console.log('ids to delete: ', ids)
+  await Promise.all(ids.map(async id => {
+    await new Promise((resolve, reject) => {
+      connection.query(
+        `DELETE FROM archive_authors WHERE archive_id=?;
+         DELETE FROM archive_publishers WHERE archive_id=?;
+         DELETE FROM archive_origs WHERE archive_id=?;
+         DELETE FROM archive_remarks WHERE archive_id=?;
+         DELETE FROM archive_tags WHERE archive_id=?;
+         DELETE FROM archives WHERE id=?;`,
+        [id, id, id, id, id, id],
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            console.log('Deletion done: ', result)
+            resolve(result);
+          }
+        });
+    });
+  }));
+}
+
 async function main() {
   await init();
   // await findCreationDate();
   // await origsMap();
   // await giveNotationsForNoOrigArchives();
+  // await removeArchive([10838]);
   await newMasterSync([]);
-  await compileArchives();
+  // await compileArchives();
   connection.end();
 }
 
 main();
-
