@@ -282,6 +282,7 @@ async function newMasterSync(specifiedIds: number[]) {
 function findChangedFiles() {
   return `${execSync(`git status --porcelain -- ./archives`)}`
     .split('\n')
+    .filter(f => /^(\?\?|M) archives\/comments\//.test(f))
     .map(f => f
       .replace(/^\?\? archives\/comments\//, '')
       .replace(/^ M archives\/comments\//, '')
