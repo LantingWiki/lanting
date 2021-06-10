@@ -1,6 +1,23 @@
 # Lanting
 Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
+# TODOs
+[] dev env
+  - 本地nginx, 能跑起来, 有数据 (archives.json也用本地版本)
+  - 点赞数, 要有接口. 要起lanting-server (mysql)
+  - search keywords, 有接口
+  - Create & Update
+    - 电脑上, 用git + mysql机制: single-file -> comment -> yarn archives:compile -> yarn archives:add
+    - 手机上, 用tribute页面: https://lanting.wiki/lanting/tribute -> lanting-server
+
+[] commit mgs prefix
+[] 原文 for Book, 用豆瓣页面吧
+[] Fix sorting
+[] Work on server
+[] New get latest id
+[] 原文图标需要一点空格
+[] 标签, 有一个空
+
 # Workflow
 [x] 日期特殊排序
 [x] 自己的tag排序
@@ -61,12 +78,6 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] 放在archive.json, 什么后缀名
 [x] 从public读, 链接先直接跳到orig, 以后考虑iframe?
 
-# TODOs
-
-[] 原文 for Book, 用豆瓣页面吧
-[] Fix sorting
-[] Work on server
-[] New get latest id
 
 ### 聚合
 
@@ -159,7 +170,7 @@ html静态文件的部分, 存到object store一类的里面. 设为private, 访
 
 ## 上OSS
 
-[ ] compile archives.json的时候, orig不能走本地了. 走DB
+[x] compile archives.json的时候, orig不能走本地了. 走DB
 
 想想步骤和需要的改变
 
