@@ -466,7 +466,7 @@ async function main() {
   // await giveNotationsForNoOrigArchives();
   // await removeArchive([10838]);
   await newMasterSync([]);
-  // await compileArchives();
+  await compileArchives();
   connection.end();
 }
 
