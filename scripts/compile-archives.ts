@@ -400,9 +400,9 @@ async function compileArchives(isCompleteTask: boolean = true, todoCommentsFiles
 
   if (isCompleteTask) {
     const archivesPath = `${ARCHIVE_DIR}/archives.json`;
-    console.log('XXXTEMP', archivesPath);
     fs.writeFileSync(archivesPath, JSON.stringify(compiledArchives));
     await ossClient.put('archives/archives.json', archivesPath);
+    console.log('Done put archives.json')
   }
   return compiledArchives;
 }
