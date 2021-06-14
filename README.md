@@ -10,13 +10,12 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
     - 电脑上, 用git + mysql机制: single-file -> comment -> yarn archives:compile -> yarn archives:add
     - 手机上, 用tribute页面: https://lanting.wiki/lanting/tribute -> lanting-server
 
-[] commit mgs prefix
+[x] commit mgs prefix
+[x] 原文图标需要一点空格
+[x] 标签, 有一个空
 [] 原文 for Book, 用豆瓣页面吧
-[] Fix sorting
 [] Work on server
 [] New get latest id
-[] 原文图标需要一点空格
-[] 标签, 有一个空
 [] 接口很慢. 不要等接口, 先展示 (按ID倒序), 然后re-sort
 [] compile archives, 在更新archives.json的时候, 得用DB的origs. 不是本地. 要不然服务器端根本对不了
 
