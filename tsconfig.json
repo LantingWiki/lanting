@@ -35,6 +35,6 @@
     ".stylelintrc.js",
     ".prettierrc.js",
     "jest.config.js"
-  ],
+, "commitlint.config.js"  ],
   "exclude": ["node_modules", "build", "dist", "src/.umi/*", "webpack", "jest"]
 }
