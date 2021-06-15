@@ -28,9 +28,9 @@ if (dtNode) {
   dt = dtNode.innerText;
   if (dt === 'Yesterday' || dt === 'Today' || dt.includes('days ago') || dt.includes('week ago')) {
     dt = new Date().toISOString().substring(0, 7);
-  } else if (/^([0-9]{1,2})\/([0-9]{1,2})$/.test(dt)) {
-    m = /^([0-9]{1,2})\/([0-9]{1,2})$/.exec(dt);
-    dt = `${new Date().getFullYear()}-${res.m[1].padStart(2, '0')}`
+  } else if (regex.test(dt)) {
+    m = regex.exec(dt);
+    dt = `${new Date().getFullYear()}-${m[1].padStart(2, '0')}`
   } else {
     dt = dt.substring(0, 7);
   }
