@@ -35,8 +35,11 @@ const Lanting: FC<LantingProps> = ({
 
   useEffect(() => {
     dispatch({
-      type: 'lanting/fetch',
+      type: 'lanting/getArchives',
     });
+    dispatch({
+      type: 'lanting/listReset'
+    })
   }, []);
 
   const onFilterChange = (_: any, values: FilterValues) => {
@@ -47,6 +50,7 @@ const Lanting: FC<LantingProps> = ({
       },
     });
   };
+
   const count = getCount(currentArchives);
   return (
     <PageContainer
