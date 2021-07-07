@@ -23,7 +23,8 @@ export interface ModelType {
   namespace: string;
   state: StateType;
   effects: {
-    fetch: Effect;
+    getArchives: Effect;
+    listReset: Effect;
     like: Effect;
     getLikes: Effect;
     getSearchList: Effect;
@@ -119,7 +120,7 @@ const Model: ModelType = {
     searchLists: [],
   },
   effects: {
-    *fetch(_, { call, put }) {
+    *getArchives(_, { call, put }) {
       if (inited) {
         return;
       }
@@ -136,6 +137,9 @@ const Model: ModelType = {
           currentArchives: initedChapterArchives,
         },
       });
+    },
+
+    *listReset(_, { put }) {
 
       yield put({
         type: 'getLikes',
@@ -145,6 +149,7 @@ const Model: ModelType = {
         type: 'getSearchList',
       });
     },
+
     *getLikes(_, { call, put }) {
       const responseLikes = yield call(() => {
         return request('https://lanting.wiki/api/archive/like/read?articleId=-1');
