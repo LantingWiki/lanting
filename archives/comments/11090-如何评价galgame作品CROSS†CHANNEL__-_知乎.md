@@ -1,5 +1,5 @@
 # title
-(12 封私信 / 80 条消息) 如何评价galgame作品CROSS†CHANNEL？ - 知乎
+如何评价galgame作品CROSS†CHANNEL？ - 知乎
 
 # author
 知乎
