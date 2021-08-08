@@ -91,11 +91,15 @@ function getIdFromCommentFilename(f: string) {
   return f.substring(0, f.indexOf('-'));
 }
 
-async function init() {
+async function initOrigOssFiles() {
   currentOrigOssFiles = (
     await ossClient.list({ prefix: 'archives/origs/', 'max-keys': 1000 }, {})
   ).objects.map((o) => o.name.replace(/^archives\/origs\//, ''));
   console.log('currentOrigFiles OSS', currentOrigOssFiles.length);
+}
+
+async function init() {
+  await initOrigOssFiles();
 
   currentOrigDb = await new Promise((resolve, reject) => {
     connection.query(`SELECT * from archive_origs`, (error, results) => {
@@ -374,6 +378,7 @@ async function compileArchives(
   const compiledArchives = new Archives();
   if (isCompleteTask) {
     todoCommentsFiles = commentsFiles;
+    await initOrigOssFiles();
     todoOrigsFiles = currentOrigOssFiles;
     console.log('Comments & origs count: ', todoCommentsFiles.length, todoOrigsFiles.length);
   } else {
