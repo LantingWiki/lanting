@@ -11,7 +11,7 @@ Journal of Medical Ethics
 2005-00
 
 # chapter
-游侠
+群像
 
 # tag
 医学, 社会, 伦理
