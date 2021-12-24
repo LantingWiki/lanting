@@ -15,6 +15,12 @@ interface ArchiveListContentProps {
   dispatch: Dispatch;
 }
 
+const processMdImgSyntax = (md: string) => {
+  return md.replace(/!\[\]\((.+?)\)/g, (match, g1) => {
+    return `![](https://cdn.lanting.wiki/archives/${g1})`;
+  });
+};
+
 const like = (dispatch: Dispatch, archive: Archive, isLike: boolean) => {
   return () => {
     dispatch({
@@ -60,7 +66,7 @@ const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive, se
           plugins={[remarkGfm]}
           className="react-markdown"
           renderers={renderers}
-          source={archive.remarks}
+          source={processMdImgSyntax(archive.remarks)}
         />
       </ExpandCollapse>
       <div className={styles.extra}>
