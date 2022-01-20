@@ -11,7 +11,7 @@ Fredrik Haga
 2022-03
 
 # chapter
-列传
+搜神
 
 # tag
 Web3, Data, DUNE, 北欧
