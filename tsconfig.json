@@ -22,6 +22,7 @@
       "@/*": ["./src/*"],
       "@@/*": ["./src/.umi/*"]
     },
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*",
