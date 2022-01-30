@@ -11,10 +11,10 @@ Lushark
 2021-11
 
 # chapter
-TODO
+游侠
 
 # tag
-TODO
+ACG, Fate/Zero
 
 # remarks
 `十年了! 全是个人化的感慨`
