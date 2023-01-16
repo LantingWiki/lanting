@@ -48,7 +48,7 @@ function setField(archive: Archive, field: string, fileContent: string, archives
 
     updateFreqMap(field, fieldVal, archives);
   } else {
-    console.log('Failed to get field: ', field);
+    console.log('Failed to get field: ', field, archive);
   }
   return fileContent;
 }
