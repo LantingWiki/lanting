@@ -125,7 +125,7 @@ const Model: ModelType = {
       }
       inited = true;
       const response = yield call(() => {
-        return request('https://cdn.lanting.wiki.w.cdngslb.com/archives/archives.json');
+        return request('https://cdn.lanting.wiki/archives/archives.json');
       });
       initedChapterArchives = initArchives(response);
 

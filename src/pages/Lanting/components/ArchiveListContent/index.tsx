@@ -17,7 +17,7 @@ interface ArchiveListContentProps {
 
 const processMdImgSyntax = (md: string) => {
   return md.replace(/!\[\]\((.+?)\)/g, (match, g1) => {
-    return `![](https://cdn.lanting.wiki.w.cdngslb.com/archives/${g1})`;
+    return `![](https://cdn.lanting.wiki/archives/${g1})`;
   });
 };
 
