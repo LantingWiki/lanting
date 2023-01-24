@@ -17,7 +17,7 @@ interface ArchiveListContentProps {
 
 const processMdImgSyntax = (md: string) => {
   return md.replace(/!\[\]\((.+?)\)/g, (match, g1) => {
-    return `![](https://cdn.lanting.wiki/archives/${g1})`;
+    return `![](https://cdn.lanting.wiki.w.cdngslb.com/archives/${g1})`;
   });
 };
 
@@ -38,6 +38,7 @@ const ArchiveListContent: FC<ArchiveListContentProps> = ({ dispatch, archive, se
     text: ({ value }: { value: any }) => (
       <Highlighter searchWords={[search]} autoEscape textToHighlight={value} />
     ),
+    // eslint-disable-next-line react/no-unused-prop-types
     inlineCode: ({ value }: { value: any }) => (
       <code>
         <Highlighter searchWords={[search]} autoEscape textToHighlight={value} />
