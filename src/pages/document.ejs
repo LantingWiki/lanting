@@ -14,24 +14,6 @@
     />
     <title>兰亭文存</title>
     <link rel="icon" href="<%= context.config.publicPath +'favicon.ico'%>" type="image/x-icon" />
-    <script>
-    (function (win, export_obj) {
-      win['TeaAnalyticsObject'] = export_obj;
-      if (!win[export_obj]) {
-        function _collect() {
-          _collect.q.push(arguments);
-        }
-        _collect.q = _collect.q || [];
-        win[export_obj] = _collect;
-      }
-      win[export_obj].l = +new Date();
-    })(window, 'collectEvent');
-  </script>
-  <script async src="https://sf1-scmcdn-tos.pstatp.com/goofy/log-sdk/collect/collect-autotrack-rangers.js"></script>
-  <script>
-    window.collectEvent('init', { app_id: 194981, channel: 'cn', enable_ab_test: true, autotrack: true });
-    window.collectEvent('start')
-  </script>
   </head>
 
   <body>
