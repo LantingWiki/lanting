@@ -48,7 +48,7 @@ async function run(options) {
     `export lantingid=${options.lantingId}`
   );
   execSync(
-    `/Applications/"Visual Studio Code.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
+    `/Applications/"Visual Studio Code - Insiders.app"/Contents/Resources/app/bin/code "${commentPathname}"`,
   );
 }
 
