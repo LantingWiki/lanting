@@ -1,5 +1,5 @@
 import { defineConfig } from 'umi';
-import { CDN_DOMAIN } from '@/utils/utils';
+import { CDN_DOMAIN } from '../src/utils/utils';
 
 export default defineConfig({
   publicPath: `${CDN_DOMAIN}/`,
