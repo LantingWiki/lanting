@@ -1,6 +1,7 @@
 import { Effect, Reducer } from 'umi';
 import request from '@/utils/request';
 // import { shuffleByWeek } from '@/utils/utils';
+import { CDN_DOMAIN } from '@/utils/utils';
 import { Archives, ChapterArchives, CHAPTERS, FilterValues, SearchList } from './data';
 
 const sortByLikesAndId = (arr: number[], archives: Archives) => {
@@ -125,7 +126,7 @@ const Model: ModelType = {
       }
       inited = true;
       const response = yield call(() => {
-        return request('https://cdn.lanting.wiki/archives/archives.json');
+        return request(`${CDN_DOMAIN}/archives/archives.json`);
       });
       initedChapterArchives = initArchives(response);
 

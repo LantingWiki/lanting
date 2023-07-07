@@ -3,6 +3,7 @@ import { PageContainer, PageLoading } from '@ant-design/pro-layout';
 import { Card, List, Tag } from 'antd';
 import { BankOutlined, BookOutlined, CalendarOutlined, EditOutlined } from '@ant-design/icons';
 import { connect, Dispatch, Redirect } from 'umi';
+import { CDN_DOMAIN } from '@/utils/utils';
 import { Archive, Archives } from '../../data';
 import ArchiveListContent from '../ArchiveListContent';
 
@@ -16,7 +17,7 @@ const renderOrig = (item: Archive) => {
   return item.origs.map((orig) => (
     <a
       className={styles.listItemMetaTitle}
-      href={`https://cdn.lanting.wiki/archives/origs/${orig}`}
+      href={`${CDN_DOMAIN}/archives/origs/${orig}`}
       rel="noreferrer"
       target="_blank"
     >

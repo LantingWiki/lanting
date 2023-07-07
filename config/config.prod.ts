@@ -1,5 +1,6 @@
 import { defineConfig } from 'umi';
+import { CDN_DOMAIN } from '@/utils/utils';
 
 export default defineConfig({
-  publicPath: 'https://cdn.lanting.wiki/',
+  publicPath: `${CDN_DOMAIN}/`,
 });
