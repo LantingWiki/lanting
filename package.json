@@ -4,11 +4,9 @@
   "description": "兰亭文存",
   "scripts": {
     "lint": "umi g tmp && npm run lint:js && npm run lint:prettier",
-    "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx ",
     "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
     "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
     "lint:prettier": "prettier --check \"src/**/*\" --end-of-line auto",
-    "precommit": "lint-staged",
     "prettier": "prettier -c --write \"src/**/*\"",
     "start": "umi dev",
     "start:dev": "cross-env REACT_APP_ENV=dev MOCK=none umi dev",
@@ -27,14 +25,6 @@
     "analyze": "cross-env ANALYZE=1 umi build",
     "deploy:oss": "for f in ./dist/; do ossutilmac64 cp -r -u $f oss://lanting-public/; done",
     "deploy:ec2": "rsync -arvz --progress ./config/lanting-nginx.conf root@101.200.34.182:/data/server-apps/lanting; rsync -arvz --progress ./dist/index.html root@101.200.34.182:/data/server-apps/lanting/dist"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged",
-      "pre-add": "lint-staged",
-      "pre-push": "lint-staged"
-    }
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
