@@ -2,6 +2,7 @@ import React from 'react';
 import { List, Tag } from 'antd';
 import { BankOutlined, EditOutlined, BookOutlined, CalendarOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
+import { CDN_DOMAIN } from '@/utils/utils';
 import ChapterCard from '../ChapterCard';
 import ArchiveListContent from '../ArchiveListContent';
 import { Archive, Archives } from '../../data';
@@ -21,7 +22,7 @@ const renderOrig = (item: Archive) => {
   return item.origs.map((orig) => (
     <a
       className={styles.listItemMetaTitle}
-      href={`https://cdn.lanting.wiki/archives/origs/${orig}`}
+      href={`${CDN_DOMAIN}/archives/origs/${orig}`}
       rel="noreferrer"
       target="_blank"
     >

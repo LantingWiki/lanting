@@ -6,6 +6,7 @@ import Highlighter from 'react-highlight-words';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ExpandCollapse from '@/components/vendor/ExpandCollapse';
+import { CDN_DOMAIN } from '@/utils/utils';
 import styles from './index.less';
 import { Archive } from '../../data';
 
@@ -17,7 +18,7 @@ interface ArchiveListContentProps {
 
 const processMdImgSyntax = (md: string) => {
   return md.replace(/!\[\]\((.+?)\)/g, (match, g1) => {
-    return `![](https://cdn.lanting.wiki/archives/${g1})`;
+    return `![](${CDN_DOMAIN}/archives/${g1})`;
   });
 };
 
