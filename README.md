@@ -4,7 +4,7 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 # TODOs
 [] dev env
   - 本地nginx, 能跑起来, 有数据 (archives.json也用本地版本)
-  - 点赞数, 要有接口. 要起lanting-server (mysql)
+  - 点赞数, 要有接口. 要起lanting-server (mysql). 有没有不用的办法... 好像没有. 也可以放弃点赞这个功能
   - search keywords, 有接口
   - Create & Update
     - 电脑上, 用git + mysql机制: single-file -> comment -> yarn archives:compile -> yarn archives:add
@@ -13,7 +13,7 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] commit mgs prefix
 [x] 原文图标需要一点空格
 [x] 标签, 有一个空
-[] 原文 for Book, 用豆瓣页面吧
+[x] 原文 for Book, 用豆瓣页面吧
 [] Work on server
 [] New get latest id
 [] 接口很慢. 不要等接口, 先展示 (按ID倒序), 然后re-sort
@@ -84,7 +84,11 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 兰亭 - 兰亭文存
 芦柑 - 芦柑笔谈
-异端 - 异端十二
+异端 - 异端年刻
+
+Heresy Anthology
+Lanting Florilegium
+Soda Manuscripts
 
 ### clipper
 两个用例: 微信上存链接 - 公众号. 电脑上打开页面 - chrome extension
