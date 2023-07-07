@@ -53,7 +53,7 @@ export default defineConfig(({
             },
             {
               name: '网络国家',
-              path: 'https://b0yan9.notion.site/The-Network-State-8b74d1a9c3784d10b80e14f6e6a8b06e',
+              path: 'https://www.thenetworkstate-zh.com/foreword/',
               icon: 'GatewayOutlined',
             },
             {
