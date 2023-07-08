@@ -147,22 +147,38 @@ const Model: ModelType = {
       });
     },
     *getLikes(_, { call, put }) {
-      const responseLikes = yield call(() => {
+      let responseLikes = yield call(() => {
         return request('https://lanting.wiki/api/archive/like/read?articleId=-1');
       });
-      if (responseLikes && responseLikes.data) {
-        yield put({
-          type: 'putLikes',
-          payload: {
-            likesMap: responseLikes.data,
-          },
-        });
+      if (!responseLikes || !responseLikes.data) {
+        responseLikes = { data: {} };
       }
+      yield put({
+        type: 'putLikes',
+        payload: {
+          likesMap: responseLikes.data,
+        },
+      });
     },
     *getSearchList(_, { call, put }) {
-      const responseSearchList = yield call(() => {
+      let responseSearchList = yield call(() => {
         return request('https://lanting.wiki/api/archive/search/keyword/read');
       });
+      /**
+        public class SearchKeywordEntity implements Serializable {
+
+            @TableId(type = IdType.AUTO)
+            public Long id;
+
+            public String keyword;
+            public int searchCount;
+            public Long createdAt;
+            public Long updatedAt;
+        }
+      */
+      if (!responseSearchList || !responseSearchList.data) {
+        responseSearchList = { data: [] };
+      }
       const searchLists = [];
       for (let i = 0; i < responseSearchList.data.length; i++) {
         const { keyword, searchCount, updatedAt } = responseSearchList.data[i];
