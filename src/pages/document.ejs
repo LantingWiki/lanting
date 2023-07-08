@@ -7,16 +7,27 @@
       name="keywords"
       content="创业,互联网,移动互联网,技术,计算机,商业,历史,阿里巴巴,腾讯,百度,字节跳动,美团"
     />
-    <meta name="description" content="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" />
+    <meta property="og:description" name="description" content="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" />
+    <meta property="description" content="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
-    <title>兰亭文存</title>
+    <meta property="og:title" content="兰亭文存 LantingFlorilegium">
+    <title>兰亭文存 LantingFlorilegium</title>
+    <meta property="og:image" content="<%= context.config.publicPath +'favicon.ico'%>">
     <link rel="icon" href="<%= context.config.publicPath +'favicon.ico'%>" type="image/x-icon" />
   </head>
 
   <body>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6WWVYG0LZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-6WWVYG0LZZ');
+    </script>
     <div id="root">
       <style>
         html,
