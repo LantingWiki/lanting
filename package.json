@@ -18,12 +18,12 @@
     "archives": "yarn archives:compile && yarn archives:upload-imgs && yarn archives:add && git push",
     "archives:compile": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/compile-archives.ts",
     "archives:add": "git fetch; git add ./archives; git commit --no-verify -m \"archive: `date \"+%Y-%m-%d-%H:%M:%S\"`\"; git merge origin master; git push",
-    "archives:upload-imgs": "ossutilmac64 cp -r -u ./archives/imgs oss://lanting-public/archives/imgs",
+    "archives:upload-imgs": "ossutilmac64 cp -r -u ./archives/imgs oss://lanting-public-20230707-1/archives/imgs",
     "archives:migrate-backend2": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/migrate-backend2.ts",
     "deploy": "yarn build && yarn deploy:ec2 && yarn deploy:oss",
     "build": "UMI_ENV=prod umi build",
     "analyze": "cross-env ANALYZE=1 umi build",
-    "deploy:oss": "for f in ./dist/; do ossutilmac64 cp -r -u $f oss://lanting-public/; done",
+    "deploy:oss": "for f in ./dist/; do ossutilmac64 cp -r -u $f oss://lanting-public-20230707-1/; done",
     "deploy:ec2": "rsync -arvz --progress ./config/lanting-nginx.conf root@101.200.34.182:/data/server-apps/lanting; rsync -arvz --progress ./dist/index.html root@101.200.34.182:/data/server-apps/lanting/dist"
   },
   "lint-staged": {

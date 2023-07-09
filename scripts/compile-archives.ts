@@ -6,7 +6,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import OSS from 'ali-oss';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import mysql from 'mysql';
+import mysql, { Connection } from 'mysql';
 import { execSync } from 'child_process';
 import axios from 'axios';
 import { createHmac } from 'crypto';
@@ -14,30 +14,87 @@ import { Archive, Archives } from './data';
 import secrets from './secrets.json';
 import { exec } from './migrate-backend2';
 
-const connection = mysql.createConnection({
-  host: 'lanting.wiki',
-  user: 'root',
-  password: secrets.db.password,
-  database: 'lanting',
-  connectTimeout: 60000,
-  multipleStatements: true,
-});
-
-const ossClient = new OSS({
-  region: 'oss-cn-beijing',
-  accessKeyId: secrets.oss.accessKeyId,
-  accessKeySecret: secrets.oss.accessKeySecret,
-  bucket: 'lanting-public',
-});
-
+/**
+ * One-liner constants
+ */
 // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ARCHIVE_DIR = `${__dirname}/../archives`;
-// XXX boyang: old way
 const localOrigFiles = fs.readdirSync(`${ARCHIVE_DIR}/origs`);
 let currentOrigOssFiles: string[] = [];
 let currentOrigDb: any[] = [];
 const commentsFiles = fs.readdirSync(`${ARCHIVE_DIR}/comments`);
+const connection: Connection = initConnection();
+const ossClient = new OSS({
+  region: 'oss-cn-beijing',
+  accessKeyId: secrets.oss.accessKeyId,
+  accessKeySecret: secrets.oss.accessKeySecret,
+  bucket: 'lanting-public-20230707-1',
+});
+/**
+ * End of one-liner constants
+ */
+
+async function main() {
+  await initOrigOssFiles();
+  await newMasterSync([]);
+  
+  await compileArchives();
+
+  // boyang: this was used to remove an archive
+  // await findCreationDate();
+  // await origsMap();
+  // await giveNotationsForNoOrigArchives();
+  // await removeArchive([10838]);
+}
+main();
+
+async function initOrigOssFiles() {
+  currentOrigOssFiles = [];
+
+  // I need to iterate through all the files in the OSS bucket. Each time it only return 1000 files.
+  // I need to keep track of the marker and use it to get the next 1000 files until it returns nothing.
+  let marker: string | undefined;
+
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    const result = await ossClient.list({
+      prefix: 'archives/origs/',
+      marker,
+      'max-keys': 1000,
+    }, {});
+
+    currentOrigOssFiles = currentOrigOssFiles.concat(result.objects.map((o) => o.name.replace(/^archives\/origs\//, '')));
+    marker = result.nextMarker;
+  } while (marker);
+
+  console.log('currentOrigFiles OSS', currentOrigOssFiles.length);
+}
+async function initCurrentOrigDbData() {
+  currentOrigDb = await new Promise((resolve, reject) => {
+    connection.query(`SELECT * from archive_origs`, (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+function initConnection() {
+  return mysql.createConnection({
+    host: 'lanting.wiki',
+    user: 'root',
+    password: secrets.db.password,
+    database: 'lanting',
+    connectTimeout: 60000,
+    multipleStatements: true,
+  });
+}
+function endConnection() {
+  // Closes the connection to the database.
+  connection.end();
+}
 
 function setField(archive: Archive, field: string, fileContent: string, archives: Archives) {
   const regexArr = toFieldRegex(field).exec(fileContent);
@@ -89,27 +146,6 @@ function toFieldRegex(field: string): RegExp {
 
 function getIdFromCommentFilename(f: string) {
   return f.substring(0, f.indexOf('-'));
-}
-
-async function initOrigOssFiles() {
-  currentOrigOssFiles = (
-    await ossClient.list({ prefix: 'archives/origs/', 'max-keys': 1000 }, {})
-  ).objects.map((o) => o.name.replace(/^archives\/origs\//, ''));
-  console.log('currentOrigFiles OSS', currentOrigOssFiles.length);
-}
-
-async function init() {
-  await initOrigOssFiles();
-
-  currentOrigDb = await new Promise((resolve, reject) => {
-    connection.query(`SELECT * from archive_origs`, (error, results) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
 }
 
 async function origsMap() {
@@ -191,7 +227,7 @@ async function giveNotationsForNoOrigArchives() {
         return;
       }
       const origFile = await getOrigContentFromOss(
-        `https://lanting-public.oss-cn-beijing.aliyuncs.com/archives/origs/${id}`,
+        `https://lanting-public-20230707-1.oss-cn-beijing.aliyuncs.com/archives/origs/${id}`,
       );
       // invoke to record to DB
       await origFileRecordToDb(id, origFile);
@@ -283,14 +319,14 @@ async function newMasterSync(specifiedIds: number[]) {
           const filename = `archives/origs/${o}`;
           await origFileUploadToOss(filename);
           const content = fs.readFileSync(filename, 'utf-8');
-          await origFileRecordToDb(o, content);
+          // await origFileRecordToDb(o, content);
         }),
       );
     }),
   );
   // comment handling
   const individualArchives = await compileArchives(false, changedFiles, involvedOrigFiles);
-  exec(individualArchives);
+  // exec(individualArchives);
 }
 
 function findDeletedFiles() {
@@ -345,7 +381,7 @@ async function origFileRecordToDb(shortFilename: string, content: string) {
   const sha256 = createSha256(content);
   let type: string;
   let origUrl: string;
-  const ossPrefix = 'https://lanting-public.oss-cn-beijing.aliyuncs.com/archives/origs/';
+  const ossPrefix = 'https://lanting-public-20230707-1.oss-cn-beijing.aliyuncs.com/archives/origs/';
   if (idParts[2] !== 'html') {
     origUrl = 'about:blank#';
     type = 'document';
@@ -481,16 +517,3 @@ async function removeArchive(ids: number[]) {
     }),
   );
 }
-
-async function main() {
-  await init();
-  // await findCreationDate();
-  // await origsMap();
-  // await giveNotationsForNoOrigArchives();
-  // await removeArchive([10838]);
-  await newMasterSync([]);
-  await compileArchives();
-  connection.end();
-}
-
-main();
