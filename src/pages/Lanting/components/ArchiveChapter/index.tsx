@@ -82,7 +82,7 @@ const ArchiveChapter: React.FC<ArchiveChapterProps> = ({
 }) => {
   const archives = archiveIds.map((id) => compiledArchives.archives[id]);
   return (
-    <ChapterCard title={<h2>{chapter}</h2>} defaultActive={chapter !== '本纪'}>
+    <ChapterCard title={<h2>{chapter}</h2>} defaultActive={false}>
       <List<Archive>
         pagination={{
           size: 'small',
