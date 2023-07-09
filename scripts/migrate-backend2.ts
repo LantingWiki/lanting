@@ -149,7 +149,7 @@ export async function exec(compiled: Archives) {
     //   ) values (
     //     ?,?
     //   )`,
-    //     [id, `https://lanting-public.oss-cn-beijing.aliyuncs.com/archives/origs/${orig}`],
+    //     [id, `https://lanting-public-20230707-1.oss-cn-beijing.aliyuncs.com/archives/origs/${orig}`],
     //     (error) => {
     //       if (error) {
     //         console.log('XXXTEMP orig', archive);
