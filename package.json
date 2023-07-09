@@ -2,6 +2,7 @@
   "name": "lanting",
   "version": "0.1.0",
   "description": "兰亭文存",
+  "type": "module",
   "scripts": {
     "lint": "umi g tmp && npm run lint:js && npm run lint:prettier",
     "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
