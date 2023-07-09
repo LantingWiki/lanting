@@ -14,7 +14,7 @@ Reddit
 世家
 
 # tag
-技术, 区块链, Vitalik, 以太坊
+技术, 区块链, Vitalik Buterin, 以太坊
 
 # remarks
 `技术细节跟不上了. 不跟也好, plasma, Ethash旧事..`
