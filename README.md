@@ -2,6 +2,8 @@
 Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 # TODOs
+[ ] I need to fix the broken APIs, using serverless functions
+
 [] dev env
   - 本地nginx, 能跑起来, 有数据 (archives.json也用本地版本)
   - 点赞数, 要有接口. 要起lanting-server (mysql). 有没有不用的办法... 好像没有. 也可以放弃点赞这个功能
