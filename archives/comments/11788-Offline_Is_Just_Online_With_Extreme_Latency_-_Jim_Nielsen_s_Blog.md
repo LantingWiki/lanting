@@ -2,19 +2,19 @@
 Offline Is Just Online With Extreme Latency - Jim Nielsen’s Blog
 
 # author
-TODO
+Jim Nielsen
 
 # publisher
-TODO
+Jim Nielsen’s Blog
 
 # date
-TODO
+2023-04
 
 # chapter
-TODO
+游侠
 
 # tag
-TODO
+Tech
 
 # remarks
-TODO
+![](imgs/2023-07-08-17-21-09.png)

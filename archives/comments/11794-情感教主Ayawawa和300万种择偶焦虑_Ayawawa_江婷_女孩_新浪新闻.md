@@ -2,19 +2,19 @@
 情感教主Ayawawa和300万种择偶焦虑|Ayawawa|江婷|女孩_新浪新闻
 
 # author
-TODO
+葛佳男, 林珊珊, 陈梦岚
 
 # publisher
-TODO
+谷雨实验室
 
 # date
-TODO
+2018-05
 
 # chapter
-TODO
+群像
 
 # tag
-TODO
+婚恋, 社会, Ayawawa
 
 # remarks
-TODO
+`文章是好文章, 写得比较冷静中立了. 晴予讲学习所有套路然后回归真心, 是不错的`
