@@ -8,14 +8,14 @@ export default (
     links={[
       {
         key: 'legal',
-        title: '京ICP备19033403号',
-        href: 'http://beian.miit.gov.cn/',
+        title: ' ',
+        href: 'https://www.eff.org/cyberspace-independence',
         blankTarget: true,
       },
       {
         key: 'github',
         title: <GithubOutlined />,
-        href: 'https://github.com/boyangwang/lanting',
+        href: 'https://github.com/LantingWiki/lanting',
         blankTarget: true,
       },
       {
