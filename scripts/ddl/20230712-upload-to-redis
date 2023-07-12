@@ -1,0 +1,88 @@
+INSERT INTO `search_keywords`
+VALUES (1000002, 18, '游戏', 1608224083965, 1608532753271);
+
+
+mylist = ['比特币',
+'马云',
+'和阿里巴巴好好说话',
+'腾讯没有梦想',
+'百度投资',
+'百度',
+'劣迹斑',
+'王慧文',
+'梁',
+'steam',
+'蒸汽',
+'腾讯游戏',
+'难啊',
+'00后',
+'memo',
+'MEMOS',
+'GOOGLE',
+'进腾讯',
+'嗨氏',
+'社交',
+'饿了么',
+'字节',
+'BIGO',
+'TODO',
+'陈天桥',
+'傅盛',
+'字节跳动',
+'快手',
+'管培',
+'TAP',
+'KENZO',
+'火箭',
+'曲凯',
+'10246',
+]
+
+for (let a of mylist) {
+  fetch('https://www.lanting.wiki/api/search-keyword/create', { method: 'post', body: a });
+}
+
+hincrby search_keyword '劣迹斑斑的九城' 1
+hincrby search_keyword '缺少外部竞争' 1
+hincrby search_keyword '内部竞争' 1
+hincrby search_keyword '腾讯' 1
+hincrby search_keyword 'IEG' 1
+hincrby search_keyword '王思聪' 1
+hincrby search_keyword '斗鱼' 1
+
+
+
+hincrby search_keyword '比特币' 1
+hincrby search_keyword '马云' 1
+hincrby search_keyword '和阿里巴巴好好说话' 1
+hincrby search_keyword '腾讯没有梦想' 1
+hincrby search_keyword '百度投资' 1
+hincrby search_keyword '百度' 1
+hincrby search_keyword '劣迹斑' 1
+hincrby search_keyword '王慧文' 4
+hincrby search_keyword '梁' 1
+hincrby search_keyword 'steam' 1
+hincrby search_keyword '蒸汽' 1
+hincrby search_keyword '腾讯游戏' 1
+hincrby search_keyword '难啊' 1
+hincrby search_keyword '00后' 1
+hincrby search_keyword 'memo' 11
+hincrby search_keyword 'MEMOS' 2
+hincrby search_keyword 'GOOGLE' 1
+hincrby search_keyword '进腾讯' 1
+hincrby search_keyword '嗨氏' 1
+hincrby search_keyword '社交' 1
+hincrby search_keyword '饿了么' 1
+hincrby search_keyword '字节' 1
+hincrby search_keyword 'BIGO' 2
+hincrby search_keyword 'TODO' 7
+hincrby search_keyword '陈天桥' 1
+hincrby search_keyword '傅盛' 1
+hincrby search_keyword '字节跳动' 2
+hincrby search_keyword '快手' 1
+hincrby search_keyword '管培' 1
+hincrby search_keyword 'TAP' 1
+hincrby search_keyword 'KENZO' 1
+hincrby search_keyword '火箭' 1
+hincrby search_keyword '曲凯' 1
+hincrby search_keyword '10246' 1
