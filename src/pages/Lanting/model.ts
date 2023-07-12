@@ -162,8 +162,9 @@ const Model: ModelType = {
     },
     *getSearchList(_, { call, put }) {
       let responseSearchList = yield call(() => {
-        return request('https://lanting.wiki/api/archive/search/keyword/read');
+        return request('https://lanting.wiki/api/search-keyword/read');
       });
+      console.log('XXXTEMP', responseSearchList);
       /**
         public class SearchKeywordEntity implements Serializable {
 
@@ -238,7 +239,7 @@ const Model: ModelType = {
         },
       });
       yield call(() => {
-        return request('https://lanting.wiki/api/archive/search/keyword/create', {
+        return request('https://lanting.wiki/api/search-keyword/create', {
           method: 'post',
           data: keyword,
         });
