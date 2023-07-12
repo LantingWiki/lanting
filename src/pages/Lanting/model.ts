@@ -148,7 +148,7 @@ const Model: ModelType = {
     },
     *getLikes(_, { call, put }) {
       let responseLikes = yield call(() => {
-        return request('https://lanting.wiki/api/archive/like/read?articleId=-1');
+        return request('https://www.lanting.wiki/api/archive/like/read?articleId=-1');
       });
       if (!responseLikes || !responseLikes.data) {
         responseLikes = { data: {} };
@@ -162,7 +162,7 @@ const Model: ModelType = {
     },
     *getSearchList(_, { call, put }) {
       let responseSearchList = yield call(() => {
-        return request('https://lanting.wiki/api/search-keyword/read');
+        return request('https://www.lanting.wiki/api/search-keyword/read');
       });
       console.log('XXXTEMP', responseSearchList);
       /**
@@ -211,7 +211,7 @@ const Model: ModelType = {
       });
 
       yield call(() => {
-        return request('https://lanting.wiki/api/archive/like/create', {
+        return request('https://www.lanting.wiki/api/archive/like/create', {
           method: 'post',
           data: {
             articleId: archive.id,
@@ -239,7 +239,7 @@ const Model: ModelType = {
         },
       });
       yield call(() => {
-        return request('https://lanting.wiki/api/search-keyword/create', {
+        return request('https://www.lanting.wiki/api/search-keyword/create', {
           method: 'post',
           data: keyword,
         });
