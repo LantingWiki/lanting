@@ -60,7 +60,6 @@
     "use-merge-value": "^1.0.1"
   },
   "devDependencies": {
-    "@vercel/node": "^2.15.3",
     "@ant-design/pro-cli": "^1.0.18",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
@@ -81,6 +80,8 @@
     "@umijs/preset-react": "^1.4.8",
     "@umijs/preset-ui": "^2.0.9",
     "@umijs/yorkie": "^2.0.3",
+    "@vercel/kv": "^0.2.2",
+    "@vercel/node": "^2.15.3",
     "carlo": "^0.9.46",
     "chalk": "^4.0.0",
     "commitlint": "^12.1.4",
