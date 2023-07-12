@@ -1,7 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { kv } from "@vercel/kv";
+import { allowCors } from "../../src/utils/request";
 
-export default async function handler(
+export default allowCors(async function handler(
   request: VercelRequest,
   response: VercelResponse,
 ) {
@@ -14,4 +15,4 @@ export default async function handler(
     headers: request.headers,
     keywords,
   });
-}
+});
