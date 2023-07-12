@@ -60,6 +60,7 @@
     "use-merge-value": "^1.0.1"
   },
   "devDependencies": {
+    "@vercel/node": "^2.15.3",
     "@ant-design/pro-cli": "^1.0.18",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",

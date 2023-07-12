@@ -2,7 +2,7 @@ import React from 'react';
 import { List, Tag } from 'antd';
 import { BankOutlined, EditOutlined, BookOutlined, CalendarOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-import { CDN_DOMAIN } from '@/utils/utils';
+import { CDN_DOMAIN, toChineseNumbers } from '@/utils/utils';
 import ChapterCard from '../ChapterCard';
 import ArchiveListContent from '../ArchiveListContent';
 import { Archive, Archives } from '../../data';
@@ -82,7 +82,13 @@ const ArchiveChapter: React.FC<ArchiveChapterProps> = ({
 }) => {
   const archives = archiveIds.map((id) => compiledArchives.archives[id]);
   return (
-    <ChapterCard title={<h2>{chapter}</h2>} defaultActive={false}>
+    <ChapterCard title={
+        <h2>
+          {chapter}
+          <span className="chapter-archive-count">{`凡${toChineseNumbers('' + archives.length)}篇`}</span>
+        </h2>
+      }
+      defaultActive={false}>
       <List<Archive>
         pagination={{
           size: 'small',
