@@ -177,16 +177,17 @@ const Model: ModelType = {
             public Long updatedAt;
         }
       */
-      if (!responseSearchList || !responseSearchList.data) {
-        responseSearchList = { data: [] };
+      if (!responseSearchList || !responseSearchList.keywords) {
+        responseSearchList = { keywords: {} };
       }
       const searchLists = [];
-      for (let i = 0; i < responseSearchList.data.length; i++) {
-        const { keyword, searchCount, updatedAt } = responseSearchList.data[i];
-        const newSearchList = { keyword, count: searchCount, updatedAt };
+
+      for (let keyword of Object.keys(responseSearchList.keywords)) {
+        const newSearchList = { keyword, count: responseSearchList.keywords[keyword] };
         searchLists.push(newSearchList);
       }
-      if (responseSearchList && responseSearchList.data) {
+
+      if (responseSearchList && responseSearchList.keywords) {
         yield put({
           type: 'putSearchList',
           payload: {
