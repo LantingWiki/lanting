@@ -22,7 +22,7 @@ export default allowCors(async function handler(
   request: VercelRequest,
   response: VercelResponse,
 ) {
-  await kv.hincrby("likes", request.body, 1);
+  await kv.hincrby("likes", request.body.articleId, request.body.like ? 1 : -1);
   const likes = await kv.hgetall("likes");
   response.status(200).json({
     body: request.body,
