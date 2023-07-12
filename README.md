@@ -2,9 +2,10 @@
 Palette: #F4E285 #F4A259 #7A4419 #755C1B
 
 # TODOs
+[ ] chapter要加数量呀
 [ ] I need to fix the broken APIs, using serverless functions
 
-[] dev env
+[x] dev env
   - 本地nginx, 能跑起来, 有数据 (archives.json也用本地版本)
   - 点赞数, 要有接口. 要起lanting-server (mysql). 有没有不用的办法... 好像没有. 也可以放弃点赞这个功能
   - search keywords, 有接口
@@ -16,10 +17,10 @@ Palette: #F4E285 #F4A259 #7A4419 #755C1B
 [x] 原文图标需要一点空格
 [x] 标签, 有一个空
 [x] 原文 for Book, 用豆瓣页面吧
-[] Work on server
-[] New get latest id
-[] 接口很慢. 不要等接口, 先展示 (按ID倒序), 然后re-sort
-[] compile archives, 在更新archives.json的时候, 得用DB的origs. 不是本地. 要不然服务器端根本对不了
+[x] Work on server
+[x] New get latest id
+[x] 接口很慢. 不要等接口, 先展示 (按ID倒序), 然后re-sort
+[x] compile archives, 在更新archives.json的时候, 得用DB的origs. 不是本地. 要不然服务器端根本对不了
 
 # Workflow
 [x] 日期特殊排序
