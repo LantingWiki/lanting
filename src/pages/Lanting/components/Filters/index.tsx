@@ -138,9 +138,9 @@ const Filters: React.FC<FilterProps> = ({
   searchLists,
   onValuesChange,
 }) => {
-  const [tagLimit, addTagLimit] = useState(30);
+  const [tagLimit, addTagLimit] = useState(50);
   const handleSubmit = () => {
-    addTagLimit(tagLimit + 15);
+    addTagLimit(tagLimit + 20);
   };
   return (
     <Collapse ghost>
