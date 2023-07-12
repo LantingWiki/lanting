@@ -148,15 +148,15 @@ const Model: ModelType = {
     },
     *getLikes(_, { call, put }) {
       let responseLikes = yield call(() => {
-        return request('https://www.lanting.wiki/api/archive/like/read?articleId=-1');
+        return request('https://www.lanting.wiki/api/likes/read?articleId=-1');
       });
-      if (!responseLikes || !responseLikes.data) {
-        responseLikes = { data: {} };
+      if (!responseLikes || !responseLikes.likes) {
+        responseLikes = { likes: {} };
       }
       yield put({
         type: 'putLikes',
         payload: {
-          likesMap: responseLikes.data,
+          likesMap: responseLikes.likes,
         },
       });
     },
@@ -212,7 +212,7 @@ const Model: ModelType = {
       });
 
       yield call(() => {
-        return request('https://www.lanting.wiki/api/archive/like/create', {
+        return request('https://www.lanting.wiki/api/likes/create', {
           method: 'post',
           data: {
             articleId: archive.id,
