@@ -11,7 +11,7 @@ import { execSync } from 'child_process';
 import axios from 'axios';
 import { createHmac } from 'crypto';
 import { Archive, Archives } from './data';
-import secrets from './secrets.json';
+import secrets from './secrets.json' assert { type: "json" };
 import { exec } from './migrate-backend2';
 
 /**
