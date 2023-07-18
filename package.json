@@ -100,7 +100,7 @@
     "prettier": "^2.0.1",
     "pro-download": "1.0.1",
     "puppeteer-core": "^5.0.0",
-    "ts-node": "^10.0.0",
+    "ts-node": "^10.9.1",
     "typescript": "^3.9.7"
   },
   "engines": {

@@ -57,6 +57,11 @@ export default defineConfig(({
               icon: 'GatewayOutlined',
             },
             {
+              name: '芦柑笔谈',
+              path: 'https://blog.wangboyang.com',
+              icon: 'EditOutlined',
+            },
+            {
               component: './404',
             },
           ],
