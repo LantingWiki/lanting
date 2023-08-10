@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 import * as fs from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -10,7 +11,7 @@ import mysql, { Connection } from 'mysql';
 import { execSync } from 'child_process';
 import axios from 'axios';
 import { createHmac } from 'crypto';
-import { Archive, Archives } from './data';
+import { Archive, Archives, FieldFreqMap } from './data';
 import secrets from './secrets.json' assert { type: "json" };
 import { exec } from './migrate-backend2';
 
@@ -96,11 +97,12 @@ function endConnection() {
   connection.end();
 }
 
-function setField(archive: Archive, field: string, fileContent: string, archives: Archives) {
+function setField(archive: Archive, field: keyof Archive, fileContent: string, archives: Archives) {
   const regexArr = toFieldRegex(field).exec(fileContent);
   if (regexArr && regexArr[1]) {
-    const fieldVal = getFieldFromFieldLine(field, regexArr[1]);
-    archive[field] = fieldVal;
+    const fieldVal: string | string[] = getFieldFromFieldLine(field, regexArr[1]);
+
+    (archive[field] as any) = fieldVal;
     fileContent = fileContent.replace(regexArr[0], '');
 
     updateFreqMap(field, fieldVal, archives);
@@ -112,11 +114,12 @@ function setField(archive: Archive, field: string, fileContent: string, archives
 
 function updateFreqMap(field: string, fieldVal: string | string[], archives: Archives) {
   if (['author', 'publisher', 'date', 'tag'].includes(field)) {
+    const validfield = field as keyof FieldFreqMap;
     if (typeof fieldVal === 'string') {
-      archives.fieldFreqMap[field][fieldVal] = (archives.fieldFreqMap[field][fieldVal] || 0) + 1;
+      archives.fieldFreqMap[validfield][fieldVal] = (archives.fieldFreqMap[validfield][fieldVal] || 0) + 1;
     } else {
       (fieldVal as string[]).forEach((v) => {
-        archives.fieldFreqMap[field][v] = (archives.fieldFreqMap[field][v] || 0) + 1;
+        archives.fieldFreqMap[validfield][v] = (archives.fieldFreqMap[validfield][v] || 0) + 1;
       });
     }
   }
@@ -425,9 +428,10 @@ async function compileArchives(
     const archive = new Archive();
     archive.id = getIdFromCommentFilename(f);
 
+    console.log(f);
     let fileContent: string = fs.readFileSync(`${ARCHIVE_DIR}/comments/${f}`, 'utf-8');
 
-    ['title', 'author', 'publisher', 'date', 'chapter', 'tag'].forEach((field) => {
+    (['title', 'author', 'publisher', 'date', 'chapter', 'tag'] as (keyof Archive)[]).forEach((field) => {
       fileContent = setField(archive, field, fileContent, compiledArchives);
     });
     archive.remarks = fileContent.replace('# remarks', '');
@@ -449,7 +453,7 @@ async function compileArchives(
 
   compiledArchives.archives = {};
   archives.forEach((a) => {
-    compiledArchives.archives[a.id] = a;
+    compiledArchives.archives[parseInt(a.id)] = a;
   });
 
   if (isCompleteTask) {

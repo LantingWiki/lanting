@@ -8,5 +8,9 @@
     "@types/ali-oss": "^6.0.8",
     "ali-oss": "^6.15.2",
     "axios": "^0.21.1"
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   }
 }
