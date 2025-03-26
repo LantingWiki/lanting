@@ -1,5 +1,12 @@
 # 兰亭文存 (Lanting)
 
+根目录运行：
+yarn install
+yarn start
+
+后端backend目录运行：
+yarn install
+yarn dev
 ## 项目结构
 
 ## 主要功能
