@@ -1,0 +1,64 @@
+{
+  "archives": {
+    "10000": {
+      "id": "10000",
+      "title": "测试网页",
+      "author": [
+        "我"
+      ],
+      "publisher": "1",
+      "date": "1",
+      "chapter": "本纪",
+      "tag": [
+        "测试"
+      ],
+      "remarks": "测试一下",
+      "origs": [
+        "10000.html"
+      ],
+      "likes": 0
+    },
+    "10001": {
+      "id": "10001",
+      "title": "测试网页",
+      "author": [
+        "我"
+      ],
+      "publisher": "1",
+      "date": "1",
+      "chapter": "游侠",
+      "tag": [
+        "测试"
+      ],
+      "remarks": "测试一下",
+      "origs": [
+        "10001.html"
+      ],
+      "likes": 0
+    },
+    "10002": {
+      "id": "10002",
+      "title": "微信网页",
+      "author": [
+        "微信"
+      ],
+      "publisher": "1",
+      "date": "1",
+      "chapter": "世家",
+      "tag": [
+        "测试"
+      ],
+      "remarks": "测试一下",
+      "origs": [
+        "10002.html"
+      ],
+      "likes": 0
+    }
+  },
+  "fieldFreqMap": {
+    "author": {
+      "我": 2,
+      "微信": 1
+    }
+  }
+}

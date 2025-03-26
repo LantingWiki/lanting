@@ -38,7 +38,7 @@ const Tribute: React.FC<TributeProps> = (props) => {
 
   const handleSubmit = async () => {
     submitLoadingToggle(true);
-    const result = await request('https://lanting.wiki/api/archive/tribute/save', {
+    const result = await request('/api/archive/tribute/save', {
       method: 'post',
       data: tributeState,
     });
@@ -77,7 +77,7 @@ const Tribute: React.FC<TributeProps> = (props) => {
   const handleInitRequest = () => {
     let result: any;
     const fetchData = async () => {
-      result = await request(`https://lanting.wiki/api/archive/tribute/info`, {
+      result = await request(`/api/archive/tribute/info`, {
         method: 'post',
         data: tributeState.link,
       });

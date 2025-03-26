@@ -3,7 +3,30 @@ import { parse } from 'querystring';
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
 
-export const CDN_DOMAIN = 'https://lanting-public-20230707-1.oss-cn-beijing.aliyuncs.com';
+// 根据环境设置不同的CDN_DOMAIN
+// 这里使用一个环境变量函数，便于获取当前环境中定义的变量
+const getEnv = (key: string, defaultValue: string = ''): string => {
+  // @ts-ignore
+  if (typeof process !== 'undefined' && process.env && process.env[key]) {
+    // @ts-ignore
+    return process.env[key];
+  }
+  // @ts-ignore
+  if (typeof window !== 'undefined' && window.REACT_APP_ENV && window.REACT_APP_ENV[key]) {
+    // @ts-ignore
+    return window.REACT_APP_ENV[key];
+  }
+  return defaultValue;
+};
+
+// CDN_DOMAIN从环境变量中读取，默认为本地开发环境
+// 确保默认端口与后端配置保持一致（15123）
+export const CDN_DOMAIN = getEnv('REACT_APP_CDN_DOMAIN', 'http://localhost:15123');
+
+// 也可以根据环境设置不同的CDN_DOMAIN
+// export const CDN_DOMAIN = process.env.NODE_ENV === 'production'
+//   ? 'https://your-production-domain.com'
+//   : 'http://localhost:5000';
 
 export const isUrl = (path: string): boolean => reg.test(path);
 

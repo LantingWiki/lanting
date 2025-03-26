@@ -18,6 +18,8 @@ export interface StateType {
   currentArchives: ChapterArchives;
   confirmSearch: string;
   searchLists: SearchList[];
+  keywords: any;
+  filters: any;
 }
 
 export interface ModelType {
@@ -118,6 +120,8 @@ const Model: ModelType = {
     currentArchives: initedChapterArchives,
     confirmSearch: '',
     searchLists: [],
+    keywords: {},
+    filters: {},
   },
   effects: {
     *fetch(_, { call, put }) {
@@ -148,7 +152,7 @@ const Model: ModelType = {
     },
     *getLikes(_, { call, put }) {
       let responseLikes = yield call(() => {
-        return request('https://www.lanting.wiki/api/likes/read?articleId=-1');
+        return request('/api/likes/read?articleId=-1');
       });
       if (!responseLikes || !responseLikes.likes) {
         responseLikes = { likes: {} };
@@ -162,7 +166,7 @@ const Model: ModelType = {
     },
     *getSearchList(_, { call, put }) {
       let responseSearchList = yield call(() => {
-        return request('https://www.lanting.wiki/api/search-keyword/read');
+        return request('/api/search-keyword/read');
       });
       console.log('XXXTEMP', responseSearchList);
       /**
@@ -212,7 +216,7 @@ const Model: ModelType = {
       });
 
       yield call(() => {
-        return request('https://www.lanting.wiki/api/likes/create', {
+        return request('/api/likes/create', {
           method: 'post',
           data: {
             articleId: archive.id,
@@ -240,7 +244,7 @@ const Model: ModelType = {
         },
       });
       yield call(() => {
-        return request('https://www.lanting.wiki/api/search-keyword/create', {
+        return request('/api/search-keyword/create', {
           method: 'post',
           data: keyword,
         });

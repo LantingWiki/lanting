@@ -9,7 +9,7 @@
 
  Target Server Type    : MySQL
  Target Server Version : 50732
- File Encoding         : 65001
+ File Encoding         : 65000
 
  Date: 16/02/2021 09:20:18
 */

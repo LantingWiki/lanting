@@ -26,49 +26,50 @@ export interface FilterProps {
   onValuesChange: (changedValues: any, values: FilterValues) => void;
 }
 
-const generateOptions = (field: string, archives: Archives) => {
-  const map = archives.fieldFreqMap[field];
-  let options: TagPair[] = Object.entries(map);
-  if (field === 'date') {
-    options = options.sort();
-  } else {
-    options = options.sort(compareFn);
-  }
-  const optionElements = options.map((fieldVal) => (
-    <Option key={fieldVal[0]} value={fieldVal[0]} label={fieldVal[0]}>
-      {fieldVal[0]}: {fieldVal[1]}
-    </Option>
-  ));
-  optionElements.unshift(
-    <Option key="all" value="all" label="全选">
-      全选
-    </Option>,
-  );
-  return optionElements;
+const generateOptions = (obj) => {
+  if (!obj) return [];
+
+  return Object.entries(obj).map(([key, value]) => ({
+    value: key,
+    label: value,
+  }));
 };
 
-const generateSelect = (field: string, archives: Archives, isLast: boolean) => {
-  const translation = fieldToTranslation[field];
+const generateSelect = (data, name, onChange) => {
+  if (!data) return null;
+
+  const options = generateOptions(data);
+  if (options.length === 0) return null;
+
+  const translation = fieldToTranslation[name];
   return (
-    <StandardFormRow title={translation} key={field} last={isLast}>
-      <FormItem name={field}>
+    <StandardFormRow title={translation} key={name} last>
+      <FormItem name={name}>
         <Select
           suffixIcon={<DownOutlined />}
           mode="multiple"
           placeholder={`筛选${translation}`}
           optionLabelProp="label"
         >
-          {generateOptions(field, archives)}
+          {options.map((fieldVal) => (
+            <Option key={fieldVal.value} value={fieldVal.value} label={fieldVal.label}>
+              {fieldVal.value}: {fieldVal.label}
+            </Option>
+          ))}
         </Select>
       </FormItem>
     </StandardFormRow>
   );
 };
 
-const generateSelects = (archives: Archives) => {
-  return ['author', 'publisher', 'date', 'tag'].map((f, idx) =>
-    generateSelect(f, archives, idx === 3),
-  );
+const generateSelects = (filters, onChange) => {
+  if (!filters || typeof filters !== 'object') return [];
+
+  return Object.keys(filters).map((key) => {
+    if (!filters[key]) return null;
+
+    return generateSelect(filters[key], key, onChange);
+  }).filter(Boolean);
 };
 
 const onClickChange = (form: any, event: any, onValuesChange: any) => {
@@ -142,6 +143,13 @@ const Filters: React.FC<FilterProps> = ({
   const handleSubmit = () => {
     addTagLimit(tagLimit + 20);
   };
+
+  if (!archives || Object.keys(archives).length === 0) {
+    return null;
+  }
+
+  const selects = generateSelects(archives, onValuesChange);
+
   return (
     <Collapse ghost>
       <Panel header="兰亭已矣, 梓泽丘墟. 何处世家? 几人游侠?" key="1" forceRender showArrow={false}>
@@ -183,7 +191,7 @@ const Filters: React.FC<FilterProps> = ({
               </FormItem>
             </div>
           </StandardFormRow>
-          {generateSelects(archives)}
+          {selects.length > 0 ? selects : null}
         </Form>
       </Panel>
     </Collapse>

@@ -8,21 +8,21 @@
 export default {
   dev: {
     '/api/': {
-      target: 'https://localhost:14441',
+      target: 'http://localhost:15123',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
   },
   test: {
     '/api/': {
-      target: 'https://localhost:14441',
+      target: 'http://localhost:15123',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
   },
   pre: {
     '/api/': {
-      target: 'https://localhost:14441',
+      target: 'http://localhost:15123',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

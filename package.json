@@ -10,7 +10,7 @@
     "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
     "lint:prettier": "prettier --check \"src/**/*\" --end-of-line auto",
     "prettier": "prettier -c --write \"src/**/*\"",
-    "start": "umi dev",
+    "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider umi dev",
     "start:dev": "cross-env REACT_APP_ENV=dev MOCK=none umi dev",
     "start:no-mock": "cross-env MOCK=none umi dev",
     "start:no-ui": "cross-env UMI_UI=none umi dev",
@@ -19,9 +19,12 @@
     "archives:sync": "echo TODO",
     "archives": "yarn archives:compile && yarn archives:upload-imgs && yarn archives:add && git push",
     "archives:compile": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/compile-archives.ts",
-    "archives:add": "git fetch; git add ./archives; git commit --no-verify -m \"archive: `date \"+%Y-%m-%d-%H:%M:%S\"`\"; git merge origin master; git push",
-    "archives:upload-imgs": "ossutilmac64 cp -r -u ./archives/imgs oss://lanting-public-20230707-1/archives/imgs",
+    "archives:add": "git fetch; git add ./backend/archives; git commit --no-verify -m \"archive: `date \"+%Y-%m-%d-%H:%M:%S\"`\"; git merge origin master; git push",
     "archives:migrate-backend2": "node --experimental-specifier-resolution=node --loader ts-node/esm ./scripts/migrate-backend2.ts",
+    "archives:upload-imgs": "ossutilmac64 cp -r -u ./backend/archives/imgs oss://lanting-public-20230707-1/archives/imgs",
+    "archives:upload-origs": "ossutilmac64 cp -r -u ./backend/archives/origs oss://lanting-public-20230707-1/archives/origs",
+    "archives:upload-json": "ossutilmac64 cp -r -u ./backend/archives/archives.json oss://lanting-public-20230707-1/archives/archives.json",
+    "archives:upload-all": "yarn archives:upload-imgs && yarn archives:upload-origs && yarn archives:upload-json",
     "deploy": "yarn build && yarn deploy:ec2 && yarn deploy:oss",
     "build": "UMI_ENV=prod umi build",
     "analyze": "cross-env ANALYZE=1 umi build",
@@ -89,7 +92,7 @@
     "carlo": "^0.9.46",
     "chalk": "^4.0.0",
     "commitlint": "^12.1.4",
-    "cross-env": "^7.0.0",
+    "cross-env": "^7.0.3",
     "cross-port-killer": "^1.1.1",
     "detect-installer": "^1.0.1",
     "enzyme": "^3.11.0",
@@ -116,5 +119,6 @@
     "src/**/*.less",
     "config/**/*.js*",
     "scripts/**/*.js"
-  ]
+  ],
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
