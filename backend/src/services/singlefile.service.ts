@@ -31,6 +31,7 @@ const COMMENTS_DIR = path.join(ARCHIVES_DIR, config.archives.subdirs.comments);
 interface SingleFileOptions {
   browserWaitUntil?: string;
   browserExecutablePath?: string;
+  browserArgs?: string[];  // 添加此行以支持浏览器参数
   dumpContent?: boolean;
   outputDirectory?: string;
   articleInfo?: ArticleInfo;
@@ -65,7 +66,21 @@ const browserPath = process.env.BROWSER_EXECUTABLE_PATH;
  */
 async function getPuppeteerChromiumPath(): Promise<string | undefined> {
   try {
-    const browser = await puppeteer.launch();
+    // 添加必要的启动参数，解决Linux服务器上的问题
+    const browser = await puppeteer.launch({
+      headless: 'new',  // 使用新的无头模式
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process',
+        '--disable-gpu'
+      ]
+    });
+
     const executablePath = puppeteer.executablePath();
     await browser.close();
     console.log(`Using Puppeteer's Chromium at: ${executablePath}`);
@@ -243,6 +258,13 @@ export async function archiveWebpage(
 
       if (chromePath) {
         command += ` --browser-executable-path="${chromePath}"`;
+
+        // 添加浏览器参数
+        if (mergedOptions.browserArgs && mergedOptions.browserArgs.length > 0) {
+          // 将参数数组转换为 JSON 字符串格式
+          const browserArgsJSON = JSON.stringify(mergedOptions.browserArgs);
+          command += ` --browser-args='${browserArgsJSON}'`;
+        }
       }
 
       if (mergedOptions.dumpContent === false) {

@@ -12,5 +12,6 @@ router.get('/health', (req, res) => {
 // Register route modules
 router.use('/archives', archiveRoutes);
 router.use('/archive/tribute', tributeRoutes);
+router.use('/tribute', tributeRoutes);
 
 export default router;

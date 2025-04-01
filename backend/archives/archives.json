@@ -2,17 +2,17 @@
   "archives": {
     "10000": {
       "id": "10000",
-      "title": "测试网页",
+      "title": "45岁的日本人来上海大厂做制作人：好难，但我挺过来了",
       "author": [
-        "我"
+        "游戏葡萄君"
       ],
-      "publisher": "1",
-      "date": "1",
+      "publisher": "微信",
+      "date": "2025年03月22日",
       "chapter": "本纪",
       "tag": [
-        "测试"
+        "做游戏"
       ],
-      "remarks": "测试一下",
+      "remarks": "读了之后很有感触",
       "origs": [
         "10000.html"
       ],
@@ -20,17 +20,17 @@
     },
     "10001": {
       "id": "10001",
-      "title": "测试网页",
+      "title": "Elasticsearch踩坑记录",
       "author": [
-        "我"
+        "Ne-21"
       ],
-      "publisher": "1",
-      "date": "1",
-      "chapter": "游侠",
+      "publisher": "博客",
+      "date": "2023-05-05",
+      "chapter": "世家",
       "tag": [
-        "测试"
+        "技术文档"
       ],
-      "remarks": "测试一下",
+      "remarks": "又学到了新知识",
       "origs": [
         "10001.html"
       ],
@@ -38,27 +38,294 @@
     },
     "10002": {
       "id": "10002",
-      "title": "微信网页",
+      "title": "如何评价林俊杰最近在全球巡演finallap的唱功表现？",
       "author": [
-        "微信"
+        "eff"
       ],
-      "publisher": "1",
-      "date": "1",
-      "chapter": "世家",
+      "publisher": "",
+      "date": "",
+      "chapter": "群像",
       "tag": [
-        "测试"
+        ""
       ],
-      "remarks": "测试一下",
+      "remarks": "好看爱看",
       "origs": [
         "10002.html"
+      ],
+      "likes": 0
+    },
+    "10003": {
+      "id": "10003",
+      "title": "NTU",
+      "author": [
+        ""
+      ],
+      "publisher": "",
+      "date": "",
+      "chapter": "",
+      "tag": [
+        ""
+      ],
+      "remarks": "",
+      "origs": [
+        "10003.html"
+      ],
+      "likes": 0
+    },
+    "10004": {
+      "id": "10004",
+      "title": "Markdown 使用指南 - 基础语法",
+      "author": [
+        "siyuan笔记"
+      ],
+      "publisher": "siyuan",
+      "date": "2025年03月27日",
+      "chapter": "",
+      "tag": [
+        "未分类"
+      ],
+      "remarks": "如果没有选chapter文章会存到哪里",
+      "origs": [
+        "10004.html"
+      ],
+      "likes": 0
+    },
+    "10005": {
+      "id": "10005",
+      "title": "Markdown 使用指南 - 基础语法",
+      "author": [
+        "siyuan笔记"
+      ],
+      "publisher": "siyuan",
+      "date": "2025年03月27日",
+      "chapter": "本纪",
+      "tag": [
+        "未分类"
+      ],
+      "remarks": "点归档后立即关闭会存成功吗\n",
+      "origs": [
+        "10005.html"
+      ],
+      "likes": 0
+    },
+    "10006": {
+      "id": "10006",
+      "title": "为什么说“免于被哲学打扰的人生是非常幸运的”？",
+      "author": [
+        "知乎"
+      ],
+      "publisher": "知乎",
+      "date": "2025年03月27日",
+      "chapter": "群像",
+      "tag": [
+        "知乎"
+      ],
+      "remarks": "这是测试知乎是否可以抓取的测试用例",
+      "origs": [
+        "10006.html"
+      ],
+      "likes": 0
+    },
+    "10007": {
+      "id": "10007",
+      "title": "我们正批量退出人形机器人公司",
+      "author": [
+        "刘燕秋"
+      ],
+      "publisher": "投中网",
+      "date": "3.28",
+      "chapter": "本纪",
+      "tag": [
+        "商业化"
+      ],
+      "remarks": "",
+      "origs": [
+        "10007.html"
+      ],
+      "likes": 0
+    },
+    "10008": {
+      "id": "10008",
+      "title": "拿下“AI 3D模型生成”世界第一，清华姚班大佬要给游戏圈来场革命！",
+      "author": [
+        "GameLook"
+      ],
+      "publisher": "微信",
+      "date": "2025年03月28日",
+      "chapter": "本纪",
+      "tag": [
+        "3d模型生成"
+      ],
+      "remarks": "展望未来",
+      "origs": [
+        "10008.html"
+      ],
+      "likes": 0
+    },
+    "10010": {
+      "id": "10010",
+      "title": "杭州招商最牛的4个秘诀，99%的城市根本学不会",
+      "author": [
+        "王战新"
+      ],
+      "publisher": "Weixin Official Accounts Platform",
+      "date": "",
+      "chapter": "",
+      "tag": [
+        ""
+      ],
+      "remarks": "",
+      "origs": [
+        "10010.html"
+      ],
+      "likes": 0
+    },
+    "10011": {
+      "id": "10011",
+      "title": "杭州招商最牛的4个秘诀，99%的城市根本学不会",
+      "author": [
+        "王战新"
+      ],
+      "publisher": "Weixin Official Accounts Platform",
+      "date": "",
+      "chapter": "本纪",
+      "tag": [
+        ""
+      ],
+      "remarks": "",
+      "origs": [
+        "10011.html"
+      ],
+      "likes": 0
+    },
+    "10012": {
+      "id": "10012",
+      "title": "中国“人造太阳”挺进燃烧实验，意味着什么？",
+      "author": [
+        "戴晶晶"
+      ],
+      "publisher": "Weixin Official Accounts Platform",
+      "date": "2025-03-25",
+      "chapter": "本纪",
+      "tag": [
+        "adf"
+      ],
+      "remarks": "",
+      "origs": [
+        "10012.html"
+      ],
+      "likes": 0
+    },
+    "10013": {
+      "id": "10013",
+      "title": "今日登顶Steam全球热销榜：用虚幻5做的「模拟人生」火了",
+      "author": [
+        "游戏葡萄君"
+      ],
+      "publisher": "游戏葡萄",
+      "date": "2025-03",
+      "chapter": "列传",
+      "tag": [
+        "游戏"
+      ],
+      "remarks": "永远的皇冠上的宝珠, 人生模拟",
+      "origs": [
+        "10013.html"
+      ],
+      "likes": 0
+    },
+    "10014": {
+      "id": "10014",
+      "title": "聊聊本周的收获",
+      "author": [
+        "小渔 坚持"
+      ],
+      "publisher": "小渔聊独立站",
+      "date": "",
+      "chapter": "",
+      "tag": [
+        ""
+      ],
+      "remarks": "",
+      "origs": [
+        "10014.html"
+      ],
+      "likes": 0
+    },
+    "10015": {
+      "id": "10015",
+      "title": "聊聊本周的收获",
+      "author": [
+        "小渔 坚持"
+      ],
+      "publisher": "小渔聊独立站",
+      "date": "2025-03-25",
+      "chapter": "本纪",
+      "tag": [
+        ""
+      ],
+      "remarks": "",
+      "origs": [
+        "10015.html"
+      ],
+      "likes": 0
+    },
+    "10016": {
+      "id": "10016",
+      "title": "华人富豪花2亿美金上太空，开启人类首次极地轨道飞行首秀 |【经纬低调出品】",
+      "author": [
+        "经纬创投主页君"
+      ],
+      "publisher": "经纬创投",
+      "date": "2025-04-01",
+      "chapter": "本纪",
+      "tag": [
+        "太空，商业航天"
+      ],
+      "remarks": "",
+      "origs": [
+        "10016.html"
       ],
       "likes": 0
     }
   },
   "fieldFreqMap": {
     "author": {
-      "我": 2,
-      "微信": 1
+      "游戏葡萄君": 2,
+      "Ne-21": 1,
+      "eff": 1,
+      "": 1,
+      "siyuan笔记": 2,
+      "知乎": 1,
+      "刘燕秋": 1,
+      "GameLook": 1,
+      "王战新": 2,
+      "戴晶晶": 1,
+      "小渔 坚持": 2,
+      "经纬创投主页君": 1
+    },
+    "tag": {
+      "做游戏": 1,
+      "技术文档": 1,
+      "": 6,
+      "未分类": 2,
+      "知乎": 1,
+      "商业化": 1,
+      "3d模型生成": 1,
+      "adf": 1,
+      "游戏": 1,
+      "太空，商业航天": 1
+    },
+    "publisher": {
+      "微信": 2,
+      "博客": 1,
+      "siyuan": 2,
+      "知乎": 1,
+      "投中网": 1,
+      "Weixin Official Accounts Platform": 3,
+      "游戏葡萄": 1,
+      "小渔聊独立站": 2,
+      "经纬创投": 1
     }
   }
 }

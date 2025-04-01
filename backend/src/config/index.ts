@@ -20,7 +20,7 @@ const config = {
   apiPrefix: '/api',
 
   // CORS configuration
-  corsOrigin: process.env.CORS_ORIGIN || '*',
+  corsOrigin: '*',
 
   // JWT configuration (if needed)
   jwtSecret: process.env.JWT_SECRET || 'lanting-secret-key',

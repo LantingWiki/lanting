@@ -57,7 +57,7 @@ async function testArchive(chromiumPath: string) {
     const outputPath = await singleFileService.archiveWebpage(
       TEST_URL,
       TEST_FILENAME,
-      { browserExecutablePath: chromiumPath }
+      { browserExecutablePath: chromiumPath,browserArgs: ['--no-sandbox', '--disable-setuid-sandbox'] }
     );
 
     console.log(`2. 验证存档文件...`);

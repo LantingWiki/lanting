@@ -21,7 +21,7 @@ const getEnv = (key: string, defaultValue: string = ''): string => {
 
 // CDN_DOMAIN从环境变量中读取，默认为本地开发环境
 // 确保默认端口与后端配置保持一致（15123）
-export const CDN_DOMAIN = getEnv('REACT_APP_CDN_DOMAIN', 'http://localhost:15123');
+export const CDN_DOMAIN = getEnv('REACT_APP_CDN_DOMAIN', 'http://121.62.31.213:15123');
 
 // 也可以根据环境设置不同的CDN_DOMAIN
 // export const CDN_DOMAIN = process.env.NODE_ENV === 'production'

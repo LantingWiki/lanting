@@ -1,16 +1,35 @@
 import { Request, Response } from 'express';
-import * as tributeService from '../services/tribute.service';
-import { Tribute } from '../types/tribute.types';
+import { tributeService, archiveContent, Tribute } from '../services';
 import fs from 'fs';
 import path from 'path';
+import config from '../config';
+
+// 使用类型断言来处理 multer 添加的文件
+interface RequestWithFile extends Request {
+  file?: any; // 使用 any 类型暂时解决类型冲突
+}
 
 /**
  * Save tribute data
  * @route POST /api/archive/tribute/save
  */
-export const saveTribute = async (req: Request, res: Response): Promise<void> => {
+export const saveTribute = async (req: RequestWithFile, res: Response): Promise<void> => {
   try {
-    const tributeData: Tribute = req.body;
+    let tributeData: Tribute = req.body;
+
+    // 将字符串转换为对象（如果前端发送的是字符串形式的JSON）
+    if (typeof req.body === 'string') {
+      try {
+        tributeData = JSON.parse(req.body);
+      } catch (error) {
+        console.error('Error parsing JSON body:', error);
+      }
+    }
+
+    // 添加上传的文件路径（如果有）
+    if (req.file) {
+      tributeData.uploadedHtmlFile = req.file.path;
+    }
 
     // Validate required fields
     if (!tributeData.link || !tributeData.title) {
@@ -44,11 +63,12 @@ export const saveTribute = async (req: Request, res: Response): Promise<void> =>
 
 /**
  * Get tribute info from link
- * @route POST /api/archive/tribute/info
+ * @route GET /api/tribute/info
  */
 export const getTributeInfo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const link = req.body;
+    // 获取查询参数中的link
+    const link = req.query.link as string;
 
     if (!link) {
       res.status(400).json({
@@ -59,12 +79,19 @@ export const getTributeInfo = async (req: Request, res: Response): Promise<void>
       return;
     }
 
-    // Get info using service
+    // 从链接获取信息
     const info = await tributeService.getTributeInfo(link);
 
+    // 返回标准格式的响应
     res.status(200).json({
       status: 'success',
-      data: info
+      code: '',
+      data: {
+        title: info.title || null,
+        author: info.author || null,
+        publisher: info.publisher || null,
+        date: info.date || null
+      }
     });
   } catch (error) {
     console.error('Error getting tribute info:', error);
@@ -116,12 +143,8 @@ export const getArchivedContent = async (req: Request, res: Response): Promise<v
       return;
     }
 
-    // 构建文件路径
-    const archivesDir = path.join(process.cwd(), 'archives');
-    const filePath = path.join(archivesDir, filename);
-
     // 检查文件是否存在
-    if (!fs.existsSync(filePath)) {
+    if (!archiveContent.archivedFileExists(filename)) {
       res.status(404).json({
         status: 'fail',
         code: 'FILE_NOT_FOUND',
@@ -131,13 +154,57 @@ export const getArchivedContent = async (req: Request, res: Response): Promise<v
     }
 
     // 读取存档文件内容
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = await archiveContent.getArchivedContent(filename);
 
     // 返回 HTML 内容
     res.set('Content-Type', 'text/html');
     res.send(content);
   } catch (error) {
     console.error('Error getting archived content:', error);
+    res.status(500).json({
+      status: 'fail',
+      code: 'SERVER_ERROR',
+      message: 'Internal server error'
+    });
+  }
+};
+
+/**
+ * Extract tribute info from uploaded HTML file
+ * @route POST /api/tribute/extract-html
+ */
+export const extractHtmlInfo = async (req: RequestWithFile, res: Response): Promise<void> => {
+  try {
+    if (!req.file) {
+      res.status(400).json({
+        status: 'fail',
+        code: 'MISSING_FILE',
+        message: 'HTML file is required'
+      });
+      return;
+    }
+
+    const filePath = req.file.path;
+
+    if (!fs.existsSync(filePath)) {
+      res.status(404).json({
+        status: 'fail',
+        code: 'FILE_NOT_FOUND',
+        message: 'Uploaded file not found'
+      });
+      return;
+    }
+
+    // 使用新的extractHtmlInfo服务函数提取元数据
+    const metadata = await tributeService.extractHtmlInfo(filePath);
+
+    res.status(200).json({
+      status: 'success',
+      code: '',
+      data: metadata
+    });
+  } catch (error) {
+    console.error('Error extracting HTML info:', error);
     res.status(500).json({
       status: 'fail',
       code: 'SERVER_ERROR',

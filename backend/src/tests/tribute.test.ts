@@ -4,7 +4,7 @@ import cors from 'cors';
 import apiRoutes from '../routes';
 import * as tributeService from '../services/tribute.service';
 
-
+// 模拟 archiveWebpage 功能以避免在测试中实际调用 single-file-cli
 jest.mock('../services/tribute.service', () => {
   const originalModule = jest.requireActual('../services/tribute.service');
   return {
@@ -36,7 +36,7 @@ jest.mock('../services/tribute.service', () => {
   };
 });
 
-
+// Create a test app
 const app = express();
 app.use(cors());
 app.use(express.json());

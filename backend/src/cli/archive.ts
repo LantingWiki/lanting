@@ -1,3 +1,10 @@
+#!/usr/bin/env ts-node
+/**
+ * 命令行脚本：使用 single-file-cli 存档网页
+ *
+ * 使用方法:
+ * npm run save-page "https://example.com" [output-file]
+ */
 
 import * as singleFileService from '../services/singlefile.service';
 import path from 'path';
