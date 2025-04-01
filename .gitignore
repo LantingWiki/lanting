@@ -8,6 +8,7 @@ ossutil_output/
 # roadhog-api-doc ignore
 /src/utils/request-temp.js
 _roadhog-api-doc
+backend/google-chrome-stable_current_amd64.deb
 
 # production
 /dist
