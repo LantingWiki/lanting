@@ -38,11 +38,42 @@ export async function extractMetadataFromHtml(htmlContent: string): Promise<Part
       extractDateFromHtml(document, result);
     }
 
+    // 确保所有未提取到的字段返回 'null'
+    ensureNullForMissingFields(result);
+
     return result;
   } catch (error) {
     console.error('Error extracting metadata from HTML:', error);
-    return {};
+    // 出错时返回所有字段为 'null' 的对象
+    return createNullFieldsObject();
   }
+}
+
+/**
+ * 确保所有未提取到的字段返回 'null'
+ * @param result 结果对象
+ */
+function ensureNullForMissingFields(result: Partial<Tribute>): void {
+  const fields: (keyof Tribute)[] = ['title', 'author', 'publisher', 'date'];
+
+  for (const field of fields) {
+    if (!result[field]) {
+      result[field] = 'null';
+    }
+  }
+}
+
+/**
+ * 创建所有字段为 'null' 的对象
+ * @returns 所有字段为 'null' 的对象
+ */
+function createNullFieldsObject(): Partial<Tribute> {
+  return {
+    title: 'null',
+    author: 'null',
+    publisher: 'null',
+    date: 'null'
+  };
 }
 
 /**
@@ -56,11 +87,15 @@ function extractTitle(document: Document, result: Partial<Tribute>): void {
     const content = metaTitle.getAttribute('content');
     if (content) {
       result.title = content;
+    } else {
+      result.title = 'null';
     }
   } else {
     const titleTag = document.querySelector('title');
     if (titleTag && titleTag.textContent) {
       result.title = titleTag.textContent;
+    } else {
+      result.title = 'null';
     }
   }
 }
@@ -76,7 +111,11 @@ function extractAuthor(document: Document, result: Partial<Tribute>): void {
     const content = metaAuthor.getAttribute('content');
     if (content) {
       result.author = content;
+    } else {
+      result.author = 'null';
     }
+  } else {
+    result.author = 'null';
   }
 }
 
@@ -93,7 +132,7 @@ function extractWechatMetadata(document: Document, result: Partial<Tribute>): vo
   extractWechatDate(document, result);
 
   // 如果没有找到作者，尝试从微信特定元素提取
-  if (!result.author) {
+  if (!result.author || result.author === 'null') {
     extractWechatAuthor(document, result);
   }
 }
@@ -110,7 +149,11 @@ function extractWechatPublisher(document: Document, result: Partial<Tribute>): v
     if (publisherText) {
       result.publisher = publisherText;
       console.log('Extracted Wechat publisher:', publisherText);
+    } else {
+      result.publisher = 'null';
     }
+  } else {
+    result.publisher = 'null';
   }
 }
 
@@ -159,9 +202,15 @@ function extractWechatDate(document: Document, result: Partial<Tribute>): void {
         if (extractedDate) {
           result.date = extractedDate.date;
           console.log('Extracted Wechat date (general method):', result.date);
+        } else {
+          result.date = 'null';
         }
       }
+    } else {
+      result.date = 'null';
     }
+  } else {
+    result.date = 'null';
   }
 }
 
@@ -173,6 +222,7 @@ function extractWechatDate(document: Document, result: Partial<Tribute>): void {
 function extractWechatAuthor(document: Document, result: Partial<Tribute>): void {
   const dateElement = document.querySelector('#publish_time');
   const authorElements = document.querySelectorAll('.rich_media_meta.rich_media_meta_text');
+  let authorFound = false;
 
   for (const el of authorElements) {
     // 排除带有ID的元素（通常是时间），作者元素通常没有ID
@@ -181,9 +231,14 @@ function extractWechatAuthor(document: Document, result: Partial<Tribute>): void
       if (authorText && authorText !== dateElement?.textContent?.trim()) {
         result.author = authorText;
         console.log('Extracted Wechat author:', authorText);
+        authorFound = true;
         break;
       }
     }
+  }
+
+  if (!authorFound) {
+    result.author = 'null';
   }
 }
 
@@ -199,7 +254,11 @@ function extractGenericMetadata(document: Document, result: Partial<Tribute>): v
     const content = metaPublisher.getAttribute('content');
     if (content) {
       result.publisher = content;
+    } else {
+      result.publisher = 'null';
     }
+  } else {
+    result.publisher = 'null';
   }
 }
 
@@ -315,6 +374,11 @@ function extractDateFromHtml(document: Document, result: Partial<Tribute>): void
         }
       }
     }
+  }
+
+  // 如果所有方法都未找到日期，设置为'null'
+  if (!dateFound) {
+    result.date = 'null';
   }
 }
 

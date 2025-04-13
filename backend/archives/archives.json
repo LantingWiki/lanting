@@ -287,6 +287,24 @@
         "10016.html"
       ],
       "likes": 0
+    },
+    "10017": {
+      "id": "10017",
+      "title": "The Network State: How To Start a New Country",
+      "author": [
+        "null"
+      ],
+      "publisher": "The Network State",
+      "date": "null",
+      "chapter": "本纪",
+      "tag": [
+        ""
+      ],
+      "remarks": "",
+      "origs": [
+        "10017.html"
+      ],
+      "likes": 0
     }
   },
   "fieldFreqMap": {
@@ -302,12 +320,13 @@
       "王战新": 2,
       "戴晶晶": 1,
       "小渔 坚持": 2,
-      "经纬创投主页君": 1
+      "经纬创投主页君": 1,
+      "null": 1
     },
     "tag": {
       "做游戏": 1,
       "技术文档": 1,
-      "": 6,
+      "": 7,
       "未分类": 2,
       "知乎": 1,
       "商业化": 1,
@@ -325,7 +344,8 @@
       "Weixin Official Accounts Platform": 3,
       "游戏葡萄": 1,
       "小渔聊独立站": 2,
-      "经纬创投": 1
+      "经纬创投": 1,
+      "The Network State": 1
     }
   }
 }
