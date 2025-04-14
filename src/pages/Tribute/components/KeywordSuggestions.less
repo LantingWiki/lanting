@@ -1,0 +1,36 @@
+@import '~antd/es/style/themes/default.less';
+
+.container {
+  margin-top: 8px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.section {
+  margin-bottom: 8px;
+}
+
+.tagContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  gap: 6px;
+}
+
+.tag {
+  cursor: pointer;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  transition: all 0.3s;
+  
+  &:hover {
+    color: @primary-color;
+    border-color: @primary-color;
+    background-color: fade(@primary-color, 10%);
+    transform: scale(1.05);
+  }
+}
+
+.divider {
+  margin: 12px 0;
+} 

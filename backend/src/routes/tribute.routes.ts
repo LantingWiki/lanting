@@ -26,10 +26,41 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+// 文件过滤器 - 允许的文件类型：HTML, PDF, PNG, JPG
+const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+  // 检查文件MIME类型
+  if (
+    file.mimetype === 'text/html' ||
+    file.mimetype === 'application/pdf' ||
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    // 接受文件
+    cb(null, true);
+  } else {
+    // 检查文件扩展名
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (['.html', '.pdf', '.png', '.jpg', '.jpeg'].includes(ext)) {
+      // 接受文件
+      cb(null, true);
+    } else {
+      // 拒绝文件
+      cb(new Error('不支持的文件类型'));
+    }
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50 MB 文件大小限制
+  }
+});
 
 // POST save tribute data with optional file upload
-router.post('/save', upload.single('htmlFile'), saveTribute);
+// 支持各种文件类型
+router.post('/save', upload.single('file'), saveTribute);
 
 // GET get tribute info from link (query param)
 router.get('/info', getTributeInfo);

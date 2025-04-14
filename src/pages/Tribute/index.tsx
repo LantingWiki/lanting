@@ -14,7 +14,9 @@ import { Input, Select, Form, notification, Upload, Button, Divider, Switch, Spi
 import type { UploadFile } from 'antd/es/upload/interface';
 import request from '@/utils/request';
 import LoginForm from './tribute';
+import LinkPreview from './components/LinkPreview';
 import styles from './style.less';
+import KeywordSuggestions from './components/KeywordSuggestions';
 
 const { TextArea } = Input;
 
@@ -53,8 +55,9 @@ const Tribute: React.FC<TributeProps> = (props) => {
   const [submitLoading, submitLoadingToggle] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [useManualUpload, setUseManualUpload] = useState(false);
-  const [linkLoading, setLinkLoading] = useState(false); // 新增：链接加载状态
-  const [fileLoading, setFileLoading] = useState(false); // 新增：文件加载状态
+  const [linkLoading, setLinkLoading] = useState(false); // 链接加载状态
+  const [fileLoading, setFileLoading] = useState(false); // 文件加载状态
+  const [previewData, setPreviewData] = useState<any>(null); // 添加预览数据状态
 
   const handleSubmit = async () => {
     submitLoadingToggle(true);
@@ -69,7 +72,10 @@ const Tribute: React.FC<TributeProps> = (props) => {
 
     // 如果有上传的文件
     if (fileList.length > 0 && useManualUpload) {
-      formData.append('htmlFile', fileList[0].originFileObj as File);
+      const file = fileList[0].originFileObj as File;
+
+      // 统一使用'file'字段名上传文件
+      formData.append('file', file);
     }
 
     const result = await request('/api/archive/tribute/save', {
@@ -118,6 +124,8 @@ const Tribute: React.FC<TributeProps> = (props) => {
     }
 
     setLinkLoading(true); // 设置加载状态为true
+    setPreviewData(null); // 清空之前的预览数据
+    
     try {
       // 调用接口获取数据
       const result = await request(`/api/tribute/info?link=${encodeURIComponent(tributeState.link)}`, {
@@ -131,6 +139,9 @@ const Tribute: React.FC<TributeProps> = (props) => {
           description: `成功从${tributeState.link}获取相关信息!`,
           icon: <CheckCircleOutlined style={{ color: '#008000' }} />,
         });
+
+        // 更新预览数据
+        setPreviewData(result.data);
 
         // 创建新的状态对象
         const newTributeState = { ...tributeState };
@@ -172,14 +183,24 @@ const Tribute: React.FC<TributeProps> = (props) => {
     // 只保留一个文件
     newFileList = newFileList.slice(-1);
 
-    // 过滤文件类型，只允许 HTML 文件
+    // 允许HTML、PDF、PNG和JPG文件
     newFileList = newFileList.filter(file => {
-      if (file.type === 'text/html' || file.name.endsWith('.html')) {
+      if (
+        file.type === 'text/html' ||
+        file.name.endsWith('.html') ||
+        file.type === 'application/pdf' ||
+        file.name.endsWith('.pdf') ||
+        file.type === 'image/png' ||
+        file.name.endsWith('.png') ||
+        file.type === 'image/jpeg' ||
+        file.name.endsWith('.jpg') ||
+        file.name.endsWith('.jpeg')
+      ) {
         return true;
       }
       notification.error({
         message: '文件类型错误',
-        description: '只允许上传 HTML 文件！',
+        description: '只允许上传 HTML、PDF、PNG 或 JPG 文件！',
       });
       return false;
     });
@@ -188,8 +209,35 @@ const Tribute: React.FC<TributeProps> = (props) => {
 
     // 如果有上传文件，自动提取信息
     if (newFileList.length > 0) {
-      extractDataFromHtmlFile(newFileList[0].originFileObj as File);
+      const file = newFileList[0].originFileObj as File;
+      const fileType = file.type || file.name.split('.').pop()?.toLowerCase();
+
+      // 根据文件类型选择不同的处理方法
+      if (fileType === 'text/html' || file.name.endsWith('.html')) {
+        extractDataFromHtmlFile(file);
+      } else {
+        // PDF、PNG、JPG文件不需要提取信息，只显示提示
+        notification.info({
+          message: '文件上传',
+          description: `已选择${getFileTypeDescription(file)}文件，提交后将保存到归档。`,
+          icon: <CheckCircleOutlined style={{ color: '#1890ff' }} />,
+        });
+      }
     }
+  };
+
+  // 获取文件类型描述
+  const getFileTypeDescription = (file: File) => {
+    if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+      return 'PDF';
+    } else if (file.type === 'image/png' || file.name.endsWith('.png')) {
+      return 'PNG图片';
+    } else if (file.type === 'image/jpeg' || file.name.endsWith('.jpg') || file.name.endsWith('.jpeg')) {
+      return 'JPG图片';
+    } else if (file.type === 'text/html' || file.name.endsWith('.html')) {
+      return 'HTML';
+    }
+    return '未知类型';
   };
 
   // 从上传的HTML文件提取信息
@@ -197,6 +245,8 @@ const Tribute: React.FC<TributeProps> = (props) => {
     if (!file) return;
 
     setFileLoading(true);
+    setPreviewData(null); // 清空之前的预览数据
+    
     try {
       const formData = new FormData();
       formData.append('htmlFile', file);
@@ -208,6 +258,9 @@ const Tribute: React.FC<TributeProps> = (props) => {
       });
 
       if (result && result.status === 'success' && result.data) {
+        // 更新预览数据
+        setPreviewData(result.data);
+        
         const foundFields = Object.keys(result.data).filter(key =>
           result.data[key] !== null && result.data[key] !== undefined && result.data[key] !== ''
         );
@@ -304,118 +357,169 @@ const Tribute: React.FC<TributeProps> = (props) => {
     }
   };
 
+  // 在Tribute组件内添加处理关键词的函数
+  const handleSelectKeyword = (keyword: string) => {
+    // 如果tag字段已有内容，添加逗号和新关键词
+    const currentTags = tributeState.tag ? tributeState.tag.trim() : '';
+    const newTags = currentTags ? `${currentTags}, ${keyword}` : keyword;
+    
+    // 更新状态
+    const newTributeState = { ...tributeState, tag: newTags };
+    setTributeState(newTributeState);
+    
+    // 显示提示
+    notification.success({
+      message: '已添加关键词',
+      description: `已将"${keyword}"添加到标签中`,
+      duration: 2,
+    });
+  };
+
+  // 处理一次性添加多个关键词
+  const handleSelectAllKeywords = (keywords: string[]) => {
+    if (keywords.length === 0) return;
+    
+    // 如果tag字段已有内容，添加逗号和新关键词
+    const currentTags = tributeState.tag ? tributeState.tag.trim() : '';
+    const newKeywords = keywords.join(', ');
+    const newTags = currentTags ? `${currentTags}, ${newKeywords}` : newKeywords;
+    
+    // 更新状态
+    const newTributeState = { ...tributeState, tag: newTags };
+    setTributeState(newTributeState);
+    
+    // 显示提示
+    notification.success({
+      message: '已添加所有关键词',
+      description: `已将${keywords.length}个关键词添加到标签中`,
+      duration: 2,
+    });
+  };
+
   return (
     <div className={styles.main}>
-      <LoginForm activeKey="tribute" onSubmit={handleSubmit}>
-        <Tab key="tribute" tab="归档">
-          <Form.Item
-            name="link"
-            rules={[
-              {
-                required: true,
-                message: '请输入链接！',
-              },
-            ]}
-          >
-            <Input
-              size="large"
-              placeholder="链接 (必填)"
-              prefix={
-                linkLoading ? (
-                  <Spin indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />} />
-                ) : (
-                  <BookOutlined />
-                )
-              }
-              value={tributeState.link}
-              id="link"
-              onChange={handleInput}
-              onBlur={handleInitRequest}
-              disabled={linkLoading}
-            />
-          </Form.Item>
+      <div className={styles.formContainer}>
+        <div className={styles.formMain}>
+          <LoginForm activeKey="tribute" onSubmit={handleSubmit}>
+            <Tab key="tribute" tab="归档">
+              <Form.Item>
+                <Input.Group compact>
+                  <Input
+                    id="link"
+                    value={tributeState.link}
+                    onChange={handleInput}
+                    style={{ width: 'calc(100% - 130px)' }}
+                    placeholder="请输入文章URL"
+                    disabled={linkLoading || fileLoading}
+                  />
+                  <Button
+                    type="primary"
+                    onClick={handleInitRequest}
+                    loading={linkLoading}
+                    style={{ width: '130px' }}
+                    disabled={!tributeState.link || fileLoading}
+                  >
+                    获取信息
+                  </Button>
+                </Input.Group>
+              </Form.Item>
 
-          <Form.Item>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
-              <span style={{ marginRight: '10px' }}>使用手动上传HTML文件:</span>
-              <Switch checked={useManualUpload} onChange={(checked) => setUseManualUpload(checked)} />
-            </div>
-
-            {useManualUpload && (
-              <Upload
-                fileList={fileList}
-                onChange={handleFileChange}
-                beforeUpload={() => false} // 阻止自动上传
-                accept=".html,text/html"
-              >
-                <Button icon={<UploadOutlined />} loading={fileLoading}>选择HTML文件</Button>
-                <div style={{ marginTop: '5px', color: '#999' }}>
-                  只支持HTML文件，系统将直接使用上传的文件而不下载网页
+              <Form.Item>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
+                  <span style={{ marginRight: '10px' }}>手动上传文件:</span>
+                  <Switch checked={useManualUpload} onChange={(checked) => setUseManualUpload(checked)} />
                 </div>
-              </Upload>
-            )}
-          </Form.Item>
 
-          <Divider orientation="left">文章信息</Divider>
+                {useManualUpload && (
+                  <Upload
+                    fileList={fileList}
+                    onChange={handleFileChange}
+                    beforeUpload={() => false} // 阻止自动上传
+                    accept=".html,text/html,.pdf,application/pdf,.png,image/png,.jpg,.jpeg,image/jpeg"
+                  >
+                    <Button icon={<UploadOutlined />} loading={fileLoading}>选择文件</Button>
+                    <div style={{ marginTop: '5px', color: '#999' }}>
+                      支持HTML、PDF、PNG和JPG文件，系统将直接使用上传的文件而不下载网页
+                    </div>
+                  </Upload>
+                )}
+              </Form.Item>
 
-          <div className={styles.gridbox}>
-            <Input
-              size="large"
-              placeholder="标题 (必填)"
-              value={tributeState.title}
-              id="title"
-              onChange={handleInput}
-            />
-            <Input
-              size="large"
-              placeholder="作者"
-              value={tributeState.author}
-              id="author"
-              onChange={handleInput}
-            />
-            <Input
-              size="large"
-              placeholder="出版方"
-              value={tributeState.publisher}
-              id="publisher"
-              onChange={handleInput}
-            />
-            <Input
-              size="large"
-              placeholder="日期 (YYYY-MM)"
-              value={tributeState.date}
-              id="date"
-              onChange={handleInput}
-            />
-            <Select
-              suffixIcon={<DownOutlined />}
-              placeholder="章节"
-              id="chapter"
-              onChange={handleSelect}
-              value={tributeState.chapter || undefined}
-            >
-              {['本纪', '世家', '搜神', '列传', '游侠', '群像'].map((chapter) => (
-                <Select.Option value={chapter} key={chapter}>{chapter}</Select.Option>
-              ))}
-            </Select>
-            <Input
-              size="large"
-              placeholder="标签 (多个标签用逗号分隔)"
-              value={tributeState.tag}
-              id="tag"
-              onChange={handleInput}
-            />
-            <TextArea
-              placeholder="备注"
-              rows={4}
-              value={tributeState.remarks}
-              id="remarks"
-              onChange={handleInput}
-            />
-          </div>
-        </Tab>
-        <Submit loading={submitLoading}>归档</Submit>
-      </LoginForm>
+              <Divider orientation="left">文章信息</Divider>
+
+              <div className={styles.gridbox}>
+                <Input
+                  size="large"
+                  placeholder="标题 (必填)"
+                  value={tributeState.title}
+                  id="title"
+                  onChange={handleInput}
+                />
+                <Input
+                  size="large"
+                  placeholder="作者"
+                  value={tributeState.author}
+                  id="author"
+                  onChange={handleInput}
+                />
+                <Input
+                  size="large"
+                  placeholder="出版方"
+                  value={tributeState.publisher}
+                  id="publisher"
+                  onChange={handleInput}
+                />
+                <Input
+                  size="large"
+                  placeholder="日期 (YYYY-MM)"
+                  value={tributeState.date}
+                  id="date"
+                  onChange={handleInput}
+                />
+                <Select
+                  suffixIcon={<DownOutlined />}
+                  placeholder="章节"
+                  id="chapter"
+                  onChange={handleSelect}
+                  value={tributeState.chapter || undefined}
+                >
+                  {['本纪', '世家', '搜神', '列传', '游侠', '群像'].map((chapter) => (
+                    <Select.Option value={chapter} key={chapter}>{chapter}</Select.Option>
+                  ))}
+                </Select>
+                <Input
+                  size="large"
+                  placeholder="标签 (多个标签用逗号分隔)"
+                  value={tributeState.tag}
+                  id="tag"
+                  onChange={handleInput}
+                />
+                <div className={styles.keywordSuggestionContainer}>
+                  <KeywordSuggestions 
+                    summary={previewData?.summary} 
+                    keywords={previewData?.keywords}
+                    loading={linkLoading} 
+                    onSelectKeyword={handleSelectKeyword} 
+                    onSelectAllKeywords={handleSelectAllKeywords} 
+                  />
+                </div>
+                <TextArea
+                  placeholder="备注"
+                  rows={4}
+                  value={tributeState.remarks}
+                  id="remarks"
+                  onChange={handleInput}
+                />
+              </div>
+            </Tab>
+            <Submit loading={submitLoading}>归档</Submit>
+          </LoginForm>
+        </div>
+        
+        <div className={styles.formSidebar}>
+          <LinkPreview previewData={previewData} loading={linkLoading} />
+        </div>
+      </div>
     </div>
   );
 };

@@ -14,7 +14,7 @@ const puppeteer = require('puppeteer');
 import path from 'path';
 import fs from 'fs';
 
-const TEST_URL = 'https://example.com';
+const TEST_URL = 'https://blog.gocos.cn/archives/395.html';
 const TEST_FILENAME = 'test-puppeteer-archive.html';
 
 /**
@@ -83,10 +83,10 @@ async function main() {
 
   try {
     // 测试 Puppeteer
-    const chromiumPath = await testPuppeteer();
+    // const chromiumPath = await testPuppeteer();
 
     // 测试网页存档
-    await testArchive(chromiumPath);
+    await testArchive( '/usr/bin/google-chrome');
 
     console.log('\n✅ 所有测试通过!');
     console.log('现在您可以使用 npm run save-page <URL> [filename] 命令来存档任意网页。');

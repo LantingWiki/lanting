@@ -9,6 +9,7 @@ import { dateUtil } from './date-util.service';
  */
 export async function extractMetadataFromHtml(htmlContent: string): Promise<Partial<Tribute>> {
   try {
+    console.log('Extracting metadata from HTML:', htmlContent);
     const dom = new JSDOM(htmlContent);
     const document = dom.window.document;
 
@@ -54,12 +55,18 @@ export async function extractMetadataFromHtml(htmlContent: string): Promise<Part
  * @param result 结果对象
  */
 function ensureNullForMissingFields(result: Partial<Tribute>): void {
-  const fields: (keyof Tribute)[] = ['title', 'author', 'publisher', 'date'];
-
-  for (const field of fields) {
-    if (!result[field]) {
-      result[field] = 'null';
-    }
+  // 处理基本字段
+  if (!result.title) result.title = 'null';
+  if (!result.author) result.author = 'null';
+  if (!result.publisher) result.publisher = 'null';
+  if (!result.date) result.date = 'null';
+  
+  // 对于复杂类型的字段，提供默认值而不是'null'字符串
+  if (!result.keywords) {
+    result.keywords = {
+      predefined: [],
+      extracted: []
+    };
   }
 }
 
@@ -72,7 +79,11 @@ function createNullFieldsObject(): Partial<Tribute> {
     title: 'null',
     author: 'null',
     publisher: 'null',
-    date: 'null'
+    date: 'null',
+    keywords: {
+      predefined: [],
+      extracted: []
+    }
   };
 }
 
@@ -163,7 +174,8 @@ function extractWechatPublisher(document: Document, result: Partial<Tribute>): v
  * @param result 结果对象
  */
 function extractWechatDate(document: Document, result: Partial<Tribute>): void {
-  const dateElement = document.querySelector('#publish_time');
+  const dateElement = document.getElementById('publish_time');
+
   if (dateElement && dateElement.textContent) {
     const dateText = dateElement.textContent.trim();
     if (dateText) {

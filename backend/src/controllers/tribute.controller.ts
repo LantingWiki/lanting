@@ -14,6 +14,8 @@ interface RequestWithFile extends Request {
  * @route POST /api/archive/tribute/save
  */
 export const saveTribute = async (req: RequestWithFile, res: Response): Promise<void> => {
+  console.log('接收到保存tribute请求');
+  
   try {
     let tributeData: Tribute = req.body;
 
@@ -21,18 +23,46 @@ export const saveTribute = async (req: RequestWithFile, res: Response): Promise<
     if (typeof req.body === 'string') {
       try {
         tributeData = JSON.parse(req.body);
+        console.log('已将字符串转换为JSON对象');
       } catch (error) {
         console.error('Error parsing JSON body:', error);
+        res.status(400).json({
+          status: 'fail',
+          code: 'INVALID_JSON',
+          message: 'Invalid JSON in request body'
+        });
+        return;
       }
     }
 
+    console.log('请求数据:', {
+      link: tributeData.link,
+      title: tributeData.title,
+      hasFile: !!req.file
+    });
+
     // 添加上传的文件路径（如果有）
     if (req.file) {
-      tributeData.uploadedHtmlFile = req.file.path;
+      // 检查上传的文件是否存在
+      if (!fs.existsSync(req.file.path)) {
+        console.error(`上传的文件不存在: ${req.file.path}`);
+        res.status(400).json({
+          status: 'fail',
+          code: 'FILE_NOT_FOUND',
+          message: 'Uploaded file not found'
+        });
+        return;
+      }
+      
+      console.log(`检测到上传的文件: ${req.file.path}, 大小: ${fs.statSync(req.file.path).size} 字节`);
+      
+      // 统一使用 uploadedFile 字段保存文件路径
+      tributeData.uploadedFile = req.file.path;
     }
 
     // Validate required fields
     if (!tributeData.link || !tributeData.title) {
+      console.error('缺少必填字段: link或title');
       res.status(400).json({
         status: 'fail',
         code: 'MISSING_REQUIRED_FIELDS',
@@ -42,17 +72,46 @@ export const saveTribute = async (req: RequestWithFile, res: Response): Promise<
     }
 
     // Save tribute using service
-    await tributeService.saveTribute(tributeData);
-
-    res.status(200).json({
-      status: 'success',
-      message: 'Tribute saved successfully',
-      data: {
-        archivePath: tributeData.archivePath
+    try {
+      await tributeService.saveTribute(tributeData);
+      console.log('tribute保存成功');
+      
+      // 检查HTML文件是否确实存在
+      let htmlFileExists = false;
+      let htmlFilePath = '';
+      
+      if (tributeData.archivePath) {
+        const origsDir = path.join(config.archives.rootDir, 'origs');
+        htmlFilePath = path.join(origsDir, tributeData.archivePath);
+        htmlFileExists = fs.existsSync(htmlFilePath);
       }
-    });
+      
+      // 在响应中返回更多信息，帮助调试
+      res.status(200).json({
+        status: 'success',
+        message: 'Tribute saved successfully',
+        data: {
+          id: tributeData.id,
+          archivePath: tributeData.archivePath,
+          fileType: tributeData.fileType,
+          title: tributeData.title,
+          htmlFileExists: htmlFileExists,
+          htmlFilePath: htmlFilePath,
+          note: htmlFileExists 
+            ? `文件保存成功, ID: ${tributeData.id}` 
+            : '元数据已保存，但HTML文件创建失败。您可以稍后再次尝试或手动上传文件。'
+        }
+      });
+    } catch (err: any) {
+      console.error('保存tribute过程中发生错误:', err);
+      res.status(500).json({
+        status: 'fail',
+        code: 'SAVE_ERROR',
+        message: `保存过程中发生错误: ${err.message || '未知错误'}`
+      });
+    }
   } catch (error) {
-    console.error('Error saving tribute:', error);
+    console.error('处理tribute请求过程中发生未捕获的错误:', error);
     res.status(500).json({
       status: 'fail',
       code: 'SERVER_ERROR',
@@ -90,7 +149,9 @@ export const getTributeInfo = async (req: Request, res: Response): Promise<void>
         title: info.title || null,
         author: info.author || null,
         publisher: info.publisher || null,
-        date: info.date || null
+        date: info.date || null,
+        summary: info.summary || null,
+        keywords: info.keywords || { predefined: [], extracted: [] }
       }
     });
   } catch (error) {
@@ -195,13 +256,19 @@ export const extractHtmlInfo = async (req: RequestWithFile, res: Response): Prom
       return;
     }
 
-    // 使用新的extractHtmlInfo服务函数提取元数据
-    const metadata = await tributeService.extractHtmlInfo(filePath);
+    // 使用extractHtmlInfo服务函数提取元数据
+    const info = await tributeService.extractHtmlInfo(filePath);
 
     res.status(200).json({
       status: 'success',
-      code: '',
-      data: metadata
+      data: {
+        title: info.title || null,
+        author: info.author || null,
+        publisher: info.publisher || null,
+        date: info.date || null,
+        summary: info.summary || null,
+        keywords: info.keywords || { predefined: [], extracted: [] }
+      }
     });
   } catch (error) {
     console.error('Error extracting HTML info:', error);

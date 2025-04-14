@@ -1,7 +1,8 @@
 @import '~antd/es/style/themes/default.less';
 
 .main {
-  width: 368px;
+  width: 90%;
+  max-width: 1200px;
   margin: 0 auto;
   @media screen and (max-width: @screen-sm) {
     width: 95%;
@@ -38,7 +39,34 @@
   }
 }
 
+.formContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.formMain {
+  flex: 1;
+  min-width: 320px;
+}
+
+.formSidebar {
+  width: 380px;
+  margin-top: 45px; /* 与表单内容对齐 */
+  
+  @media screen and (max-width: @screen-md) {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
 .gridbox {
   display: grid;
-  grid-gap:0.9375rem;
+  grid-gap: 0.9375rem;
+  grid-template-columns: 1fr;
+}
+
+/* 给关键词建议组件的特殊样式，确保它在标签输入框下方正确显示 */
+.keywordSuggestionContainer {
+  margin-top: -0.5rem; /* 调整与上方标签输入框的间距 */
 }

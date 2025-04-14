@@ -296,13 +296,260 @@
       ],
       "publisher": "The Network State",
       "date": "null",
-      "chapter": "本纪",
+      "chapter": "搜神",
       "tag": [
         ""
       ],
       "remarks": "",
       "origs": [
         "10017.html"
+      ],
+      "likes": 0
+    },
+    "10018": {
+      "id": "10018",
+      "title": "To Start a New Country",
+      "author": [
+        "null"
+      ],
+      "publisher": "The Network State",
+      "date": "null",
+      "chapter": "搜神",
+      "tag": [
+        ""
+      ],
+      "remarks": "",
+      "origs": [
+        "10018.jpg"
+      ],
+      "likes": 0
+    },
+    "10019": {
+      "id": "10019",
+      "title": "马斯克宣传多年的脑机接口，被湖北医保局宣布了医疗定价",
+      "author": [
+        "一棵青木"
+      ],
+      "publisher": "远方青木",
+      "date": "null",
+      "chapter": "群像",
+      "tag": [
+        "测试"
+      ],
+      "remarks": "2",
+      "origs": [
+        "10019.html"
+      ],
+      "likes": 0
+    },
+    "10020": {
+      "id": "10020",
+      "title": "马斯克宣传多年的脑机接口，被湖北医保局宣布了医疗定价",
+      "author": [
+        "一棵青木"
+      ],
+      "publisher": "远方青木",
+      "date": "null",
+      "chapter": "群像",
+      "tag": [
+        "测试"
+      ],
+      "remarks": "2",
+      "origs": [
+        "10020.html"
+      ],
+      "likes": 0
+    },
+    "10021": {
+      "id": "10021",
+      "title": "记录一次处理服务器磁盘爆满问题-云淡风轻",
+      "author": [
+        "null"
+      ],
+      "publisher": "null",
+      "date": "2025-02-17",
+      "chapter": "群像",
+      "tag": [
+        ""
+      ],
+      "remarks": "",
+      "origs": [
+        "10021.html"
+      ],
+      "likes": 0
+    },
+    "10030": {
+      "id": "10030",
+      "title": "想在苹果M4上跑Linux？开发者：真是太痛苦了！-CSDN博客",
+      "author": [
+        "null"
+      ],
+      "publisher": "null",
+      "date": "2025-04-13",
+      "chapter": "本纪",
+      "tag": [
+        "Linux",
+        "苹果",
+        "Linux",
+        "项目",
+        "芯片",
+        "Asahi",
+        "Sven",
+        "运行",
+        "Mac",
+        "跑",
+        "AI",
+        "开发者",
+        "问题",
+        "生态",
+        "硬件"
+      ],
+      "remarks": "最后 随着在苹果设备上运行 Linux 越来越困难，不少网友也发出了自己的看法： “别再折腾在 MacBook 上跑 Linux 了，不如支持那些真正在乎 Linux 的厂商。\n”一本在手，开发全有！AIBOOK算力本用50TOPS+Linux原生生态回答「AI开发",
+      "origs": [
+        "10030.html"
+      ],
+      "likes": 0
+    },
+    "10031": {
+      "id": "10031",
+      "title": "Example Domain",
+      "author": [
+        "null"
+      ],
+      "publisher": "null",
+      "date": "null",
+      "chapter": "本纪",
+      "tag": [
+        "use",
+        "for",
+        "domain",
+        "This",
+        "this",
+        "may",
+        "asking",
+        "is",
+        "permi",
+        "More",
+        "You",
+        "or",
+        "coordination",
+        "in",
+        "without"
+      ],
+      "remarks": "",
+      "origs": [
+        "10031.html"
+      ],
+      "likes": 0
+    },
+    "10032": {
+      "id": "10032",
+      "title": "想在苹果M4上跑Linux？开发者：真是太痛苦了！-CSDN博客",
+      "author": [
+        "null"
+      ],
+      "publisher": "null",
+      "date": "2025-04-13",
+      "chapter": "本纪",
+      "tag": [
+        "use",
+        "for",
+        "domain",
+        "This",
+        "this",
+        "may",
+        "asking",
+        "is",
+        "permi",
+        "More",
+        "You",
+        "or",
+        "coordination",
+        "in",
+        "without",
+        "Linux",
+        "苹果",
+        "Linux",
+        "项目",
+        "芯片",
+        "Asahi",
+        "Sven",
+        "运行",
+        "Mac",
+        "跑",
+        "AI",
+        "开发者",
+        "问题",
+        "生态",
+        "硬件"
+      ],
+      "remarks": "整理 | 苏宓 出品 | CSDN 苹果的“围墙花园”到底有多难突破？看看开发者们想在 Mac 上跑 Linux 需要付出多大努力，就能感受到这堵墙有多厚。\nAsahi Linux 是一个专门让 Linux 内核兼容 Apple Silicon的开源项目，目标是让普通用户也可以在现代 Mac 设备上原生运行 Linux。\n这一项目最早由 Hector Martin 等开发者在 2021 年发起，历经四年多的时间，他们成功搞定 M1 和 M2 芯片，不仅可以让 Linux 在其设",
+      "origs": [
+        "10032.html"
+      ],
+      "likes": 0
+    },
+    "10033": {
+      "id": "10033",
+      "title": "记录一次处理服务器磁盘爆满问题-云淡风轻",
+      "author": [
+        "null"
+      ],
+      "publisher": "null",
+      "date": "2025-02-17",
+      "chapter": "本纪",
+      "tag": [
+        "文件",
+        "进程",
+        "lsof",
+        "问题",
+        "状态",
+        "du",
+        "信息",
+        "目录",
+        "df",
+        "df",
+        "go",
+        "linux",
+        "应用程序",
+        "宝塔",
+        "程序"
+      ],
+      "remarks": "cd到根目录下，执行du -h --max-depth=1 发现没有问题，执行du -sh /* | sort -nr 依然没有问题，此时求助Google “linux df du 结果不一致”得知：当有其他进程打开某文件时文件被删除，就会将该文件标记为deleted，并删除其目录节点。\n",
+      "origs": [
+        "10033.html"
+      ],
+      "likes": 0
+    },
+    "10034": {
+      "id": "10034",
+      "title": "记录一次处理服务器磁盘爆满问题-云淡风轻",
+      "author": [
+        "null"
+      ],
+      "publisher": "null",
+      "date": "2025-02-17",
+      "chapter": "本纪",
+      "tag": [
+        "文件",
+        "进程",
+        "lsof",
+        "问题",
+        "状态",
+        "du",
+        "信息",
+        "目录",
+        "df",
+        "df",
+        "go",
+        "linux",
+        "应用程序",
+        "宝塔",
+        "程序"
+      ],
+      "remarks": "# 问题 在发现磁盘爆满后，迅速停止了go程序，此时检查日志目录为爆满状态，故在宝塔进行删除操作，同时清理回收站。\n",
+      "origs": [
+        "10034.html"
       ],
       "likes": 0
     }
@@ -312,7 +559,6 @@
       "游戏葡萄君": 2,
       "Ne-21": 1,
       "eff": 1,
-      "": 1,
       "siyuan笔记": 2,
       "知乎": 1,
       "刘燕秋": 1,
@@ -321,19 +567,62 @@
       "戴晶晶": 1,
       "小渔 坚持": 2,
       "经纬创投主页君": 1,
-      "null": 1
+      "null": 8,
+      "一棵青木": 2
     },
     "tag": {
       "做游戏": 1,
       "技术文档": 1,
-      "": 7,
       "未分类": 2,
       "知乎": 1,
       "商业化": 1,
       "3d模型生成": 1,
       "adf": 1,
       "游戏": 1,
-      "太空，商业航天": 1
+      "太空，商业航天": 1,
+      "测试": 2,
+      "Linux": 4,
+      "苹果": 2,
+      "项目": 2,
+      "芯片": 2,
+      "Asahi": 2,
+      "Sven": 2,
+      "运行": 2,
+      "Mac": 2,
+      "跑": 2,
+      "AI": 2,
+      "开发者": 2,
+      "问题": 4,
+      "生态": 2,
+      "硬件": 2,
+      "use": 2,
+      "for": 2,
+      "domain": 2,
+      "This": 2,
+      "this": 2,
+      "may": 2,
+      "asking": 2,
+      "is": 2,
+      "permi": 2,
+      "More": 2,
+      "You": 2,
+      "or": 2,
+      "coordination": 2,
+      "in": 2,
+      "without": 2,
+      "文件": 2,
+      "进程": 2,
+      "lsof": 2,
+      "状态": 2,
+      "du": 2,
+      "信息": 2,
+      "目录": 2,
+      "df": 4,
+      "go": 2,
+      "linux": 2,
+      "应用程序": 2,
+      "宝塔": 2,
+      "程序": 2
     },
     "publisher": {
       "微信": 2,
@@ -345,7 +634,9 @@
       "游戏葡萄": 1,
       "小渔聊独立站": 2,
       "经纬创投": 1,
-      "The Network State": 1
+      "The Network State": 2,
+      "远方青木": 2,
+      "null": 6
     }
   }
 }
