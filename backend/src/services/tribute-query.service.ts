@@ -2,7 +2,7 @@ import { Tribute } from '../types/tribute.types';
 import axios from 'axios';
 import * as metadataExtractor from './metadata-extractor.service';
 import { JSDOM } from 'jsdom';
-import * as baiduNLP from './ai/baidu-nlp.service';
+import { deepseekService } from './ai/deepseek.service';
 import fs from 'fs';
 
 // In-memory storage for tribute data
@@ -52,19 +52,24 @@ export const getTributeInfo = async (link: string): Promise<Partial<Tribute>> =>
     // 提取文章内容（用于分析）
     const articleContent = await extractArticleContent(htmlContent);
     
-    // 使用百度AI服务分析内容
-    console.log('使用百度AI服务分析内容...');
-    const analysisResult = await baiduNLP.analyzeContent(metadata.title, articleContent, 15);
+    // 使用 deepseek 分析内容
+    const analysis = await deepseekService.analyzeContent(
+      metadata.title || '',
+      articleContent,
+      15
+    );
     
     console.log('Extracted metadata:', metadata);
-    console.log('AI analysis summary:', analysisResult.summary);
-    console.log('AI analysis keywords:', analysisResult.keywords.extracted);
+    console.log('AI analysis summary:', analysis.summary);
+    console.log('AI analysis keywords:', analysis.keywords.extracted);
 
     return {
       ...metadata,
-      summary: analysisResult.summary,
-      // 添加关键词字段，前端可以使用
-      keywords: analysisResult.keywords
+      summary: analysis.summary,
+      keywords: {
+        predefined: [],
+        extracted: analysis.keywords.extracted
+      }
     };
   } catch (error) {
     console.error(`Error fetching info for link: ${link}`, error);
@@ -247,18 +252,24 @@ export const extractHtmlInfo = async (filePath: string): Promise<Partial<Tribute
     // 提取文章内容（用于分析）
     const articleContent = await extractArticleContent(htmlContent);
     
-    // 使用百度AI服务分析内容
-    console.log('使用百度AI服务分析HTML文件内容...');
-    const analysisResult = await baiduNLP.analyzeContent(metadata.title, articleContent, 15);
+    // 使用 deepseek 分析内容
+    const analysis = await deepseekService.analyzeContent(
+      metadata.title || '',
+      articleContent,
+      15
+    );
     
     console.log('Extracted metadata from HTML file:', metadata);
-    console.log('AI analysis summary:', analysisResult.summary);
-    console.log('AI analysis keywords:', analysisResult.keywords.extracted);
+    console.log('AI analysis summary:', analysis.summary);
+    console.log('AI analysis keywords:', analysis.keywords.extracted);
     
     return {
       ...metadata,
-      summary: analysisResult.summary,
-      keywords: analysisResult.keywords
+      summary: analysis.summary,
+      keywords: {
+        predefined: [],
+        extracted: analysis.keywords.extracted
+      }
     };
   } catch (error) {
     console.error(`Error extracting info from HTML file: ${filePath}`, error);

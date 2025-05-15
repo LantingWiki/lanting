@@ -14,7 +14,7 @@ const puppeteer = require('puppeteer');
 import path from 'path';
 import fs from 'fs';
 
-const TEST_URL = 'https://blog.gocos.cn/archives/395.html';
+const TEST_URL = 'https://example.com';
 const TEST_FILENAME = 'test-puppeteer-archive.html';
 
 /**
